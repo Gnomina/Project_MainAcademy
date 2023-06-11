@@ -11,9 +11,8 @@ pipeline {
         
         stage('Clone') {
             steps {
-                withCredentials([string(credentialsId: 'Access_to_Git', variable: 'token')]) {
-                    git branch: 'main', url: "https://Gnomina:${token}@github.com/Gnomina/WordPress_WIP.git"
-                    echo "Клонированный репозиторий находится в папке: ${WORKSPACE}"
+                git branch: 'main', credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
+                echo "Клонированный репозиторий находится в папке: ${WORKSPACE}"
                 }
             }     
         }
