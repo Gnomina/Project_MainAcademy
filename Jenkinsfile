@@ -28,6 +28,28 @@ pipeline {
                         }
                     }
                 }
+                stage("Terraform_Plan"){
+                    steps{
+                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
+                        credentialsId: 'MainAcademy_AWS_key',
+                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
+                            sh "terraform plan"
+                            echo 'ok'
+                         }
+                    }
+                } 
+                stage("Terraform_apply"){
+                    steps{
+                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
+                        credentialsId: 'MainAcademy_AWS_key',
+                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
+                            sh "terraform apply -auto-approve"
+                            echo 'ok'
+                         }
+                    }
+                } 
             }
         }
     }
