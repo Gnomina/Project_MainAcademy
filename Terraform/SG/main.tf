@@ -1,7 +1,18 @@
+data "terraform_remote_state" "VPC" {
+  backend = "s3"
+  config = {
+    bucket = "mainacademy-project-terraform-back"
+    key    = "dev/network/terraform.tfstate"
+    region = "eu-central-1"
+  }
+}
+
+
+
 resource "aws_security_group" "my_security_group" {
   name        = "${var.name}"
   description = "${var.description}"
-  vpc_id      = aws_vpc.my_vpc.id
+  vpc_id      = data.terraform_remote_state.VPC.outputs.VPC-ID
 
   ingress {
     from_port   = 22
