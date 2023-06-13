@@ -16,5 +16,4 @@ module "VPC" {
 
 module "SG" {
   source = "./Terraform/SG"
-  vpc_id = module.VPC.vpc_id
-}
+  }
