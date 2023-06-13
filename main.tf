@@ -4,7 +4,7 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket = "mainacademy-Projekt-terraform-back"
+    bucket = "mainacademy-project-terraform-back"
     key    = "dev/network/terraform.tfstate"
     region = "eu-central-1"
   }
