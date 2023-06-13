@@ -1,3 +1,5 @@
+/*
+
 output "VPC-ID" {
   value = var.aws_vpc.my_vpc.id
 }
@@ -27,3 +29,6 @@ output "RouteTableAssociation-ID" {
 }
 
 # Path: Terraform\VPC\variables.tf
+
+
+*/
