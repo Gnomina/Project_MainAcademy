@@ -55,5 +55,5 @@ resource "aws_route_table_association" "subnet_association" {
 }
 
 output "vps" {
-  value = "${aws_vpc.my_vpc.id}"
+  value = aws_vpc.my_vpc.id
 }
