@@ -12,7 +12,7 @@ data "terraform_remote_state" "vpc_state" {
 resource "aws_security_group" "my_security_group" {
   name        = "${var.name}"
   description = "${var.description}"
-  vpc_id      = data.terraform_remote_state.vpc_state.outputs.VPC-ID
+  vpc_id      = var.vpc_id
 
   ingress {
     from_port   = 22
