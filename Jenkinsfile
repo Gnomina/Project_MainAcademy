@@ -69,7 +69,8 @@ pipeline {
                                 echo 'Delete ok'
                            
                             } else {
-                            echo 'Skipping resource destruction.'
+                                 echo 'Skipping resource destruction.'
+                                }
                             }
                         }
                     }
