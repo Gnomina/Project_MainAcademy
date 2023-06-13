@@ -3,11 +3,11 @@ pipeline {
     
     stages {
 
-        /*stage('CLEAN_WORKSPACE') {
+        stage('CLEAN_WORKSPACE') {
             steps {
                cleanWs()
             }
-        }*/
+        }
         
         stage('Clone') {
             steps {
@@ -24,7 +24,7 @@ pipeline {
                         credentialsId: 'MainAcademy_AWS_key',
                         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
-                            sh 'terraform init -migrate-state'
+                            sh 'terraform init '
                             echo 'ok'
                             sh "terraform plan"
                             echo 'ok'
