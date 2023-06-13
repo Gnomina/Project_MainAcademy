@@ -61,3 +61,5 @@ output "vpc_id" {
 resource "null_resource" "save_instance_ip" {
   provisioner "local-exec" {
     command = "echo ${vpc_id}"
+  }
+}
