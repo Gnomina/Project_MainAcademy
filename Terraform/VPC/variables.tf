@@ -46,3 +46,5 @@ variable "Destination-CIDR" {
   description = "Destination CIDR-Block"
   default     = "0.0.0.0/0"
 }
+
+# Path: Terraform\VPC\main.tf

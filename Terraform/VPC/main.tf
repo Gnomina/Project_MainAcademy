@@ -1,14 +1,15 @@
-# AWS Init
+/*# AWS Init
 provider "aws" {
-  region = var.region 
-}
+  region = "${var.region}" 
+}*/
 
 # Create VPC
 resource "aws_vpc" "my_vpc" {
-  cidr_block = var.VPC-CIDR  #VPS CIDR-Block
+  cidr_block = "${var.VPC-CIDR}"  #VPS CIDR-Block
 
   tags = {
-    Name = var.VPC-Name #VPC Name
+    //Name = var.VPC-Name #VPC Name
+    Name = "${var.VPC-Name}"
   }
 }
 
@@ -16,10 +17,10 @@ resource "aws_vpc" "my_vpc" {
 # Create Subnet in VPC
 resource "aws_subnet" "my_subnet" {
   vpc_id                  = aws_vpc.my_vpc.id
-  cidr_block              = var.Subnet-CIDR  # subnet CIDR-Block
+  cidr_block              = "${var.Subnet-CIDR}"  # subnet CIDR-Block
 
   tags = {
-    Name = var.Subnet-Name
+    Name = "${var.Subnet-Name}"
   }
 }
 
@@ -28,7 +29,7 @@ resource "aws_internet_gateway" "my_igw" {
   vpc_id = aws_vpc.my_vpc.id
 
   tags = {
-    Name = var.IGW-Name
+    Name = "${var.IGW-Name}"
   }
 }
 
@@ -37,14 +38,14 @@ resource "aws_route_table" "my_route_table" {
   vpc_id = aws_vpc.my_vpc.id
 
   tags = {
-    Name = var.RouteTable-Name
+    Name = "${var.RouteTable-Name}"
   }
 }
 
 # Create Route
 resource "aws_route" "internet_route" {
   route_table_id         = aws_route_table.my_route_table.id
-  destination_cidr_block = var.Destination-CIDR
+  destination_cidr_block = "${var.Destination-CIDR}"
   gateway_id             = aws_internet_gateway.my_igw.id
 }
 
