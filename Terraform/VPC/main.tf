@@ -56,10 +56,10 @@ resource "aws_route_table_association" "subnet_association" {
 }
 
 
-output "VPC-CIDR" {
+output "VPC-cidr" {
   value = aws_vpc.my_vpc.cidr_block
 }
 
-output "VPC-ID" {
+output "VPC-id" {
   value = aws_vpc.my_vpc.id
 }
