@@ -24,10 +24,14 @@ pipeline {
                         credentialsId: 'MainAcademy_AWS_key',
                         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
-                            sh 'terraform init'
-                            echo 'ok'
-                            sh "terraform plan"
-                            echo 'ok'
+                            script {
+                                env.TF_CLI_INIT_INPUT = 'false'
+                                sh 'terraform init'
+                                echo 'ok'
+                                sh "terraform plan"
+                                echo 'ok'
+                            }
+                           
                         }
                     }
                 }
