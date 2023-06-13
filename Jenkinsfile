@@ -60,18 +60,19 @@ pipeline {
                             parameters: [booleanParam(defaultValue: false, description: 'Select true to destroy resources')]
                             )
 
-                        if (userInput.destroyInput) {
-                            withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
-                            credentialsId: 'MainAcademy_AWS_key',
-                            accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                            secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
-                                sh "terraform destroy -auto-approve"
-                                echo 'Delete ok'
+                            if (userInput.destroyInput) {
+                                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
+                                credentialsId: 'MainAcademy_AWS_key',
+                                accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                                secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
+                                    sh "terraform destroy -auto-approve"
+                                    echo 'Delete ok'
                            
                             } else {
-                                 echo 'Skipping resource destruction.'
-                                }
+                                echo 'Skipping resource destruction.'
+                                }   
                             }
+
                         }
                     }
                 }
