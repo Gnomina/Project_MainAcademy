@@ -14,7 +14,7 @@ module "VPC" {
   source = "./Terraform/VPC"
 }
 
-/*
+
 module "SG" {
   source = "./Terraform/SG"
-  }*/
+  }

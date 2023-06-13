@@ -1,4 +1,4 @@
-data "terraform_remote_state" "vps" {
+data "terraform_remote_state" "vpc_state" {
   backend = "s3"
   config = {
     bucket = "mainacademy-project-terraform-back"
@@ -12,7 +12,7 @@ data "terraform_remote_state" "vps" {
 resource "aws_security_group" "my_security_group" {
   name        = "${var.name}"
   description = "${var.description}"
-  vpc_id      = data.terraform_remote_state.vps.outputs.vpc_id
+  vpc_id      = data.terraform_remote_state.vpc_state.outputs.VPC-ID
 
   ingress {
     from_port   = 22

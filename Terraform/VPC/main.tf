@@ -53,13 +53,3 @@ resource "aws_route_table_association" "subnet_association" {
   subnet_id      = aws_subnet.my_subnet.id
   route_table_id = aws_route_table.my_route_table.id
 }
-
-output "vpc_id" {
-  value = aws_vpc.my_vpc.id
-}
-
-resource "null_resource" "save_instance_ip" {
-  provisioner "local-exec" {
-    command = "echo ${vpc_id}"
-  }
-}
