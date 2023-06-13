@@ -32,7 +32,7 @@ resource "aws_route_table" "my_route_table" {
   vpc_id = aws_vpc.my_vpc.id
 
   tags = {
-    Name = "$MainAcademy_RouteTable"
+    Name = "MainAcademy_RouteTable"
   }
 }
 
