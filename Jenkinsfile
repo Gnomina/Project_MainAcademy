@@ -3,11 +3,11 @@ pipeline {
     
     stages {
 
-        stage('CLEAN_WORKSPACE') {
+        /*stage('CLEAN_WORKSPACE') {
             steps {
                cleanWs()
             }
-        }
+        }*/
         
         stage('Clone') {
             steps {
@@ -15,6 +15,7 @@ pipeline {
                 echo "Клонированный репозиторий находится в папке: ${WORKSPACE}"
             }
         }
+
         stage("AWS_Terraform"){
             stages{
                 stage("Terraform_Init & Plan"){
