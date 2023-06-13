@@ -36,12 +36,12 @@ pipeline {
                     // Terraform Destroy
                     script {
                         def userInput = input(
-                            id: 'destroyInput',
+                            id: 'destroyInputId',
                             message: 'Destroy resources?',
                             parameters: [booleanParam(defaultValue: false, description: 'Select true to destroy resources')]
-                        )
+                            )
 
-                        if (userInput.destroyInput) {
+                        if (userInput.destroyInputId) {
                             sh 'terraform destroy -auto-approve'
                             echo 'Terraform Destroy - OK'
                         } else {
