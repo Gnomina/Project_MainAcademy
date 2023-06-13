@@ -47,4 +47,14 @@ variable "Destination-CIDR" {
   default     = "0.0.0.0/0"
 }
 
+variable "aws_vpc" {
+  description = "AWS VPC"
+  type        = object({
+    my_vpc = object({
+      id = string
+    })
+  })
+}
+
+
 # Path: Terraform\VPC\main.tf
