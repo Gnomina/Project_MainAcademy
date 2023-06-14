@@ -39,6 +39,8 @@ pipeline {
                         credentialsId: 'MainAcademy_AWS_key',
                         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
+                            sh "terraform fmt"
+                            echo 'ok'
                             sh "terraform apply -auto-approve"
                             sh 'terraform output'
                             echo 'ok'
