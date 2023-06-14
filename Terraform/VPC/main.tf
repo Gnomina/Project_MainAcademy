@@ -1,4 +1,6 @@
 
+/*
+
 terraform {
   backend "s3" {
     bucket = "mainacademy-project-terraform-back"
@@ -63,5 +65,5 @@ resource "aws_route_table_association" "subnet_association" {
 
 output "vpc_id" {
   value = aws_vpc.my_vpc.id
-}
+}*/
   
