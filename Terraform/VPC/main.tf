@@ -1,4 +1,15 @@
 
+terraform {
+  backend "s3" {
+    bucket = "mainacademy-project-terraform-back"
+    key    = "dev/VPC/terraform.tfstate"
+    region = "eu-central-1"
+  }
+}
+
+
+
+
 # Create VPC
 resource "aws_vpc" "my_vpc" {
   cidr_block = "10.0.0.0/16"  #VPS CIDR-Block
@@ -49,3 +60,8 @@ resource "aws_route_table_association" "subnet_association" {
   route_table_id = aws_route_table.my_route_table.id
 }
 
+
+output "vpc_id" {
+  value = aws_vpc.my_vpc.id
+}
+  
