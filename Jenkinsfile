@@ -28,14 +28,12 @@ pipeline {
                             echo 'ok'
                             sh "terraform plan"
                             echo 'ok'
-                            sh 'terraform output'
-                            echo 'ok'
                             
                         }
                     }
                 }
                 
-                /*stage("Terraform_apply"){
+                stage("Terraform_apply"){
                     steps{
                         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
                         credentialsId: 'MainAcademy_AWS_key',
@@ -46,7 +44,7 @@ pipeline {
                             echo 'ok'
                          }
                     }
-                } */
+                } 
                 
             }
         }
