@@ -14,6 +14,3 @@ module "VPC" {
   source = "./Terraform/VPC"
 }
 
-output "vpc_id" {
-  value = aws_vpc.my_vpc.id
-}
