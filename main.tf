@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "VPC" {
-  source = "./VPC/main.tf"
+  source = "./VPC/"
 } 
    
 
