@@ -3,8 +3,12 @@ provider "aws" {
 }
 
 module "VPC" {
-  source = "./VPC/"
-} 
+  source = "./VPC"
+}
+
+output "vpc_id_main" {
+  value = module.VPC.vpc_id_main
+}
 
 
 /*
