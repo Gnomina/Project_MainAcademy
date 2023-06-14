@@ -1,6 +1,4 @@
 
-
-
 terraform {
   backend "s3" {
     bucket = "mainacademy-project-terraform-back"

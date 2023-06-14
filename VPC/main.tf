@@ -1,16 +1,3 @@
-provider "aws" {
-  region = "eu-central-1" 
-}
-
-
-
-module "VPC" {
-  source = "./VPC"
-} 
-   
-
-
-/*
 # Create VPC
 resource "aws_vpc" "my_vpc" {
   cidr_block = "10.0.0.0/16"  #VPS CIDR-Block
@@ -60,7 +47,3 @@ resource "aws_route_table_association" "subnet_association" {
   subnet_id      = aws_subnet.my_subnet.id
   route_table_id = aws_route_table.my_route_table.id
 }
-
-*/
-
-
