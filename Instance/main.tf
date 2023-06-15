@@ -18,9 +18,11 @@ locals {
     sg_id = data.terraform_remote_state.backend_outputs.outputs.sg_id
 }
 
+/*
 locals {
     subnet_id = data.terraform_remote_state.backend_outputs.outputs.subnet_id
 }
+*/
 #------------------------------------------------------------------------------------
 
 /*
@@ -35,7 +37,7 @@ resource "aws_instance" "example"{
   key_name               = "${var.key_name}"
   vpc_security_group_ids = ["${local.sg_id}"]
   vpc_id                 = "${var.vpc_id}"
-  subnet_id              = "${var.subnet_id[0]}"
+  subnet_id              = data.terraform_remote_state.backend_outputs.outputs.subnet_id
   tags = {
     Name = "MainAcademy_Instance_TEST"
   }                  
