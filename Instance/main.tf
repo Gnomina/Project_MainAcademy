@@ -35,7 +35,7 @@ resource "aws_instance" "example"{
   key_name               = "${var.key_name}"
   vpc_security_group_ids = ["${local.sg_id}"]
   vpc_id                 = "${var.vpc_id}"
-  subnet_id              = "${var.subnet_id}"
+  subnet_id              = "${var.subnet_id[0]}"
   tags = {
     Name = "MainAcademy_Instance_TEST"
   }                  

@@ -4,6 +4,6 @@ output "vpc_id_VPC" {
 }
 
 output "subnet_id_VPC" {
-  value = aws_subnet.my_subnet.id
+  value = aws_subnet.my_subnet[*].id
   description = "subnet_id"
 }
