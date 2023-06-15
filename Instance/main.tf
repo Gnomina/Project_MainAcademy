@@ -32,10 +32,7 @@ resource "aws_instance" "example"{
   vpc_security_group_ids = ["${local.sg_id}"]
   tags                   = "MainAcademy_Instance_TEST"
 }
-output "instance_public_ip" {
-  value = aws_instance.example.public_ip
- }
- 
+
 /*
 resource "null_resource" "save_instance_ip" {
   provisioner "local-exec" {
