@@ -24,7 +24,7 @@ variable "Name_subnet" {
 
 variable "Name_InternetGateway" {
   type = string
-  default = "MainAcademy_IGW_Net"
+  default = "MainAcademy_IGW"
     description = "Name of InternetGateway"
 }
 

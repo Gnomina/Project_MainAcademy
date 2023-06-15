@@ -8,18 +8,15 @@ data "terraform_remote_state" "backend_outputs" {
    }
 }
 
-output "backend_variables" {
-    value = data.terraform_remote_state.backend_outputs.outputs
-}
 
 
-/*
+
 resource "aws_security_group" "my_security_group" {
-  name        = "${var.name}"
-  description = "${var.description}"
-  vpc_id      = var.vpc_id
+  name        = "TEST_SG_ADD"
+  description = "Test SG"
+  vpc_id      = data.terraform_remote_state.backend_outputs.outputs.vpc_id
   tags = {
-    Name = "my-security-group"
+    Name = "TEST_SG_ADD_TAG"
   }
 
   ingress {
@@ -44,5 +41,10 @@ resource "aws_security_group" "my_security_group" {
   }
 
   
+}
+
+/*
+output "backend_variables" {
+    value = data.terraform_remote_state.backend_outputs.outputs
 }
 */
