@@ -3,8 +3,7 @@ provider "aws" {
 }
 
 module "VPC" {
-  source = "./VPC"
-  description = "VPC Module PATH"
+  source = "./VPC" #VPC Module PATH
 }
 
 
