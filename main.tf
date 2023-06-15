@@ -7,5 +7,9 @@ module "VPC" {
 }
 
 
+module "SG" {
+  source = "./SG" #SG Module PATH
+}
+
 
 
