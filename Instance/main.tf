@@ -30,7 +30,9 @@ resource "aws_instance" "example"{
   instance_type          = "${var.instance_type}"
   key_name               = "${var.key_name}"
   vpc_security_group_ids = ["${local.sg_id}"]
-  tags                   = "MainAcademy_Instance_TEST"
+  tags = {
+    Name = "MainAcademy_Instance_TEST"
+  }                  
 }
 
 /*
