@@ -10,25 +10,25 @@ variable "subnet_cidr_block" {
     description = "value of subnet_cidr_block"
 }
 
-vaiable "Name_VPC" {
+variable "Name_VPC" {
   type = string
   default = "MainAcademy_VPC"
     description = "Name of VPC"
 }
 
-vaiable "Name_subnet" {
+variable "Name_subnet" {
   type = string
   default = "MainAcademy_Subnet"
     description = "Name of subnet"
 }
 
-vaiable "Name_InternetGateway" {
+variable "Name_InternetGateway" {
   type = string
   default = "MainAcademy_IGW_Net"
     description = "Name of InternetGateway"
 }
 
-vaiable "Name_RouteTable" {
+variable "Name_RouteTable" {
   type = string
   default = "MainAcademy_RouteTable"
     description = "Name of RouteTable"
