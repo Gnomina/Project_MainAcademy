@@ -11,7 +11,7 @@ pipeline {
         
         stage('Clone') {
             steps {
-                git branch: 'main', credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
+                git branch: 'terraform_r-emote_state', credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
                 echo "Клонированный репозиторий находится в папке: ${WORKSPACE}"
             }
         }
@@ -26,9 +26,6 @@ pipeline {
                         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                             sh 'terraform init '
                             echo 'ok'
-                            sh "terraform plan"
-                            echo 'ok'
-                            
                         }
                     }
                 }
@@ -45,7 +42,6 @@ pipeline {
                          }
                     }
                 } 
-                
             }
         }
     }
