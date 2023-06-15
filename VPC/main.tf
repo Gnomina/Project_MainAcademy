@@ -1,19 +1,19 @@
 # Create VPC
 resource "aws_vpc" "my_vpc" {
-  cidr_block = "10.0.0.0/16"  #VPS CIDR-Block
+  cidr_block = "${VPCipv6_cidr_block}"  #VPC CIDR-Block
 
   tags = {
-      Name = "MainAcademy_VPC"
+      Name = "${VPCName}"
   }
 }
 
 # Create Subnet in VPC
 resource "aws_subnet" "my_subnet" {
   vpc_id = aws_vpc.my_vpc.id
-  cidr_block = "10.0.1.0/24"  # subnet CIDR-Block
+  cidr_block = "${subnet_cidr_block}"  # subnet CIDR-Block
 
   tags = {
-    Name = "MainAcademy_Subnet"
+    Name = "${Name_subnet}"
   }
 }
 
@@ -22,7 +22,7 @@ resource "aws_internet_gateway" "my_igw" {
   vpc_id = aws_vpc.my_vpc.id
 
   tags = {
-    Name = "MainAcademy_IGW_Net"
+    Name = "${Name_InternetGateway}"
   }
 }
 
@@ -31,14 +31,14 @@ resource "aws_route_table" "my_route_table" {
   vpc_id = aws_vpc.my_vpc.id
 
   tags = {
-    Name = "MainAcademy_RouteTable"
+    Name = "${Name_RouteTable}"
   }
 }
 
 # Create Route
 resource "aws_route" "internet_route" {
   route_table_id         = aws_route_table.my_route_table.id
-  destination_cidr_block = "0.0.0.0/0"
+  destination_cidr_block = "${route_destination_cidr_block}"
   gateway_id             = aws_internet_gateway.my_igw.id
 }
 
