@@ -1,4 +1,16 @@
 
+
+#-----------------Save to remote backend S3-----------------
+terraform {
+  backend "s3" {
+    bucket = "mainacademy-project-terraform-back"
+    key    = "dev/security_group/terraform.tfstate"
+    region = "eu-central-1"
+  }
+}
+#------------------------------------------------------------
+
+#-----------------Load from remote backend S3----------------
 data "terraform_remote_state" "backend_outputs" {
   backend = "s3"
   config = {
@@ -7,11 +19,9 @@ data "terraform_remote_state" "backend_outputs" {
     region = "eu-central-1"
    }
 }
+#------------------------------------------------------------
 
-
-
-
-resource "aws_security_group" "my_security_group" {
+resource "aws_security_group" "SG" {
   name        = "TEST_SG_ADD"
   description = "Test SG"
   vpc_id      = data.terraform_remote_state.backend_outputs.outputs.vpc_id
@@ -39,9 +49,14 @@ resource "aws_security_group" "my_security_group" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
-  
 }
+/* 
+}
+output "sg_id" {
+  value = aws_security_group.SG.id
+  description = "security group_id from SG module (outputs_source = ./SG)"
+}
+*/
 
 /*
 output "backend_variables" {
