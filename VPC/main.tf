@@ -1,6 +1,6 @@
 # Create VPC
 resource "aws_vpc" "my_vpc" {
-  cidr_block = "${VPCipv6_cidr_block}"  #VPC CIDR-Block
+  cidr_block = "${VPC_cidr_block}"  #VPC CIDR-Block
 
   tags = {
       Name = "${VPCName}"
