@@ -1,6 +1,6 @@
 
 
-#-----------------Load from remote backend S3----------------
+#-----------------Load Variables and other data from remote backend S3----------------
 data "terraform_remote_state" "backend_outputs" {
   backend = "s3"
   config = {
@@ -9,12 +9,16 @@ data "terraform_remote_state" "backend_outputs" {
     region = "eu-central-1"
    }
 }
+#--------------local vars-----------------
+locals{
+  vps_id = data.terraform_remote_state.backend_outputs.outputs.vpc_id
+} 
 #------------------------------------------------------------
 
 resource "aws_security_group" "SG" {
   name        = "TEST_SG_ADD"
   description = "Test SG"
-  vpc_id      = data.terraform_remote_state.backend_outputs.outputs.vpc_id
+  vpc_id      = "${local.vps_id}"
   tags = {
     Name = "TEST_SG_ADD_TAG"
   }
@@ -40,16 +44,4 @@ resource "aws_security_group" "SG" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-/* 
-}
-output "sg_id" {
-  value = aws_security_group.SG.id
-  description = "security group_id from SG module (outputs_source = ./SG)"
-}
-*/
 
-/*
-output "backend_variables" {
-    value = data.terraform_remote_state.backend_outputs.outputs
-}
-*/
