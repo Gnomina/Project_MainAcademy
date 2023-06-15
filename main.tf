@@ -1,9 +1,9 @@
 provider "aws" {
-  region = "eu-central-1" 
+  region = "${var.Region}" 
 }
 
 module "VPC" {
-  source = "./VPC"
+  source = "${var.VPC_Project_PATH}"
 }
 
 
