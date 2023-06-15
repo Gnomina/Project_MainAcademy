@@ -33,8 +33,9 @@ resource "aws_instance" "example"{
   ami                    = "${var.ami_id}"
   instance_type          = "${var.instance_type}"
   key_name               = "${var.key_name}"
-  vpc_security_group_ids = ["${local.vps_id}"]
-  //subnet_id              = "${local.subnet_id}"
+  vpc_security_group_ids = ["${local.sg_id}"]
+  vpc_id                 = "${var.vpc_id}"
+  subnet_id              = "${var.subnet_id}"
   tags = {
     Name = "MainAcademy_Instance_TEST"
   }                  
