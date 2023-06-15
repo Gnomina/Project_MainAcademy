@@ -1,7 +1,3 @@
-variable "ami_id"{
-  default     = "ami-043b07e04972f1afa"
-    description = "Canonical, Ubuntu, 22.04 LTS, amd64 jammy image build on 2023-05-16"
-}
 
 variable "instance_type"{
   default     = "t2.micro"

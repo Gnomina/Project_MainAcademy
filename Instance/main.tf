@@ -45,6 +45,7 @@ resource "aws_instance" "example"{
   key_name               = "${var.key_name}"
   vpc_security_group_ids = ["${local.sg_id}"]
   subnet_id              = data.terraform_remote_state.backend_outputs.outputs.subnet_id
+  associate_public_ip_address = true
   tags = {
     Name = "MainAcademy_Instance_TEST"
   }                  
