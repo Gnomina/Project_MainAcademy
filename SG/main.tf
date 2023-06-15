@@ -1,15 +1,5 @@
 
 
-#-----------------Save to remote backend S3-----------------
-terraform {
-  backend "s3" {
-    bucket = "mainacademy-project-terraform-back"
-    key    = "dev/security_group/terraform.tfstate"
-    region = "eu-central-1"
-  }
-}
-#------------------------------------------------------------
-
 #-----------------Load from remote backend S3----------------
 data "terraform_remote_state" "backend_outputs" {
   backend = "s3"
