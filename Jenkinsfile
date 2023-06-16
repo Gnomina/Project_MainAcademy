@@ -20,7 +20,7 @@ pipeline {
              steps {
                 withCredentials([sshUserPrivateKey(credentialsId: "key", 
                 keyFileVariable: 'KEY_PATH', usernameVariable: 'REMOTE_USER')]) {
-                    sh 'sudo ansible-playbook -i inventory.ini playbook.yml'
+                    sh 'ansible-playbook -i inventory.ini playbook.yml'
                 }
             }
         }
