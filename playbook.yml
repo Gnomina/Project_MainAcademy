@@ -1,0 +1,5 @@
+- name: Установка и настройка HTTP-сервера
+  hosts: myserver
+  become: true
+  roles:
+    - httpd

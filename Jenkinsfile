@@ -8,40 +8,17 @@ pipeline {
                cleanWs()
             }
         }
-        
+
         stage('Clone') {
             steps {
-                git branch: 'Add-instance', credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
+                git branch: 'ClamAV-antimailware', credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
                 echo "Клонированный репозиторий находится в папке: ${WORKSPACE}"
             }
         }
 
-        stage("AWS_Terraform"){
-            stages{
-                stage("Terraform_Init & Plan"){
-                    steps{
-                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
-                        credentialsId: 'MainAcademy_AWS_key',
-                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
-                            sh 'terraform init '
-                            echo 'ok'
-                        }
-                    }
-                }
-                
-                stage("Terraform_apply"){
-                    steps{
-                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
-                        credentialsId: 'MainAcademy_AWS_key',
-                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
-                            sh "terraform apply -auto-approve"
-                            sh 'terraform output'
-                            echo 'ok'
-                         }
-                    }
-                } 
+        stage('Run Ansible playbook') {
+             steps {
+                sh 'ansible-playbook -i inventory.ini playbook.yml'
             }
         }
     }

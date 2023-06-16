@@ -1,0 +1,10 @@
+- name: Установка пакета httpd
+  yum:
+    name: httpd
+    state: present
+
+- name: Включение сервиса httpd
+  service:
+    name: httpd
+    state: started
+    enabled: true
