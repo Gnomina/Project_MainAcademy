@@ -20,6 +20,7 @@ pipeline {
              steps {
                 ansibleplaybook playbook: 'playbook.yml', inventory: 'inventory.ini',
                 colorized: true, credentialsId: 'Ansible_ssh_key'
-        }
+            }
+        }    
     }
 }
