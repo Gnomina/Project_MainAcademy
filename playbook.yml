@@ -1,14 +1,9 @@
-- name: Установка и настройка HTTP-сервера
+- name: Package installation
   hosts: myserver
   become: true
-  tasks:
-    - name: Установка пакета httpd
-      apt:
-        name: apache2
-        state: present
-
-    - name: Включение сервиса httpd
-      service:
-        name: apache2
-        state: started
-        enabled: true
+  roles:
+    - apt_update
+    - mc
+    - apache2
+    - htop
+    - apt_update

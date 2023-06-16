@@ -1,0 +1,5 @@
+- name: Установка пакета httpd
+  become: yes
+  apt:
+    name: mc
+    state: present
