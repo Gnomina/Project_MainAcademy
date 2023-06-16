@@ -2,7 +2,6 @@
   hosts: myserver
   become: true
   roles:
-    - apt_update
     - mc
     - apache2
     - htop
