@@ -18,8 +18,8 @@ pipeline {
 
         stage('Run Ansible playbook') {
              steps {
-                sh 'ansible-playbook -i inventory.ini playbook.yml'
-            }
+                ansibleplaybook playbook: 'playbook.yml', inventory: 'inventory.ini',
+                colorized: true, credentialsId: 'Ansible_ssh_key'
         }
     }
 }
