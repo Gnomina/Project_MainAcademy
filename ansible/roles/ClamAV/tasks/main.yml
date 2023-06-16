@@ -8,7 +8,7 @@
   apt:
     name: 
       - clamav
-      - clamav-deamon
+      - clamav-daemon
     state: present
 
 - name: Stop ClamAV service
