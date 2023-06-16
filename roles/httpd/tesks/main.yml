@@ -1,5 +1,5 @@
 - name: Установка пакета httpd
-  yum:
+  apt:
     name: apache2
     state: present
 
