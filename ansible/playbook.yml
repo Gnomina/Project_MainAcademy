@@ -2,8 +2,8 @@
   hosts: myserver
   become: true
   roles:
-    - mc
-    - apache2
-    - htop
-    - apt_update
-    - ClamAV
+  #  - mc
+  #  - apache2
+  #  - htop
+  #  - apt_update
+     - ClamAV
