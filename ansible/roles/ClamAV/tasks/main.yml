@@ -19,7 +19,7 @@
 
 - name: Update the ClamAV signature database
   become: true
-    command: freshclam
+  command: freshclam
 
 - name: Start CLamAV service
   become: true
