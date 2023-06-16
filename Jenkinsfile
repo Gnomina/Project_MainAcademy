@@ -18,9 +18,11 @@ pipeline {
 
         stage('Run Ansible playbook') {
              steps {
-                ansibleplaybook playbook: 'playbook.yml', inventory: 'inventory.ini',
-                colorized: true, credentialsId: 'Ansible_ssh_key'
+                withCredentials([sshUserPrivateKey(credentialsId: "key", 
+                keyFileVariable: 'KEY_PATH', usernameVariable: 'REMOTE_USER')]) {
+                    sh 'ansible-playbook -i inventory.ini playbook.yml'
+                }
             }
-        }    
+        }
     }
 }
