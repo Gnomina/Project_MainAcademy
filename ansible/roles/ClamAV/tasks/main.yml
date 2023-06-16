@@ -7,15 +7,15 @@
   become: true
   apt:
     name: 
-        - clamav
-        - clamav-deamon
+      - clamav
+      - clamav-deamon
     state: present
 
 - name: Stop ClamAV service
-   become: true
-   service:
-     name: clamav- freshclam
-     state: stopped
+  become: true
+  service:
+    name: clamav- freshclam
+    state: stopped
 
 - name: Update the ClamAV signature database
   become: true
