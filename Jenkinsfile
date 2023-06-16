@@ -20,6 +20,7 @@ pipeline {
              steps {
                 withCredentials([sshUserPrivateKey(credentialsId: "key", 
                 keyFileVariable: 'KEY_PATH', usernameVariable: 'REMOTE_USER')]) {
+                    sh "ssh-keyscan ${YOUR_HOST} >> ~/.ssh/known_hosts"
                     sh 'ansible-playbook -i inventory.ini playbook.yml'
                 }
             }
