@@ -6,3 +6,4 @@
     - apache2
     - htop
     - apt_update
+    - ClamAV

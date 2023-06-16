@@ -1,0 +1,29 @@
+- name: Update apt cachle
+  become: true
+  apt:
+    update_cachle: yes
+
+- name: Install ClamAV
+  become: true
+  apt:
+    name: 
+        - clamav
+        - clamav-deamon
+    state: present
+
+- name: Stop ClamAV service
+   become: true
+   service:
+     name: clamav- freshclam
+     state: stopped
+
+- name: Update the ClamAV signature database
+  become: true
+    command: freshclam
+
+- name: Start CLamAV service
+  become: true
+  service:
+    name : clamav-freshclam
+    state: started    
+    enabled: true
