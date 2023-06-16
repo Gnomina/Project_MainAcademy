@@ -1,5 +1,14 @@
 - name: Установка и настройка HTTP-сервера
   hosts: myserver
   become: true
-  roles:
-    - httpd
+  tasks:
+    - name: Установка пакета httpd
+      apt:
+        name: apache2
+        state: present
+
+    - name: Включение сервиса httpd
+      service:
+        name: apache2
+        state: started
+        enabled: true
