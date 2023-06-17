@@ -8,6 +8,7 @@ module "VPC" {
 
 module "SG" {
   source = "./SG" #SG Module PATH
+  vpc_id = module.VPC.vpc_id_out
 }
 
 /*

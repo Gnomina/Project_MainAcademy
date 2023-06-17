@@ -9,6 +9,7 @@ data "terraform_remote_state" "backend_outputs" {
     region = "eu-central-1"
    }
 }
+/*
 #--------------local vars------------------------------------------------------------
 locals{
   vps_id = data.terraform_remote_state.backend_outputs.outputs.vpc_id
@@ -22,6 +23,8 @@ locals {
     subnet_id = data.terraform_remote_state.backend_outputs.outputs.subnet_id
 }
 #------------------------------------------------------------------------------------
+*/
+
 
 data "aws_ami" "latest_ubuntu" {
     owners =["099720109477"]

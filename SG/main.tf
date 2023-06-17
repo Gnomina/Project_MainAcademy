@@ -9,11 +9,17 @@ data "terraform_remote_state" "backend_outputs" {
     region = "eu-central-1"
    }
 }
+/*
 #--------------local vars-----------------
 locals{
   vps_id = data.terraform_remote_state.backend_outputs.outputs.vpc_id
 } 
+*/
 #------------------------------------------------------------
+
+variable "vpc_id" {
+  description = "ID of the VPC"
+}
 
 resource "aws_security_group" "SG" {
   name        = "${var.Name}}"
