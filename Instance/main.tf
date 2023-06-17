@@ -1,6 +1,4 @@
-#ami-0ab1a82de7ca5889c
-
-#-----------------Load Variables and other data from remote backend S3----------------
+#-----------------Load Variables and other data from remote backend S3. This vars work only after create Infrastructure and save data on s3bucket----------------
 data "terraform_remote_state" "backend_outputs" {
   backend = "s3"
   config = {
@@ -10,7 +8,7 @@ data "terraform_remote_state" "backend_outputs" {
    }
 }
 /*
-#--------------local vars------------------------------------------------------------
+#- create local vars from s3 bucket, this vars work only after create Infrastructure and save data on s3bucket.----
 locals{
   vps_id = data.terraform_remote_state.backend_outputs.outputs.vpc_id
 } 
@@ -25,12 +23,12 @@ locals {
 #------------------------------------------------------------------------------------
 */
 
-variable "sucurity_group" {
-  description = "Security group id"
+
+/*
+variable "branch_name" {
+  description = "Branch name from Jenkins"
 }
-variable "subnet_id"  {
-  description = "Subnet id"
-}
+*/
 
 
 data "aws_ami" "latest_ubuntu" {
@@ -41,12 +39,6 @@ data "aws_ami" "latest_ubuntu" {
         values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-*"]
     }
 }
-/*
-variable "branch_name" {
-  description = "Branch name from Jenkins"
-}
-*/
-
 
 resource "aws_instance" "example"{
   ami                    = data.aws_ami.latest_ubuntu.id
@@ -60,9 +52,4 @@ resource "aws_instance" "example"{
   }                  
 }
 
-/*
-resource "null_resource" "save_instance_ip" {
-  provisioner "local-exec" {
-    command = "echo ${aws_instance.example.public_ip} > instance_public_ip.txt"
-    }
-}*/
+
