@@ -25,6 +25,13 @@ locals {
 #------------------------------------------------------------------------------------
 */
 
+variable "sucurity_group" {
+  description = "Security group id"
+}
+variable "subnet_id"  {
+  description = "Subnet id"
+}
+
 
 data "aws_ami" "latest_ubuntu" {
     owners =["099720109477"]
@@ -45,8 +52,8 @@ resource "aws_instance" "example"{
   ami                    = data.aws_ami.latest_ubuntu.id
   instance_type          = "${var.instance_type}"
   key_name               = "${var.key_name}"
-  vpc_security_group_ids = ["${local.sg_id}"]
-  subnet_id              = "${local.subnet_id}"
+  vpc_security_group_ids = ["${var.sucurity_group}"]
+  subnet_id              = "${var.subnet_id}"
   associate_public_ip_address = true
   tags = {
     Name = "MainAcademy_Instance_TEST"
