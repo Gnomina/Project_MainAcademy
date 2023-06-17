@@ -37,7 +37,7 @@ pipeline {
                         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                             sh "terraform apply -auto-approve"
-                            sh "terraform output instance_public_ip > ${WORKSPACE}/Hosts.txt"
+                            //sh "terraform output instance_public_ip > ${WORKSPACE}/Hosts.txt"
                             echo 'ok'
                             //sh 'terraform destroy -auto-approve'
                          }
