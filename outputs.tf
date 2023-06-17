@@ -11,7 +11,7 @@ output "subnet_id" {
 }
 
 output "sg_id" {
-  value = module.SG.security_group_id #This variable locate in SG module -> outputs
+  value = module.SG.security_group_id_out #This variable locate in SG module -> outputs
   description = "security group_id from SG module (outputs_source = ./SG)"
 }
 
