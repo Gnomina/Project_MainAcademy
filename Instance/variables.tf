@@ -1,7 +1,7 @@
 
 variable "instance_type"{
-  default     = "t2.micro"
-    description = "Free tire eligible t2.mikro instance"
+  default     = "t2.small"
+    description = "(Free tire eligible t2micro) t2.small instance"
 }
 
 variable "key_name"{
