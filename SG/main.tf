@@ -24,7 +24,7 @@ variable "vpc_id" {
 resource "aws_security_group" "SG" {
   name        = "${var.Name}}"
   description = "${var.description}"
-  vpc_id      = "${local.vps_id}"
+  vpc_id      = "${var.vps_id}"
   tags = {
     Name = "${var.Tags}"
   }
