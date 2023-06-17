@@ -10,9 +10,10 @@ module "SG" {
   source = "./SG" #SG Module PATH
 }
 
+/*
 module "Instance" {
   source = "./Instance" #Instance Module PATH
 }
-
+*/
 
 
