@@ -39,30 +39,32 @@ pipeline {
         stage('Write Inventory') {
             steps {
                 script {
-                    echo "IP = ${env.my_ip}"
                     def inventoryFile = "${WORKSPACE}/ansible/inventory.ini"
                     sh "sed -i 's/REPLACE_WITH_IP/${env.my_ip}/g' ${inventoryFile}"
                 }
             }
         }
+
+        stage('Status check') {
+            steps {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
+                credentialsId: 'MainAcademy_AWS_key',
+                accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
+                    sh 'aws ec2 describe-instance-status --instance-ids i-0335eeb394f10ee2d'
+
+                }
+            }
+        }        
     }
-}   
+} 
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
+aws ec2 describe-instance-status --instance-ids i-0335eeb394f10ee2d
 /*
         stage('Run Ansible playbook') {
              steps {
