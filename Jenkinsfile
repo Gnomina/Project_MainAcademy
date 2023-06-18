@@ -25,12 +25,7 @@ pipeline {
                         sh 'aws s3 cp s3://mainacademy-project-terraform-back/dev/backend/terraform.tfstate -'
                         script {
                             def tfStateFile = sh(script: "aws s3 cp s3://mainacademy-project-terraform-back/dev/backend/terraform.tfstate -", returnStdout: true).trim()
-                            def jsonSlurper = new JsonSlurper()
-                            def tfStateJson = jsonSlurper.parseText(tfStateFile)
-                            def parameterValue = tfStateJson.parameter_name
-
-                            env.PARAMETER_VALUE = parameterValue
-                            echo "The value of PARAMETER_VALUE is: ${env.PARAMETER_VALUE}"
+                            
                         }
                         
                         /*
