@@ -31,30 +31,8 @@ pipeline {
                         echo "Contents of tfStateJson: $tfStateJson"
                         def ip = tfStateJson.outputs.instance_public_ip.value
                         echo "IP = ${ip}"
-                        
-                        
-                        
-                        
-                        
-                        
-                        /*def tfStateJson = readJSON(text: tfStateFile)
-                        def variableValue = tfStateJson.outputs.instance_public_ip.value
-
-                        env.TF_VARIABLE = variableValue
-                        echo "The value of PARAMETER_VALUE is: ${env.TF_VARIABLE}"
-                        */
-                        }
-                        
-                        /*
-                    script {
-                        def tfStateFile = sh(script: "s3://mainacademy-project-terraform-back/dev/backend/terraform.tfstate -", returnStdout: true)
-                        def tfStateJson = readJSON(text: tfStateFile)
-                        def variableValue = tfStateJson.modules[0].outputs.instance_public_ip.value
-
-                        env.TF_VARIABLE = variableValue
-                        echo "The value of TF_VARIABLE is: ${env.TF_VARIABLE}"
-                    }*/
-                }
+                    }                      
+                }       
             }
         }
     }
