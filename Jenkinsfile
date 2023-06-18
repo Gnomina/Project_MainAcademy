@@ -52,7 +52,7 @@ pipeline {
                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                     script {
-                        def output = sh(script: 'aws ec2 describe-instance-status --instance-ids i-0335eeb394f10ee2d --region eu-central-1', returnStdout: true).trim()
+                        def output = sh(script: 'aws ec2 describe-instance-status --instance-ids i-0bcd21de7e041d6c5 --region eu-central-1', returnStdout: true).trim()
                         def json = readJSON(text: output)
                         
                         def instanceStatus = json.InstanceStatuses[0].InstanceStatus.Details[0].Status
