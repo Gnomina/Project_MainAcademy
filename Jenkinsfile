@@ -30,7 +30,7 @@ pipeline {
                         def tfStateFile = sh(script: "aws s3 cp s3://mainacademy-project-terraform-back/dev/backend/terraform.tfstate -", returnStdout: true).trim()
                         def tfStateJson = readJSON(text: tfStateFile)
                         //def ip = tfStateJson.outputs.instance_public_ip.value
-                        ip = tfStateJson.outputs.instance_public_ip.value
+                        env.ip = tfStateJson.outputs.instance_public_ip.value
                         echo "IP = ${ip}"
                     }                      
                 }       
