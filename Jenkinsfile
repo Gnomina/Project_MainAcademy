@@ -36,7 +36,7 @@ pipeline {
         stage('Write Inventory') {
             steps {
                 script {
-                    def inventoryFile = "${WORKSPACE}/ansible/inventory"
+                    def inventoryFile = "${WORKSPACE}/ansible/inventory.ini"
                     def ip = "REPLACE_WITH_IP"
 
                     // Заменяем строку с IP-адресом в файле инвентаря с помощью команды sed
