@@ -1,6 +1,10 @@
 pipeline {
     agent any
     
+    environment {
+        ip = ''
+    }
+    
     stages {
 
         stage('CLEAN_WORKSPACE') {
@@ -25,7 +29,8 @@ pipeline {
                     script {
                         def tfStateFile = sh(script: "aws s3 cp s3://mainacademy-project-terraform-back/dev/backend/terraform.tfstate -", returnStdout: true).trim()
                         def tfStateJson = readJSON(text: tfStateFile)
-                        def ip = tfStateJson.outputs.instance_public_ip.value
+                        //def ip = tfStateJson.outputs.instance_public_ip.value
+                        ip = tfStateJson.outputs.instance_public_ip.value
                         echo "IP = ${ip}"
                     }                      
                 }       
@@ -36,11 +41,8 @@ pipeline {
         stage('Write Inventory') {
             steps {
                 script {
-                    //def inventoryFile = "${WORKSPACE}/ansible/inventory.ini"
-                    //def ip = "REPLACE_WITH_IP"
-
-                    // Заменяем строку с IP-адресом в файле инвентаря с помощью команды sed
-                    sh "sed -i 's/REPLACE_WITH_IP/${ip}/g' '${WORKSPACE}/ansible/inventory.ini'"
+                    def inventoryFile = "${WORKSPACE}/ansible/inventory.ini"
+                    sh "gsed -i 's/REPLACE_WITH_IP/${env.ip}/g' ${inventoryFile}"
                 }
             }
         }
