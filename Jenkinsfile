@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {
-        ip = ''
+        my_ip = ''
     }
     
     stages {
@@ -32,7 +32,7 @@ pipeline {
                         //def ip = tfStateJson.outputs.instance_public_ip.value
                         ip = tfStateJson.outputs.instance_public_ip.value
                         echo "IP = ${ip}"
-                        env.ip = ip
+                        env.my_ip = ip
                     }                      
                 }       
             }
@@ -42,9 +42,9 @@ pipeline {
         stage('Write Inventory') {
             steps {
                 script {
-                    echo "IP = ${env.ip}"
+                    echo "IP = ${env.my_ip}"
                     def inventoryFile = "${WORKSPACE}/ansible/inventory.ini"
-                    sh "sed -i 's/REPLACE_WITH_IP/${env.ip}/g' ${inventoryFile}"
+                    sh "sed -i 's/REPLACE_WITH_IP/${env.my_ip}/g' ${inventoryFile}"
                 }
             }
         }
