@@ -16,7 +16,7 @@ pipeline {
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                     sh 'terraform init'
                     sh 'terraform plan -destroy'
-                    sh 'terraform destroy -state=s3://dev/backend/terraform.tfstate'
+                    sh 'terraform destroy -state=s3://dev/backend/terraform.tfstate -auto-approve'
                     echo 'ok'
                 }
             }
