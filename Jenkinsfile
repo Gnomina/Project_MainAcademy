@@ -29,6 +29,8 @@ pipeline {
                 }
             }
         }
+    }
+}    
 /*
         stage('Run Ansible playbook') {
              steps {
