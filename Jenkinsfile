@@ -32,6 +32,7 @@ pipeline {
                         //def ip = tfStateJson.outputs.instance_public_ip.value
                         ip = tfStateJson.outputs.instance_public_ip.value
                         echo "IP = ${ip}"
+                        env.ip = ip
                     }                      
                 }       
             }
