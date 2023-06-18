@@ -30,6 +30,13 @@ pipeline {
                     }                      
                 }       
             }
+            
+        }
+        stage('Write Inventory') {
+            def inventoryFile = 'ansible/inventory.ini'
+
+            // Заменяем строку с IP-адресом в файле инвентаря с помощью команды sed
+            sh "sed -i 's/REPLACE_WITH_IP/${ip}/g' ${inventoryFile}"
         }
     }
 }   
