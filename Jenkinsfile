@@ -60,13 +60,36 @@ pipeline {
                         def systemStatus = json.InstanceStatuses[0].SystemStatus.Details[0].Status
 
                         echo "Server: ${server}"
-                        echo "InstanceStatus: ${instanceStatus}"
-                        echo "SystemStatus: ${systemStatus}"
+                        echo "InstanceStatus check: ${instanceStatus}"
+                        echo "SystemStatus check: ${systemStatus}"
                     }
                    
                 }
             }
-        }        
+        }
+
+        stage('Status check') {
+            steps {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
+                credentialsId: 'MainAcademy_AWS_key',
+                accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
+                    script {
+                        def instanceStatus = sh(returnStdout: true, script: 'aws ec2 describe-instance-status --instance-ids i-0335eeb394f10ee2d --region eu-central-1 --query "InstanceStatuses[0].InstanceStatus.Status" --output text').trim()
+            
+                        if (instanceStatus == 'initializing') {
+                            echo 'Instance is initializing. Waiting for 10 seconds...'
+                            sleep(time: 10, unit: 'SECONDS')
+                        } else if (instanceStatus == 'passed') {
+                            echo 'Instance status is passed. Proceeding with pipeline...'
+                            // Добавьте остальные шаги вашего пайплайна здесь
+                        } else {
+                            error "Unknown instance status: ${instanceStatus}"
+                        }
+                    }
+                }
+            }
+        }               
     }
 } 
 
