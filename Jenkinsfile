@@ -29,7 +29,7 @@ pipeline {
                         def tfStateJson = readJSON(text: tfStateFile)
                         def ip = tfStateJson.outputs.instance_public_ip.value
                         echo "IP = ${ip}"
-                        env.my_ip = ip
+                        env.my_ip = ip //create environment variable - env.my_ip
                     }                      
                 }       
             }
@@ -51,6 +51,7 @@ pipeline {
                 credentialsId: 'MainAcademy_AWS_key',
                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
+                    sh 'aws ec2 describe-instance-status --instance-ids i-0335eeb394f10ee2d --region eu-central-1'
                     script {
                         def output = sh(script: 'aws ec2 describe-instance-status --instance-ids i-0335eeb394f10ee2d --region eu-central-1', returnStdout: true).trim()
                         def json = readJSON(text: output)
@@ -61,7 +62,7 @@ pipeline {
                         echo "InstanceStatus: ${instanceStatus}"
                         echo "SystemStatus: ${systemStatus}"
                     }
-                    //sh 'aws ec2 describe-instance-status --instance-ids i-0335eeb394f10ee2d --region eu-central-1'
+                    sh 'aws ec2 describe-instance-status --instance-ids i-0335eeb394f10ee2d --region eu-central-1'
                     
                 }
             }
