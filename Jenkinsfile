@@ -42,7 +42,7 @@ pipeline {
             steps {
                 script {
                     def inventoryFile = "${WORKSPACE}/ansible/inventory.ini"
-                    sh "gsed -i 's/REPLACE_WITH_IP/${env.ip}/g' ${inventoryFile}"
+                    sh "sed -i 's/REPLACE_WITH_IP/${env.ip}/g' ${inventoryFile}"
                 }
             }
         }
