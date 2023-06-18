@@ -56,7 +56,7 @@ pipeline {
                         def output = sh(script: 'aws ec2 describe-instance-status --instance-ids i-0335eeb394f10ee2d --region eu-central-1', returnStdout: true).trim()
                         def json = readJSON(text: output)
                         
-                        def instanceStatus = json.InstanceStatuses[0].InstanceStatus.Details.Status
+                        def instanceStatus = json.InstanceStatuses[0].InstanceStatus.Details[0].Status
                         def systemStatus = json.InstanceStatuses.SystemStatus.Details.Status
 
                         echo "InstanceStatus: ${instanceStatus}"
