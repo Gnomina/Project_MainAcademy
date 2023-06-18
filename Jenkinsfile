@@ -2,48 +2,17 @@ pipeline {
     agent any
     
     stages {
-
-        stage('CLEAN_WORKSPACE') {
-            steps {
-               cleanWs()
-            }
-        }
-        
-        stage('Clone') {
-            steps {
-                git branch: 'Add-instance', credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
-                echo "Клонированный репозиторий находится в папке: ${WORKSPACE}"
-            }
-        }
-
-        stage("AWS_Terraform"){
-            stages{
-                stage("Terraform_Init & Plan"){
-                    steps{
-                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
-                        credentialsId: 'MainAcademy_AWS_key',
-                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
-                            sh 'terraform init'
-                            sh 'terraform plan'
-                            echo 'ok'
-                        }
-                    }
+        stage("Destroy Infrastructure"){
+            steps{
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
+                credentialsId: 'MainAcademy_AWS_key',
+                accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
+                    sh 'terraform init'
+                    sh 'terraform plan -destroy'
+                    sh 'terraform destroy -state=s3://dev/backend/terraform.tfstate'
+                    echo 'ok'
                 }
-                
-                stage("Terraform_apply"){
-                    steps{
-                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
-                        credentialsId: 'MainAcademy_AWS_key',
-                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
-                            sh "terraform apply -auto-approve"
-                            
-                            echo 'ok'
-                            //sh 'terraform destroy -auto-approve'
-                         }
-                    }
-                } 
             }
         }
     }
