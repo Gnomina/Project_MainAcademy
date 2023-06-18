@@ -31,7 +31,7 @@ pipeline {
                         def tfStateJson = readJSON(text: tfStateFile)
                         //def ip = tfStateJson.outputs.instance_public_ip.value
                         env.ip = tfStateJson.outputs.instance_public_ip.value
-                        echo "IP = ${ip}"
+                        echo "IP = ${env.ip}"
                     }                      
                 }       
             }
