@@ -78,7 +78,8 @@ pipeline {
                         def cmdOutput = sh(returnStdout: true, script: 'aws ec2 describe-instance-status --instance-ids i-0335eeb394f10ee2d --region eu-central-1 --query "InstanceStatuses[0].InstanceStatus.Status" --output text', returnStatus: true)
                         
                         if (cmdOutput == 0) {
-                            def IStatus = cmdOutput.trim()
+                            def instanceStatus = sh(returnStdout: true, script: 'aws ec2 describe-instance-status --instance-ids i-0335eeb394f10ee2d --region eu-central-1 --query "InstanceStatuses[0].InstanceStatus.Details[0].Status" --output text').trim()
+                            
                             if (IStatus == 'initializing') {
                                 echo 'Instance is initializing. Waiting for 10 seconds...'
                                 sleep(time: 10, unit: 'SECONDS')
