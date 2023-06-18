@@ -24,7 +24,7 @@ pipeline {
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                     sh 'aws s3 cp s3://mainacademy-project-terraform-back/dev/backend/terraform.tfstate -'
                     script {
-                        def tfStateFile = sh(script: "aws s3 cp s3://mainacademy-project-terraform-back/dev/backend/terraform.tfstate -", returnStdout: true)
+                        def tfStateFile = sh(script: "aws s3 cp s3://mainacademy-project-terraform-back/dev/backend/terraform.tfstate -", returnStdout: true).trim()
                         def tfStateJson = readJSON(text: tfStateFile)
 
                         def variableValue = tfStateJson.outputs.instance_public_ip.value
