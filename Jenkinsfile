@@ -2,6 +2,12 @@ pipeline {
     agent any
     
     stages {
+        stage('Clone') {
+            steps {
+                git branch: 'Add-instance', credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
+            }
+        }
+
         stage("Destroy Infrastructure"){
             steps{
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
