@@ -51,19 +51,17 @@ pipeline {
                 credentialsId: 'MainAcademy_AWS_key',
                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
-                    sh 'aws ec2 describe-instance-status --instance-ids i-0335eeb394f10ee2d --region eu-central-1'
                     script {
                         def output = sh(script: 'aws ec2 describe-instance-status --instance-ids i-0335eeb394f10ee2d --region eu-central-1', returnStdout: true).trim()
                         def json = readJSON(text: output)
                         
                         def instanceStatus = json.InstanceStatuses[0].InstanceStatus.Details[0].Status
-                        def systemStatus = json.InstanceStatuses.SystemStatus.Details.Status
+                        def systemStatus = json.InstanceStatuses[0].SystemStatus.Details[0].Status
 
                         echo "InstanceStatus: ${instanceStatus}"
                         echo "SystemStatus: ${systemStatus}"
                     }
-                    //sh 'aws ec2 describe-instance-status --instance-ids i-0335eeb394f10ee2d --region eu-central-1'
-                    
+                   
                 }
             }
         }        
