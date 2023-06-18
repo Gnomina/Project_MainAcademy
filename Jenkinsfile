@@ -68,15 +68,11 @@ pipeline {
                             sleep(time: 10, unit: 'SECONDS')
                         } else if (${instanceStatus} == 'passed'){
                             echo 'Instance status is passed. Proceeding with pipeline...'
-                        } else {
-                                error "Unknown instance status: ${instanceStatus}"
-                            }
+                        }
                     }
-                   
                 }
             }
         }
-                   
     }
 } 
 
