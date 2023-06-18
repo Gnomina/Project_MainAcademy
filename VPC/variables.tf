@@ -1,3 +1,6 @@
+
+#-------------VPC variables-----------------
+
 variable "VPC_cidr_block" { # Local variable
   type = string
   default = "10.0.0.0/16"

@@ -40,7 +40,7 @@ pipeline {
                             sh "terraform apply -auto-approve"
                             
                             echo 'ok'
-                            sh 'terraform destroy -auto-approve'
+                            //sh 'terraform destroy -auto-approve'
                          }
                     }
                 } 

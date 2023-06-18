@@ -1,37 +1,8 @@
-#-----------------Load Variables and other data from remote backend S3. This vars work only after create Infrastructure and save data on s3bucket----------------
-data "terraform_remote_state" "backend_outputs" {
-  backend = "s3"
-  config = {
-    bucket = "mainacademy-project-terraform-back"
-    key    = "dev/backend/terraform.tfstate"
-    region = "eu-central-1"
-   }
-}
-/*
-#- create local vars from s3 bucket, this vars work only after create Infrastructure and save data on s3bucket.----
-locals{
-  vps_id = data.terraform_remote_state.backend_outputs.outputs.vpc_id
-} 
 
-locals {
-    sg_id = data.terraform_remote_state.backend_outputs.outputs.sg_id
-}
-
-locals {
-    subnet_id = data.terraform_remote_state.backend_outputs.outputs.subnet_id
-}
-#------------------------------------------------------------------------------------
-*/
+#--------------Instanse main.tf-----------------
 
 
-/*
-variable "branch_name" {
-  description = "Branch name from Jenkins"
-}
-*/
-
-
-data "aws_ami" "latest_ubuntu" {
+data "aws_ami" "latest_ubuntu" { # search ubuntu image in AWS
     owners =["099720109477"]
     most_recent = true
     filter {

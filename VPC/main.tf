@@ -1,3 +1,6 @@
+
+#----------------VPC main.tf----------------------------
+
 # Create VPC
 resource "aws_vpc" "my_vpc" {
   cidr_block = "${var.VPC_cidr_block}"  #VPC CIDR-Block

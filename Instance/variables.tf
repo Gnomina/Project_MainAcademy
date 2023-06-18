@@ -1,4 +1,6 @@
 
+#----------------Instance Variables----------------
+
 variable "instance_type"{
   default     = "t2.small" # Local variable
     description = "(Free tire eligible t2micro) t2.small instance"
@@ -15,3 +17,9 @@ variable "sucurity_group" { # variable from  SG module -> outputs
 variable "subnet_id"  { # variable from  VPC module -> outputs
   description = "local value of the 'subnet_id_out' variable from the VPC module -> outputs"
 }
+
+/*
+variable "branch_name" {
+  description = "Branch name from Jenkins"
+}
+*/
