@@ -72,7 +72,8 @@ pipeline {
 
 //InstanceStatus: initializing
 //SystemStatus: initializing
-
+//InstanceStatus: passed
+//SystemStatus: passed
 
 
 
