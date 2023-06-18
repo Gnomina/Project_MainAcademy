@@ -34,10 +34,15 @@ pipeline {
         }
 
         stage('Write Inventory') {
-            def inventoryFile = "${WORKSPACE}/ansible/inventory"
+            steps {
+                script {
+                    def inventoryFile = "${WORKSPACE}/ansible/inventory"
+                    //def ip = "REPLACE_WITH_IP"
 
-            // Заменяем строку с IP-адресом в файле инвентаря с помощью команды sed
-            sh "sed -i 's/REPLACE_WITH_IP/${ip}/g' ${inventoryFile}"
+                    // Заменяем строку с IP-адресом в файле инвентаря с помощью команды sed
+                    sh "sed -i 's/REPLACE_WITH_IP/${ip}/g' ${inventoryFile}"
+                }
+            }
         }
 
         stages {
