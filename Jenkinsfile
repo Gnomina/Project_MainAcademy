@@ -17,24 +17,33 @@ pipeline {
         }
 
         stage('Get Terraform Variable') {
-    steps {
-        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
-        credentialsId: 'MainAcademy_AWS_key',
-        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
-            script {
-                def tfStateFile = sh(script: "aws s3 cp s3://dev/backend/terraform.tfstate -", returnStdout: true)
-                def tfStateJson = readJSON(text: tfStateFile)
-                def variableValue = tfStateJson.modules[0].outputs.instance_public_ip.value
+            steps {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
+                credentialsId: 'MainAcademy_AWS_key',
+                accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
+                    script {
+                        def tfStateFile = sh(script: "aws s3 cp s3://dev/backend/terraform.tfstate -", returnStdout: true)
+                        def tfStateJson = readJSON(text: tfStateFile)
+                        def variableValue = tfStateJson.modules[0].outputs.instance_public_ip.value
 
-                env.TF_VARIABLE = variableValue
-                echo "The value of TF_VARIABLE is: ${env.TF_VARIABLE}"
+                        env.TF_VARIABLE = variableValue
+                        echo "The value of TF_VARIABLE is: ${env.TF_VARIABLE}"
+                    }
+                }
             }
         }
     }
-}
-    }
 }   
+
+
+
+
+
+
+
+
+
 
 
 
