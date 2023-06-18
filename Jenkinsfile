@@ -16,6 +16,20 @@ pipeline {
             }
         }
 
+        stage('Get Terraform Variable') {
+            steps {
+                script {
+                    def tfStateFile = sh(script: "aws s3 cp s3://dev/backend/terraform.tfstate -", returnStdout: true)
+                    def tfStateJson = readJSON(text: tfStateFile)
+
+                    def variableValue = tfStateJson.modules[0].outputs.instance_public_ip.value
+
+                    env.TF_VARIABLE = variableValue
+                    echo "The value of TF_VARIABLE is: ${env.TF_VARIABLE}"
+                }
+            }
+        }
+/*
         stage('Run Ansible playbook') {
              steps {
                 withCredentials([sshUserPrivateKey(credentialsId: "12345", 
@@ -34,3 +48,4 @@ pipeline {
         }
     }
 }
+*/
