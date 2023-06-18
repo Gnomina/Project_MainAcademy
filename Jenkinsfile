@@ -22,6 +22,9 @@ pipeline {
                 credentialsId: 'MainAcademy_AWS_key',
                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
+                        sh 'aws s3 cp s3://mainacademy-project-terraform-back/dev/backend/terraform.tfstate -'
+                        
+                        /*
                     script {
                         def tfStateFile = sh(script: "s3://mainacademy-project-terraform-back/dev/backend/terraform.tfstate -", returnStdout: true)
                         def tfStateJson = readJSON(text: tfStateFile)
@@ -29,7 +32,7 @@ pipeline {
 
                         env.TF_VARIABLE = variableValue
                         echo "The value of TF_VARIABLE is: ${env.TF_VARIABLE}"
-                    }
+                    }*/
                 }
             }
         }
