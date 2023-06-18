@@ -26,7 +26,9 @@ pipeline {
                     script {
                         def tfStateFile = sh(script: "aws s3 cp s3://mainacademy-project-terraform-back/dev/backend/terraform.tfstate -", returnStdout: true).trim()
                         def tfStateJson = readJSON(text: tfStateFile)
+                        echo "The value of tfStateJson is: ${tfStateJson}"
                         def parameterValue = tfStateJson.instance_public_ip
+                        echo "The value of parameterValue is: ${parameterValue}"
 
                         env.PARAMETER_VALUE = parameterValue
                         echo "The value of PARAMETER_VALUE is: ${env.PARAMETER_VALUE}"
