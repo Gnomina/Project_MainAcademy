@@ -62,7 +62,7 @@ pipeline {
                         echo "InstanceStatus: ${instanceStatus}"
                         echo "SystemStatus: ${systemStatus}"
                     }
-                    sh 'aws ec2 describe-instance-status --instance-ids i-0335eeb394f10ee2d --region eu-central-1'
+                    //sh 'aws ec2 describe-instance-status --instance-ids i-0335eeb394f10ee2d --region eu-central-1'
                     
                 }
             }
