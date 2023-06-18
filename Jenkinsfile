@@ -75,18 +75,18 @@ pipeline {
                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                     script {
-                        def instanceStatus = sh(returnStdout: true, script: 'aws ec2 describe-instance-status --instance-ids i-0335eeb394f10ee2d --region eu-central-1 --query "InstanceStatuses[0].InstanceStatus.Status" --output text', returnStatus: true)
+                        def IStatus = sh(returnStdout: true, script: 'aws ec2 describe-instance-status --instance-ids i-0335eeb394f10ee2d --region eu-central-1 --query "InstanceStatuses[0].InstanceStatus.Status" --output text', returnStatus: true)
                         
                         if (cmdOutput == 0) {
-                            def instanceStatus = cmdOutput.trim()
-                            if (instanceStatus == 'initializing') {
+                            def IStatus = cmdOutput.trim()
+                            if (IStatus == 'initializing') {
                                 echo 'Instance is initializing. Waiting for 10 seconds...'
                                 sleep(time: 10, unit: 'SECONDS')
-                            } else if (instanceStatus == 'passed') {
+                            } else if (IStatus == 'passed') {
                                 echo 'Instance status is passed. Proceeding with pipeline...'
                                 // Добавьте остальные шаги вашего пайплайна здесь
                             } else {
-                                error "Unknown instance status: ${instanceStatus}"
+                                error "Unknown instance status: ${IStatus}"
                             }
                         }
                     }
