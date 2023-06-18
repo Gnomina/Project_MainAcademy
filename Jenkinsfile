@@ -68,7 +68,7 @@ pipeline {
             }
         }
 
-        stage('Status check') {
+        stage('check') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
                 credentialsId: 'MainAcademy_AWS_key',
