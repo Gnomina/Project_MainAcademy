@@ -36,11 +36,11 @@ pipeline {
         stage('Write Inventory') {
             steps {
                 script {
-                    def inventoryFile = "${WORKSPACE}/ansible/inventory.ini"
-                    def ip = "REPLACE_WITH_IP"
+                    //def inventoryFile = "${WORKSPACE}/ansible/inventory.ini"
+                    //def ip = "REPLACE_WITH_IP"
 
                     // Заменяем строку с IP-адресом в файле инвентаря с помощью команды sed
-                    sh "sed -i 's/REPLACE_WITH_IP/${ip}/g' ${inventoryFile}"
+                    sh "sed -i 's/REPLACE_WITH_IP/${ip}/g' '${WORKSPACE}/ansible/inventory.ini'"
                 }
             }
         }
@@ -49,7 +49,7 @@ pipeline {
             steps {
                 script {
                     def instanceId = 'i-0335eeb394f10ee2d'
-                    def command = "aws ec2 describe-instance-status --instance-ids ${instanceId}"
+                    def command = "aws ec2 describe-instance-status --instance-ids ${instanceId} --region eu-central-1"
                     def output = sh(returnStdout: true, script: command).trim()
 
                     if (output.contains("INSTANCESTATUS  initializing")) {
