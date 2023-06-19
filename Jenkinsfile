@@ -20,6 +20,20 @@ pipeline {
                 echo "PATH to clone repo: ${WORKSPACE}"
             }
         }
+        stage('Build and Push Image') {
+        environment {
+        ECR_REGISTRY = 'public.ecr.aws/p7o7q6w7/test-aws-ecr'
+        IMAGE_NAME = 'Test_WebApp'
+        }
+        steps {
+        // Крок для збирання і пушу Docker-образу в ECR реєстр
+        sh '''
+          docker build -t $IMAGE_NAME -f Dockerfile .
+          docker tag $IMAGE_NAME $ECR_REGISTRY/$IMAGE_NAME
+          docker push $ECR_REGISTRY/$IMAGE_NAME
+        '''
+      }
+    }
 
         
     }
