@@ -27,7 +27,7 @@ pipeline {
             }
             steps {
             // Крок для збирання і пушу Docker-образу в ECR реєстр
-                sh "docker build -t $IMAGE_NAME -f ${WORKSPACE}/Dockerfile ."
+                sh "docker build -t $IMAGE_NAME -f ${WORKSPACE}/Webapp/Dockerfile ."
           
                 sh 'docker tag $IMAGE_NAME $ECR_REGISTRY/$IMAGE_NAME'
                 sh 'docker push $ECR_REGISTRY/$IMAGE_NAME'
