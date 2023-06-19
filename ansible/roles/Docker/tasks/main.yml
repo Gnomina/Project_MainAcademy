@@ -1,11 +1,11 @@
 - name: Update apt cache
   become: true
-  apt-get:
+  apt:
     update_cache: yes
 
 - name: Install ca-certificates, curl, and gnupg
   become: true
-  apt-get:
+  apt:
     name:
       - ca-certificates
       - curl
@@ -38,12 +38,12 @@
 
 - name: Update apt cache again
   become: true
-  apt-get:
+  apt:
     update_cache: yes
 
 - name: Install Docker packages
   become: true
-  apt-get:
+  apt:
     name:
       - docker-ce
       - docker-ce-cli
