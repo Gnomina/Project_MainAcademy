@@ -2,6 +2,9 @@ pipeline {
     agent any
     
     stages {
+        parameters {
+            string(name: 'GIT_BRANCH_OR_TAG', defaultValue: 'main', description: 'Specify the Git branch or tag to build')
+}
 
         stage('CLEAN_WORKSPACE') {
             steps {
@@ -11,38 +14,11 @@ pipeline {
         
         stage('Clone') {
             steps {
-                git branch: 'main', credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
+                git branch: "${params.GIT_BRANCH_OR_TAG}", credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
                 echo "Клонированный репозиторий находится в папке: ${WORKSPACE}"
             }
         }
 
-        stage("AWS_Terraform"){
-            stages{
-                stage("Terraform_Init & Plan"){
-                    steps{
-                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
-                        credentialsId: 'MainAcademy_AWS_key',
-                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
-                            sh 'terraform init '
-                            echo 'ok'
-                        }
-                    }
-                }
-                
-                stage("Terraform_apply"){
-                    steps{
-                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
-                        credentialsId: 'MainAcademy_AWS_key',
-                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
-                            sh "terraform apply -auto-approve"
-                            sh 'terraform output'
-                            echo 'ok'
-                         }
-                    }
-                } 
-            }
-        }
+        
     }
 }
