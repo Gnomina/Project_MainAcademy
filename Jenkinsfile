@@ -66,14 +66,13 @@ pipeline {
                         echo "InstanceStatus check: ${instanceStatus}"
                         echo "SystemStatus check: ${systemStatus}"
 
-                        if ("${instanceStatus}" == "passed" ); then
+                        if (instanceStatus == 'passed') {
                             echo "Instance status is passed. Proceeding with the pipeline..."
                             break
-                        fi
-
-                         echo "Instance is initializing. Waiting for 10 seconds..."
-                        sleep 10
-                        done
+                        } else {
+                            echo "Instance is initializing. Waiting for 10 seconds..."
+                            sleep 10
+                        }
                     }
                 }
             }
