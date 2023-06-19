@@ -23,7 +23,7 @@ pipeline {
         stage('Build and Push Image') {
         environment {
             ECR_REGISTRY = 'public.ecr.aws/p7o7q6w7/test-aws-ecr'
-            IMAGE_NAME = 'Test_WebApp'
+            IMAGE_NAME = 'test_webapp'
             }
             steps {
             // Крок для збирання і пушу Docker-образу в ECR реєстр
