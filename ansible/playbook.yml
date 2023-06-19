@@ -2,9 +2,5 @@
   hosts: myserver
   become: true
   roles:
-  #  - mc
-  #  - apache2
-  #  - htop
-  #  - apt_update
      - ClamAV
      - Docker
