@@ -1,8 +1,7 @@
 - name: Update apt cache
   become: true
   apt:
-    update_cache: yes
-
+    update_cache: "yes"
 - name: Install ClamAV
   become: true
   apt:
@@ -20,24 +19,25 @@
 - name: Edit ClamAV configuration file
   become: true
   vars:
-    clamav_config_file: "/etc/clamav/clamd.conf"
-    scan_directory: "/"
-  tasks:
-    - name: Uncomment OnAccessIncludePath line
-      lineinfile:
-        path: "{{ clamav_config_file }}"
-        regexp: "^#OnAccessIncludePath"
-        line: "OnAccessIncludePath {{ scan_directory }}"
-        state: present
-        backup: yes
+    clamav_config_file: /etc/clamav/clamd.conf
+    scan_directory: /
+  blockinfile:
+    tasks:
+      - name: Uncomment OnAccessIncludePath line
+        lineinfile:
+          path: "{{ clamav_config_file }}"
+          regexp: "^#OnAccessIncludePath"
+          line: "OnAccessIncludePath {{ scan_directory }}"
+          state: present
+          backup: "yes"
 
-    - name: Add ScanOnAccess and OnAccessPrevention lines
-      blockinfile:
+      - name: Add ScanOnAccess and OnAccessPrevention lines
+        blockinfile:
         path: "{{ clamav_config_file }}"
         block: |
           OnAccessPrevention yes
           ScanOnAccess yes
-        backup: yes
+        backup: "yes"
 
 - name: Update the ClamAV signature database
   become: true
@@ -46,10 +46,9 @@
 - name: Configure ClamAV user
   become: true
   replace:
-    path: "/etc/systemd/system/multi-user.target.wants/clamav-daemon.service"
-    regexp: "^User=clamav"
-    line: "User=root"
-
+    path: /etc/systemd/system/multi-user.target.wants/clamav-daemon.service
+    regexp: ^User=clamav
+    line: User=root
 - name: Restart ClamAV service
   become: true
   service:
@@ -68,4 +67,4 @@
   become: true
   service:
     name: clamav-daemon
-    enabled: yes
+    enabled: "yes"
