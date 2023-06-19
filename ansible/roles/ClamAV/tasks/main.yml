@@ -42,12 +42,12 @@
   become: true
   command: freshclam
 
-- name: Configure ClamAV user
+- name: Add User=clamav line to clamav-daemon.service
   become: true
-  replace:
+  lineinfile:
     path: /etc/systemd/system/multi-user.target.wants/clamav-daemon.service
-    regexp: ^User=clamav
-    replace: User=root
+    line: "User=root"
+    insertafter: '\[Service\]'
 
 - name: Restart ClamAV service
   become: true
