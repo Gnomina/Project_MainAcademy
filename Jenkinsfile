@@ -1,10 +1,12 @@
 pipeline {
     agent any
     
+    parameters {
+        string(name: 'GIT_BRANCH_OR_TAG', defaultValue: 'main', description: 'Specify the Git branch or tag to build')
+    }
+    
     stages {
-        parameters {
-            string(name: 'GIT_BRANCH_OR_TAG', defaultValue: 'main', description: 'Specify the Git branch or tag to build')
-}
+        
 
         stage('CLEAN_WORKSPACE') {
             steps {
