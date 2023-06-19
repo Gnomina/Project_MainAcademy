@@ -25,7 +25,8 @@
   replace:
     path: /etc/systemd/system/multi-user.target.wants/clamav-daemon.service
     regexp: ^User=clamav
-    line: User=root
+    replace: User=root
+
 - name: Restart ClamAV service
   become: true
   service:
