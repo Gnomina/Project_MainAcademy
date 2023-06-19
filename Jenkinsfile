@@ -28,8 +28,11 @@ pipeline {
                         def tfStateFile = sh(script: "aws s3 cp s3://mainacademy-project-terraform-back/dev/backend/terraform.tfstate -", returnStdout: true).trim()
                         def tfStateJson = readJSON(text: tfStateFile)
                         def ip = tfStateJson.outputs.instance_public_ip.value
+                        def id = tfStateJson.outputs.instance_id.value
                         echo "IP = ${ip}"
+                        echo "ID = ${id}"
                         env.my_ip = ip //create environment variable - env.my_ip
+                        env.instance_id = id //create environment variable - env.instance_id
                     }                      
                 }       
             }
@@ -52,7 +55,7 @@ pipeline {
                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                     script {
-                        def output = sh(script: 'aws ec2 describe-instance-status --instance-ids i-0bcd21de7e041d6c5 --region eu-central-1', returnStdout: true).trim()
+                        def output = sh(script: "aws ec2 describe-instance-status --instance-ids ${env.instance_id} --region eu-central-1", returnStdout: true).trim()
                         def json = readJSON(text: output)
                         
                         def server = json.InstanceStatuses[0].InstanceState.Name
