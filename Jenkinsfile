@@ -68,7 +68,7 @@ pipeline {
 
                         if (instanceStatus == 'passed') {
                             echo "Instance status is passed. Proceeding with the pipeline..."
-                            break
+                            passed = true
                         } else {
                             echo "Instance is initializing. Waiting for 10 seconds..."
                             sleep 10
