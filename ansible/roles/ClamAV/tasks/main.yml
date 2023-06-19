@@ -29,6 +29,7 @@
     backup: "yes"
 
 - name: Add OnAccessPrevention line
+  become: true
   vars:
     clamav_config_file: /etc/clamav/clamd.conf
   blockinfile:
@@ -67,4 +68,4 @@
   become: true
   service:
     name: clamav-daemon
-    enabled: "yes"
+    enabled: true

@@ -7,3 +7,4 @@
   #  - htop
   #  - apt_update
      - ClamAV
+     - Docker
