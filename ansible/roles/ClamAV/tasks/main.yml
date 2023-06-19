@@ -29,6 +29,8 @@
     backup: "yes"
 
 - name: Add ScanOnAccess line
+  vars:
+    clamav_config_file: /etc/clamav/clamd.conf
   blockinfile:
     path: "{{ clamav_config_file }}"
     block: |
@@ -36,6 +38,8 @@
     backup: "yes"
 
 - name: Add OnAccessPrevention line
+  vars:
+    clamav_config_file: /etc/clamav/clamd.conf
   blockinfile:
     path: "{{ clamav_config_file }}"
     block: |
