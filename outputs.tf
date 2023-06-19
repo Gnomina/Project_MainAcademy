@@ -21,3 +21,7 @@ output "instance_public_ip" {
   description = "public ip of instance from Instance module (outputs_source = ./Instance)"
 }
 
+output "instance_id" {
+  value = module.Instance.instance_id #This variable locate in Instance module -> outputs 
+  description = "instance id from Instance module (outputs_source = ./Instance)"
+}
