@@ -25,12 +25,18 @@ pipeline {
             ECR_REGISTRY = 'public.ecr.aws/p7o7q6w7/test-aws-ecr'
             IMAGE_NAME = 'test_webapp'
             }
-            steps {
-            // Крок для збирання і пушу Docker-образу в ECR реєстр
+            steps { //assemble and push docker image
                 sh "docker build -t $IMAGE_NAME -f ${WORKSPACE}/webapp/Dockerfile ."
-          
-                sh 'docker tag $IMAGE_NAME $ECR_REGISTRY/$IMAGE_NAME'
-                sh 'docker push $ECR_REGISTRY/$IMAGE_NAME'
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
+                credentialsId: 'MainAcademy_AWS_key',
+                accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
+                    script {
+                        sh 'docker tag $IMAGE_NAME $ECR_REGISTRY/$IMAGE_NAME'
+                    sh 'docker push $ECR_REGISTRY/$IMAGE_NAME'
+
+                    }
+                }
             }
         }
     }
