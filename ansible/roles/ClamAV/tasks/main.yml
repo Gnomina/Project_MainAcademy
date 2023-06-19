@@ -22,7 +22,7 @@
   vars:
     clamav_config_file: "/etc/clamav/clamd.conf"
     scan_directory: "/"
-  tasks:
+  task:
     - name: Uncomment OnAccessIncludePath line
       lineinfile:
         path: "{{ clamav_config_file }}"
@@ -37,7 +37,7 @@
     block: |
       OnAccessPrevention yes
       ScanOnAccess yes
-    backup: yes
+      backup: yes
 
 - name: Update the ClamAV signature database
   become: true
@@ -45,11 +45,10 @@
 
 - name: Configure ClamAV user
   become: true
-  lineinfile:
+  replace:
     path: "/etc/systemd/system/multi-user.target.wants/clamav-daemon.service"
     regexp: "^User=clamav"
     line: "User=root"
-    state: present
 
 - name: Restart ClamAV service
   become: true
