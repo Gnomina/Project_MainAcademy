@@ -16,7 +16,7 @@
     name: clamav-freshclam
     state: stopped
 
-- name: test
+- name: read clamav config file
   become: true
   vars:
     clamav_config_file: /etc/clamav/clamd.conf
@@ -26,6 +26,20 @@
     regexp: "^#OnAccessIncludePath"
     line: "OnAccessIncludePath {{ scan_directory }}"
     state: present
+    backup: "yes"
+
+- name: Add ScanOnAccess line
+  blockinfile:
+    path: "{{ clamav_config_file }}"
+    block: |
+      ScanOnAccess yes
+    backup: "yes"
+
+- name: Add OnAccessPrevention line
+  blockinfile:
+    path: "{{ clamav_config_file }}"
+    block: |
+      OnAccessPrevention yes
     backup: "yes"
 
 - name: Update the ClamAV signature database
