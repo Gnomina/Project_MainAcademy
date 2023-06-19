@@ -66,12 +66,14 @@ pipeline {
                         echo "InstanceStatus check: ${instanceStatus}"
                         echo "SystemStatus check: ${systemStatus}"
 
-                        if (instanceStatus == 'initializing') {
-                            echo 'Instance is initializing. Waiting for 10 seconds...'
-                            sleep(time: 10, unit: 'SECONDS')
-                        } else if (instanceStatus == 'passed'){
-                            echo 'Instance status is passed. Proceeding with pipeline...'
-                        }
+                        if [ "${instanceStatus}" == "passed" ]; then
+                            echo "Instance status is passed. Proceeding with the pipeline..."
+                            break
+                        fi
+
+                         echo "Instance is initializing. Waiting for 10 seconds..."
+                        sleep 10
+                        done
                     }
                 }
             }
@@ -84,6 +86,15 @@ pipeline {
 //InstanceStatus: passed
 //SystemStatus: passed
 
+
+/*
+if (instanceStatus == 'initializing') {
+                            echo 'Instance is initializing. Waiting for 10 seconds...'
+                            sleep(time: 10, unit: 'SECONDS')
+                        } else if (instanceStatus == 'passed'){
+                            echo 'Instance status is passed. Proceeding with pipeline...'
+                        }
+*/
 
 
 
