@@ -1,3 +1,6 @@
 {
-    "ansible.python.interpreterPath": "c:\\Users\\gnomo\\AppData\\Local\\Programs\\Python\\Python310\\python.exe"
+    "ansible.python.interpreterPath": "c:\\Users\\gnomo\\AppData\\Local\\Programs\\Python\\Python310\\python.exe",
+    "yaml.schemas": {
+        "https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible.json#/$defs/playbook": "file:///w%3A/MainAcademy/Project_MainAcademy/ansible/roles/apache2/tasks/main.yml"
+    }
 }

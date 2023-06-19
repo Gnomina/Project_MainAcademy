@@ -16,29 +16,6 @@
     name: clamav-freshclam
     state: stopped
 
-- name: Edit ClamAV configuration file
-  become: true
-  vars:
-    clamav_config_file: /etc/clamav/clamd.conf
-    scan_directory: /
-  blockinfile:
-    tasks:
-      - name: Uncomment OnAccessIncludePath line
-        lineinfile:
-          path: "{{ clamav_config_file }}"
-          regexp: "^#OnAccessIncludePath"
-          line: "OnAccessIncludePath {{ scan_directory }}"
-          state: present
-          backup: "yes"
-
-      - name: Add ScanOnAccess and OnAccessPrevention lines
-        blockinfile:
-        path: "{{ clamav_config_file }}"
-        block: |
-          OnAccessPrevention yes
-          ScanOnAccess yes
-        backup: "yes"
-
 - name: Update the ClamAV signature database
   become: true
   command: freshclam
