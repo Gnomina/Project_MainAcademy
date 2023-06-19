@@ -18,8 +18,7 @@
     state: stopped
 
 - name: Edit ClamAV configuration file
-  become: yes
-  become_user: root
+  become: true
   vars:
     clamav_config_file: "/etc/clamav/clamd.conf"
     scan_directory: "/"
@@ -32,13 +31,13 @@
         state: present
         backup: yes
 
-    - name: Add ScanOnAccess and OnAccessPrevention lines
-      blockinfile:
-        path: "{{ clamav_config_file }}"
-        block: |
-          OnAccessPrevention yes
-          ScanOnAccess yes
-        backup: yes
+- name: Add ScanOnAccess and OnAccessPrevention lines
+  blockinfile:
+    path: "{{ clamav_config_file }}"
+    block: |
+      OnAccessPrevention yes
+      ScanOnAccess yes
+    backup: yes
 
 - name: Update the ClamAV signature database
   become: true
