@@ -21,7 +21,7 @@
 
 - name: Download Docker GPG key
   become: true
-  shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --yes --dearmor -o /etc/apt/keyrings/docker.gpg
 
 - name: Set permissions for Docker GPG key
   become: true
