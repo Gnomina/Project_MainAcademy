@@ -1,45 +1,46 @@
 - name: Update apt cache
   become: true
-  apt:
+  apt-get:
     update_cache: yes
 
-- name: Install prerequisites
-  become: true
-  apt:
-    name: "{{ item }}"
+- name: Install ca-certificates, curl, and gnupg
+  apt-get:
+    name:
+      - ca-certificates
+      - curl
+      - gnupg
     state: present
-  with_items:
-    - apt-transport-https
-    - ca-certificates
-    - curl
-    - software-properties-common
 
-- name: Add Docker GPG key
-  become: true
-  shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-  register: add_docker_key
-  changed_when: false
+- name: Create keyrings directory
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: "0755"
+
+- name: Download Docker GPG key
+  shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+- name: Set permissions for Docker GPG key
+  file:
+    path: /etc/apt/keyrings/docker.gpg
+    mode: "0644"
 
 - name: Add Docker repository
-  become: true
   lineinfile:
     path: /etc/apt/sources.list.d/docker.list
-    line: "deb [arch={{ ansible_architecture }} signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+    line: "deb [arch={{ ansible_architecture }} signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
     create: yes
 
 - name: Update apt cache again
-  become: true
-  apt:
+  apt-get:
     update_cache: yes
 
-- name: Check Docker package policy
-  become: true
-  command: apt-cache policy docker-ce
-  register: docker_package_policy
-
-- name: Install Docker
-  become: true
+- name: Install Docker packages
   apt:
-    name: docker-ce
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
     state: present
-  when: "'Installed: (none)' in docker_package_policy.stdout_lines[1]"
