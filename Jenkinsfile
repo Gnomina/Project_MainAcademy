@@ -86,6 +86,23 @@ pipeline {
                 }
             }
         }
+
+        stage('Run Ansible playbook') {
+             steps {
+                withCredentials([sshUserPrivateKey(credentialsId: "12345", 
+                keyFileVariable: 'KEY_PATH', usernameVariable: 'REMOTE_USER')]) {
+                
+                    sh "ssh-keyscan ${env.instance_id} >> ~/.ssh/known_hosts"
+
+                    sh 'ansible all -m ping -u ${REMOTE_USER} '+
+                       '-i ${WORKSPACE}/ansible/inventory.ini --private-key=${KEY_PATH}'
+
+                    sh 'ansible-playbook -i ${WORKSPACE}/ansible/inventory.ini'+
+                       ' ${WORKSPACE}/ansible/playbook.yml'+
+                       ' --user=${REMOTE_USER} --key-file=${KEY_PATH}'
+                }
+            }
+        }
     }
 } 
 
