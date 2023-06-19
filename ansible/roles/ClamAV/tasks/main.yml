@@ -19,7 +19,6 @@
 
 - name: Edit ClamAV configuration file
   become: true
-  become_user: root
   vars:
     clamav_config_file: "/etc/clamav/clamd.conf"
     scan_directory: "/"
