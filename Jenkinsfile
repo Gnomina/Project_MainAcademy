@@ -1,8 +1,6 @@
 pipeline {
     agent any
     
-    
-    
     stages {
 
         stage('CLEAN_WORKSPACE') {
@@ -55,23 +53,26 @@ pipeline {
                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                     script {
-                        def output = sh(script: "aws ec2 describe-instance-status --instance-ids ${env.instance_id} --region eu-central-1", returnStdout: true).trim()
-                        def json = readJSON(text: output)
-                        
-                        def server = json.InstanceStatuses[0].InstanceState.Name
-                        def instanceStatus = json.InstanceStatuses[0].InstanceStatus.Details[0].Status
-                        def systemStatus = json.InstanceStatuses[0].SystemStatus.Details[0].Status
+                        def passed = false
+                        while (!passed) {
+                            def output = sh(script: "aws ec2 describe-instance-status --instance-ids ${env.instance_id} --region eu-central-1", returnStdout: true).trim()
+                            def json = readJSON(text: output)
 
-                        echo "Server: ${server}"
-                        echo "InstanceStatus check: ${instanceStatus}"
-                        echo "SystemStatus check: ${systemStatus}"
+                            def server = json.InstanceStatuses[0].InstanceState.Name
+                            def instanceStatus = json.InstanceStatuses[0].InstanceStatus.Details[0].Status
+                            def systemStatus = json.InstanceStatuses[0].SystemStatus.Details[0].Status
 
-                        if (instanceStatus == 'passed') {
-                            echo "Instance status is passed. Proceeding with the pipeline..."
-                            passed = true
-                        } else {
-                            echo "Instance is initializing. Waiting for 10 seconds..."
-                            sleep 10
+                            echo "Server: ${server}"
+                            echo "InstanceStatus check: ${instanceStatus}"
+                            echo "SystemStatus check: ${systemStatus}"
+
+                            if (instanceStatus == 'passed') {
+                                echo "Instance status is passed. Proceeding with the pipeline..."
+                                passed = true
+                            } else {
+                                echo "Instance is initializing. Waiting for 10 seconds..."
+                                sleep 10
+                            }
                         }
                     }
                 }
