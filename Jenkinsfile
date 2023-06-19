@@ -66,7 +66,7 @@ pipeline {
                         echo "InstanceStatus check: ${instanceStatus}"
                         echo "SystemStatus check: ${systemStatus}"
 
-                        if [ "${instanceStatus}" == "passed" ]; then
+                        if ("${instanceStatus}" == "passed" ); then
                             echo "Instance status is passed. Proceeding with the pipeline..."
                             break
                         fi
