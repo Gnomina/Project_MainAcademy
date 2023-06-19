@@ -1,6 +1,0 @@
-- name: Установка пакета httpd
-  become: yes
-  apt:
-    name: htop
-    state: present
-
