@@ -33,10 +33,10 @@ pipeline {
                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                     script {
-                        def pass = sh(script: 'aws ecr get-login --region eu-central-1', returnStdout: true).trim()
+                        def pass = sh(script: 'aws ecr get-authorization-token --region eu-central-1', returnStdout: true).trim()
                         echo "${pass}"
                         
-                        sh "docker login -u AWS -p ${pass} public.ecr.aws/p7o7q6w7"
+                        //sh "docker login -u AWS -p ${pass} public.ecr.aws/p7o7q6w7"
 
 
 
