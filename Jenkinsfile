@@ -25,7 +25,6 @@ pipeline {
         environment {
             ECR_REGISTRY = 'public.ecr.aws/p7o7q6w7/test-aws-ecr'
             IMAGE_NAME = 'test-aws-ecr'
-            ECR_KEY = 'aws ecr get-login-password --region eu-central-1'
             }
             steps { //assemble and push docker image
                 sh "docker build -t $IMAGE_NAME -f ${WORKSPACE}/webapp/Dockerfile ."
@@ -35,7 +34,8 @@ pipeline {
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                     script {
                         //sh 'aws ecr get-login-password --region eu-central-1'
-                        sh 'aws ecr --region eu-central-1 | docker login -u AWS -p $ECR_KEY public.ecr.aws/p7o7q6w7'
+                        //sh 'aws ecr --region eu-central-1 | docker login -u AWS -p --password-stdin public.ecr.aws/p7o7q6w7'
+                        sh 'docker login -u AWS -p \$(aws ecr get-login-password --region eu-central-1) public.ecr.aws/p7o7q6w7'
 
                         //sh 'eval $(aws ecr get-login --no-include-email --region eu-central-1)'
                         //sh "docker login -u AWS -p ${AWS_ACCESS_KEY_ID} public.ecr.aws/public.ecr.aws/p7o7q6w7"
