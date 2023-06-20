@@ -35,9 +35,9 @@ pipeline {
                     script {
                         //def pass = sh(script: 'aws ecr get-login-password --region eu-central-1', returnStdout: true).trim()
                         //echo "${pass}"
-                        sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 284532103653.dkr.ecr.eu-central-1.amazonaws.com"
-                        sh 'docker tag test-aws-ecr:latest 284532103653.dkr.ecr.eu-central-1.amazonaws.com'
-                        sh 'docker push 284532103653.dkr.ecr.eu-central-1.amazonaws.com'
+                        sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 284532103653.dkr.ecr.eu-central-1.amazonaws.com/docker_image"
+                        sh 'docker tag test-aws-ecr:latest 284532103653.dkr.ecr.eu-central-1.amazonaws.com/docker_image'
+                        sh 'docker push 284532103653.dkr.ecr.eu-central-1.amazonaws.com/docker_image'
 
                     }
                 }
