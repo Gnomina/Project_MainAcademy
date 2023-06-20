@@ -19,31 +19,25 @@ pipeline {
                 //git branch: "${params.GIT_BRANCH_OR_TAG}", credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
                 git branch: "WebApp", credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
                 echo "PATH to clone repo: ${WORKSPACE}"
-                script {
-                    def branchName = sh(returnStdout: true, script: 'git rev-parse --abbrev-ref HEAD').trim()
-                    env.git_branch = branchName
-                    def repositoryName = sh(returnStdout: true, script: 'git remote show origin -n | grep "Fetch URL:" | awk -F/ \'{print $NF}\' | sed -e "s/.git$//"').trim().toLowerCase()
-                    env.repository_name = repositoryName
-                } 
-
             }
         }
-        
         stage('Build and Push Image') {
         environment {
-            ECR_REGISTRY = '284532103653.dkr.ecr.eu-central-1.amazonaws.com/docker_image'
-            IMAGE_NAME = "${env.repository_name}"
+            ECR_REGISTRY = 'public.ecr.aws/p7o7q6w7/test-aws-ecr'
+            IMAGE_NAME = 'test-aws-ecr'
             }
             steps { //assemble and push docker image
-                sh "docker build -t ${env.repository_name} -f ${WORKSPACE}/webapp/Dockerfile ."
+                sh "docker build -t $IMAGE_NAME -f ${WORKSPACE}/webapp/Dockerfile ."
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
                 credentialsId: 'MainAcademy_AWS_key',
                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                     script {
-                        sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin ${ECR_REGISTRY}"
-                        sh "docker tag ${env.repository_name}:${env.git_branch} ${ECR_REGISTRY}"
-                        sh "docker push ${ECR_REGISTRY}"
+                        //def pass = sh(script: 'aws ecr get-login-password --region eu-central-1', returnStdout: true).trim()
+                        //echo "${pass}"
+                        sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 284532103653.dkr.ecr.eu-central-1.amazonaws.com/docker_image"
+                        sh 'docker tag test-aws-ecr:latest 284532103653.dkr.ecr.eu-central-1.amazonaws.com/docker_image'
+                        sh 'docker push 284532103653.dkr.ecr.eu-central-1.amazonaws.com/docker_image'
 
                     }
                 }
