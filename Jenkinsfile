@@ -33,11 +33,11 @@ pipeline {
                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                     script {
-                        def pass = sh(script: 'aws ecr get-login-password --region eu-central-1', returnStdout: true).trim()
-                        echo "${pass}"
-                        
-                        sh 'docker tag test-aws-ecr:latest public.ecr.aws/p7o7q6w7/test-aws-ecr:latest'
-                        sh 'docker push public.ecr.aws/p7o7q6w7/test-aws-ecr:latest'
+                        //def pass = sh(script: 'aws ecr get-login-password --region eu-central-1', returnStdout: true).trim()
+                        //echo "${pass}"
+                        sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 284532103653.dkr.ecr.eu-central-1.amazonaws.com"
+                        sh 'docker tag test-aws-ecr:latest 284532103653.dkr.ecr.eu-central-1.amazonaws.com'
+                        sh 'docker push 284532103653.dkr.ecr.eu-central-1.amazonaws.com'
 
                     }
                 }
@@ -59,3 +59,7 @@ pipeline {
                         //sh "aws ecr-public get-login-password --region ueu-central-1 | docker login --username AWS --password-stdin public.ecr.aws/p7o7q6w7"
                         //sh 'docker tag $IMAGE_NAME $ECR_REGISTRY/$IMAGE_NAME'
                         //sh 'docker push $ECR_REGISTRY/$IMAGE_NAME'
+
+
+//sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 284532103653.dkr.ecr.eu-central-1.amazonaws.com"
+                     
