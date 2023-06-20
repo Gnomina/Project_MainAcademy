@@ -23,7 +23,7 @@ pipeline {
         stage('Build and Push Image') {
         environment {
             ECR_REGISTRY = 'public.ecr.aws/p7o7q6w7/test-aws-ecr'
-            IMAGE_NAME = 'test_webapp'
+            IMAGE_NAME = 'test-aws-ecr'
             }
             steps { //assemble and push docker image
                 sh "docker build -t $IMAGE_NAME -f ${WORKSPACE}/webapp/Dockerfile ."
@@ -33,9 +33,11 @@ pipeline {
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                     script {
                         //sh 'eval $(aws ecr get-login --no-include-email --region eu-central-1)'
-                        sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/p7o7q6w7'
-                        sh 'docker tag $IMAGE_NAME $ECR_REGISTRY/$IMAGE_NAME'
-                        sh 'docker push $ECR_REGISTRY/$IMAGE_NAME'
+                        sh "aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/p7o7q6w7"
+                        //sh 'docker tag $IMAGE_NAME $ECR_REGISTRY/$IMAGE_NAME'
+                        sh 'docker tag test-aws-ecr:latest public.ecr.aws/p7o7q6w7/test-aws-ecr:latest'
+                        //sh 'docker push $ECR_REGISTRY/$IMAGE_NAME'
+                        sh 'docker push public.ecr.aws/p7o7q6w7/test-aws-ecr:latest'
 
                     }
                 }
