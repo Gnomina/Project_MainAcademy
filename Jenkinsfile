@@ -19,12 +19,15 @@ pipeline {
                 //git branch: "${params.GIT_BRANCH_OR_TAG}", credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
                 git branch: "WebApp", credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
                 echo "PATH to clone repo: ${WORKSPACE}"
-                def branchName = sh(returnStdout: true, script: 'git rev-parse --abbrev-ref HEAD').trim()
-                env.git_branch = branchName
-                echo "Branch name: ${env.git_branch}"
-                def repositoryName = sh(returnStdout: true, script: 'git remote show origin -n | grep "Fetch URL:" | awk -F/ \'{print $NF}\' | sed -e "s/.git$//"').trim()
-                env.repository_name = repositoryName
-                echo "Repository name: ${env.repository_name}"
+                script {
+                    def branchName = sh(returnStdout: true, script: 'git rev-parse --abbrev-ref HEAD').trim()
+                    env.git_branch = branchName
+                    echo "Branch name: ${env.git_branch}"
+                    def repositoryName = sh(returnStdout: true, script: 'git remote show origin -n | grep "Fetch URL:" | awk -F/ \'{print $NF}\' | sed -e "s/.git$//"').trim()
+                    env.repository_name = repositoryName
+                    echo "Repository name: ${env.repository_name}"
+                }
+                
 
             }
         }
