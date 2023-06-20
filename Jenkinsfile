@@ -22,20 +22,17 @@ pipeline {
                 script {
                     def branchName = sh(returnStdout: true, script: 'git rev-parse --abbrev-ref HEAD').trim()
                     env.git_branch = branchName
-                    echo "Branch name: ${env.git_branch}"
                     def repositoryName = sh(returnStdout: true, script: 'git remote show origin -n | grep "Fetch URL:" | awk -F/ \'{print $NF}\' | sed -e "s/.git$//"').trim()
                     env.repository_name = repositoryName
-                    echo "Repository name: ${env.repository_name}"
-                }
-                
+                } 
 
             }
         }
-        /*
+        
         stage('Build and Push Image') {
         environment {
-            ECR_REGISTRY = 'public.ecr.aws/p7o7q6w7/test-aws-ecr'
-            IMAGE_NAME = 'test-aws-ecr'
+            ECR_REGISTRY = '284532103653.dkr.ecr.eu-central-1.amazonaws.com/docker_image'
+            IMAGE_NAME = "${env.repository_name}"
             }
             steps { //assemble and push docker image
                 sh "docker build -t $IMAGE_NAME -f ${WORKSPACE}/webapp/Dockerfile ."
@@ -44,17 +41,14 @@ pipeline {
                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                     script {
-                        //def pass = sh(script: 'aws ecr get-login-password --region eu-central-1', returnStdout: true).trim()
-                        //echo "${pass}"
-                        sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 284532103653.dkr.ecr.eu-central-1.amazonaws.com/docker_image"
-                        sh "docker tag test-aws-ecr:${env.git_branch} 284532103653.dkr.ecr.eu-central-1.amazonaws.com/docker_image"
-                        sh 'docker push 284532103653.dkr.ecr.eu-central-1.amazonaws.com/docker_image'
+                        sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin ${ECR_REGISTRY}"
+                        sh "docker tag ${env.repository_name}:${env.git_branch} ${ECR_REGISTRY}"
+                        sh "docker push ${ECR_REGISTRY}"
 
                     }
                 }
             }
         }
-        */
     }
 }
 
