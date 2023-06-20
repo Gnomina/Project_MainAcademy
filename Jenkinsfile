@@ -34,7 +34,7 @@ pipeline {
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                     script {
                         //sh 'eval $(aws ecr get-login --no-include-email --region eu-central-1)'
-                        sh "docker login -u AWS -p <AWS_ACCESS_KEY_ID> public.ecr.aws/public.ecr.aws/p7o7q6w7"
+                        sh "docker login -u AWS -p ${AWS_ACCESS_KEY_ID} public.ecr.aws/public.ecr.aws/p7o7q6w7"
                         //sh "docker login -u AWS -p \$(aws ecr-public get-login-password --region us-east-1) public.ecr.aws/p7o7q6w7"
                         //sh "aws ecr-public get-login-password --region ueu-central-1 | docker login --username AWS --password-stdin public.ecr.aws/p7o7q6w7"
                         //sh 'docker tag $IMAGE_NAME $ECR_REGISTRY/$IMAGE_NAME'
