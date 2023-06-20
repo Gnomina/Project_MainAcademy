@@ -37,7 +37,7 @@ pipeline {
                         sh "${pass}"
                         //sh 'aws ecr get-login-password --region eu-central-1'
                         //sh 'aws ecr --region eu-central-1 | docker login -u AWS -p --password-stdin public.ecr.aws/p7o7q6w7'
-                        sh "docker login -u AWS -p ${pass} public.ecr.aws/p7o7q6w7"
+                        sh 'docker login -u AWS -p \${pass} public.ecr.aws/p7o7q6w7'
 
                         //sh 'eval $(aws ecr get-login --no-include-email --region eu-central-1)'
                         //sh "docker login -u AWS -p ${AWS_ACCESS_KEY_ID} public.ecr.aws/public.ecr.aws/p7o7q6w7"
