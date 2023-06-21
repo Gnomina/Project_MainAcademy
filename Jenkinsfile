@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'test_aws'
+        label 'slave01'
     }
 
     //parameters {
