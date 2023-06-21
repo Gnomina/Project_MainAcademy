@@ -25,3 +25,8 @@ output "instance_id" {
   value = module.Instance.instance_id #This variable locate in Instance module -> outputs 
   description = "instance id from Instance module (outputs_source = ./Instance)"
 }
+
+output "ECR_URL"{
+  value = module.ECR.ecr_repository_url #This variable locate in ECR module -> outputs 
+  description = "ECR URL from ECR module (outputs_source = ./ECR)"
+}
