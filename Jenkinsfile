@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        label 'slave01'
-    }
+    agent any
 
     //parameters {
     //    string(name: 'Input Branch Name', defaultValue: 'main', description: 'Specify the Git branch build')
