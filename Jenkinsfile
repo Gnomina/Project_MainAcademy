@@ -48,7 +48,7 @@ pipeline {
                         sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin $ECR_REGISTRY"
                         //sh "docker tag ${env.repository_name}:${env.git_branch} $ECR_REGISTRY"
                         //sh "docker push $ECR_REGISTRY"
-                        sh "docker push ${env.repository_name}:${env.git_branch}"
+                        sh "docker push 284532103653.dkr.ecr.eu-central-1.amazonaws.com/docker_image:${env.git_branch}"
 
                     }
                 }
