@@ -2,5 +2,6 @@
   hosts: myserver
   become: true
   roles:
-     - ClamAV
-     - Docker
+    #- ClamAV
+    #- Docker
+    - Java_JDK
