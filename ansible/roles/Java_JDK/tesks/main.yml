@@ -1,22 +1,27 @@
 - name: Update apt cache
+  become: true
   apt:
     update_cache: yes
 
 - name: Install OpenJDK 11
+  become: true
   apt:
     name: openjdk-11-jdk
     state: present
 
 - name: Create Jenkins user
+  become: true
   user:
     name: jenkins
     shell: /bin/bash
     create_home: yes
 
 - name: Set Jenkins user password
+  become: true
   ansible.builtin.shell: echo "jenkins:jenkins" | chpasswd
 
 - name: Check Java version
+  become: true
   command: java --version
   register: java_version
 
