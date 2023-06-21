@@ -40,7 +40,7 @@ pipeline {
                     script {
                         def tfStateFile = sh(script: "aws s3 cp s3://mainacademy-project-terraform-back/dev/backend/terraform.tfstate -", returnStdout: true).trim()// url or ARN
                         def tfStateJson = readJSON(text: tfStateFile)
-                        def ecr_url = tfStateJson.outputs.ECR_URL.value
+                        def ecr_url = tfStateJson.outputs.ecr_url.value
                         env.ecr_url = ecr_url //create environment variable - env.ecr_url
                     }                      
                 }       
