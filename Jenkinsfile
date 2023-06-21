@@ -40,14 +40,8 @@ pipeline {
                     script {
                         def tfStateFile = sh(script: "aws s3 cp s3://mainacademy-project-terraform-back/dev/backend/terraform.tfstate -", returnStdout: true).trim()// url or ARN
                         def tfStateJson = readJSON(text: tfStateFile)
-                        def ip = tfStateJson.outputs.instance_public_ip.value
-                        def id = tfStateJson.outputs.instance_id.value
                         def ecr_url = tfStateJson.outputs.ecr_url.value
-                        echo "IP = ${ip}"
-                        echo "ID = ${id}"
                         echo "ECR_URL = ${ecr_url}"
-                        env.my_ip = ip //create environment variable - env.my_ip
-                        env.instance_id = id //create environment variable - env.instance_id
                         env.ecr_url = ecr_url //create environment variable - env.ecr_url
                     }                      
                 }       
