@@ -11,7 +11,7 @@ pipeline {
         
         stage('Clone') {
             steps {
-                git branch: 'Add-instance', credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
+                git branch: 'Start-AWS-instance', credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
                 echo "Клонированный репозиторий находится в папке: ${WORKSPACE}"
             }
         }
