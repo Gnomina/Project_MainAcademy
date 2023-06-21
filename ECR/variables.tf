@@ -1,5 +1,5 @@
 variable "ECR_Repo_Name" {
-  default = "MainAcademy Images"
+  default = "MainAcademy_Images"
 }
 
 variable "Tag_Mutability" {

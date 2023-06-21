@@ -19,7 +19,7 @@ module "Instance" { #Include Instance module
 }
 */
 
-module "add ECR"{
+module "ECR"{
   source = "./ECR"
 }
 
