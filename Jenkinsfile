@@ -44,10 +44,10 @@ pipeline {
                     script {
                         //def pass = sh(script: 'aws ecr get-login-password --region eu-central-1', returnStdout: true).trim()
                         //echo "${pass}"
-                        sh "docker build -t ${env.repository_name} -f ${WORKSPACE}/webapp/Dockerfile ."
+                        sh "docker build -t ${env.repository_name}:${env.git_branch} -f ${WORKSPACE}/webapp/Dockerfile ."
                         sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin $ECR_REGISTRY"
-                        sh "docker tag ${env.repository_name}:${env.git_branch} $ECR_REGISTRY"
-                        sh 'docker push $ECR_REGISTRY'
+                        //sh "docker tag ${env.repository_name}:${env.git_branch} $ECR_REGISTRY"
+                        sh "docker push $ECR_REGISTRY"
 
                     }
                 }
