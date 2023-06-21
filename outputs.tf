@@ -15,7 +15,7 @@ output "sg_id" {
   description = "security group_id from SG module (outputs_source = ./SG)"
 }
 
-
+/*
 output "instance_public_ip" {
   value = module.Instance.instance_public_ip #This variable locate in Instance module -> outputs 
   description = "public ip of instance from Instance module (outputs_source = ./Instance)"
@@ -25,7 +25,7 @@ output "instance_id" {
   value = module.Instance.instance_id #This variable locate in Instance module -> outputs 
   description = "instance id from Instance module (outputs_source = ./Instance)"
 }
-
+*/
 output "ECR_URL"{
   value = module.ECR.ecr_repository_url #This variable locate in ECR module -> outputs 
   description = "ECR URL from ECR module (outputs_source = ./ECR)"
