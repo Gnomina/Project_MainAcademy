@@ -32,7 +32,7 @@ pipeline {
         }
         stage('Build and Push Image') {
         environment {
-            env.ECR_REGISTRY = '284532103653.dkr.ecr.eu-central-1.amazonaws.com/docker_image'
+            def ECR_REGISTRY = '284532103653.dkr.ecr.eu-central-1.amazonaws.com/docker_image'
             
             }
             steps { //assemble and push docker image
