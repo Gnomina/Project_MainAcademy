@@ -40,16 +40,14 @@ pipeline {
                     script {
                         def tfStateFile = sh(script: "aws s3 cp s3://mainacademy-project-terraform-back/dev/backend/terraform.tfstate -", returnStdout: true).trim()// url or ARN
                         def tfStateJson = readJSON(text: tfStateFile)
-                        echo "TF_STATE = ${tfStateJson}"
-                        def ecr_url = tfStateJson.outputs.ECR_URL.value
-                        echo "ECR_URL = ${ecr_url}"
+                        def ecr_url = tfStateJson.outputs.ecr_url.value
                         env.ecr_url = ecr_url //create environment variable - env.ecr_url
                     }                      
                 }       
             }
             
         }
-        /*
+        
         stage('Build and Push Image') {
             
             steps { 
@@ -68,7 +66,7 @@ pipeline {
                     }
                 }
             }
-        }*/
+        }
     }
 }
 
