@@ -18,21 +18,22 @@ pipeline {
             steps {
                 //git branch: "${params.GIT_BRANCH_OR_TAG}", credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
                 git branch: "WebApp", credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
-                
-                def branchName = sh(returnStdout: true, script: 'git rev-parse --abbrev-ref HEAD').trim()
-                def repositoryName = sh(returnStdout: true, script: 'git remote show origin -n | grep "Fetch URL:" | awk -F/ \'{print $NF}\' | sed -e "s/.git$//"').trim()
-                env.repository_name = repositoryName     
-                env.git_branch = branchName
-                echo "PATH to clone repo: ${WORKSPACE}"
-                echo "Repository name: ${env.repository_name}"
-                echo "Branch name: ${env.git_branch}"
+                script{
+                    def branchName = sh(returnStdout: true, script: 'git rev-parse --abbrev-ref HEAD').trim()
+                    def repositoryName = sh(returnStdout: true, script: 'git remote show origin -n | grep "Fetch URL:" | awk -F/ \'{print $NF}\' | sed -e "s/.git$//"').trim()
+                    env.repository_name = repositoryName     
+                    env.git_branch = branchName
+                    echo "PATH to clone repo: ${WORKSPACE}"
+                    echo "Repository name: ${env.repository_name}"
+                    echo "Branch name: ${env.git_branch}"
+                }
                 
             }
         }
         stage('Build and Push Image') {
         environment {
             ECR_REGISTRY = '284532103653.dkr.ecr.eu-central-1.amazonaws.com/docker_image'
-            IMAGE_NAME = 'test-aws-ecr'
+            //IMAGE_NAME = 'test-aws-ecr'
             }
             steps { //assemble and push docker image
                 
