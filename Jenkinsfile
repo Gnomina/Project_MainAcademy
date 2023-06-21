@@ -45,6 +45,7 @@ pipeline {
                         def ecr_url = tfStateJson.outputs.ecr_url.value
                         echo "IP = ${ip}"
                         echo "ID = ${id}"
+                        echo "ECR_URL = ${ecr_url}"
                         env.my_ip = ip //create environment variable - env.my_ip
                         env.instance_id = id //create environment variable - env.instance_id
                         env.ecr_url = ecr_url //create environment variable - env.ecr_url
@@ -53,7 +54,7 @@ pipeline {
             }
             
         }
-
+        /*
         stage('Build and Push Image') {
             
             steps { 
@@ -72,7 +73,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
     }
 }
 
