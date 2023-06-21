@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        label 'test_aws'
+    }
 
     //parameters {
     //    string(name: 'Input Branch Name', defaultValue: 'main', description: 'Specify the Git branch build')
