@@ -46,7 +46,7 @@ pipeline {
                         sh "docker build -t ${env.repository_name}:${env.git_branch} -f ${WORKSPACE}/webapp/Dockerfile ."
                         sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin ${env.ECR_REGISTRY}"
                         
-                        sh "docker tag ${env.repository_name}:${env.git_branch} ${env.ECR_REGISTRY}:${env.git_branch}"
+                        sh "docker tag ${env.repository_name}:${env.git_branch} ${env.ECR_REGISTRY}"
                         sh "docker push ${env.ECR_REGISTRY}:${env.git_branch}"
 
                     }
