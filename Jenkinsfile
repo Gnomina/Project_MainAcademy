@@ -32,8 +32,8 @@ pipeline {
         }
         stage('Build and Push Image') {
         environment {
-            ECR_REGISTRY = '284532103653.dkr.ecr.eu-central-1.amazonaws.com/docker_image'
-            //IMAGE_NAME = 'test-aws-ecr'
+            env.ECR_REGISTRY = '284532103653.dkr.ecr.eu-central-1.amazonaws.com/docker_image'
+            
             }
             steps { //assemble and push docker image
                 
@@ -42,14 +42,12 @@ pipeline {
                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                     script {
-                        //def pass = sh(script: 'aws ecr get-login-password --region eu-central-1', returnStdout: true).trim()
-                        //echo "${pass}"
+                        
                         sh "docker build -t ${env.repository_name}:${env.git_branch} -f ${WORKSPACE}/webapp/Dockerfile ."
-                        sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 284532103653.dkr.ecr.eu-central-1.amazonaws.com/docker_image"
-                        //sh "docker tag ${env.repository_name}:${env.git_branch} $ECR_REGISTRY"
-                        //sh "docker push $ECR_REGISTRY"
-                        sh "docker tag ${env.repository_name}:${env.git_branch} 284532103653.dkr.ecr.eu-central-1.amazonaws.com/docker_image"
-                        sh "docker push 284532103653.dkr.ecr.eu-central-1.amazonaws.com/docker_image"
+                        sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin ${env.ECR_REGISTRY}"
+                        
+                        sh "docker tag ${env.repository_name}:${env.git_branch} ${env.ECR_REGISTRY}"
+                        sh "docker push ${env.ECR_REGISTRY}"
 
                     }
                 }
