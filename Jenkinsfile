@@ -30,10 +30,32 @@ pipeline {
                 
             }
         }
-        stage('Build and Push Image') {
-            environment {
-                def ECR_REGISTRY = '284532103653.dkr.ecr.eu-central-1.amazonaws.com/docker_image'
+
+        stage('Get Terraform Variable') { // obtaining variables with terraform S3bucet backend
+            steps {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
+                credentialsId: 'MainAcademy_AWS_key',
+                accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
+                    script {
+                        def tfStateFile = sh(script: "aws s3 cp s3://mainacademy-project-terraform-back/dev/backend/terraform.tfstate -", returnStdout: true).trim()// url or ARN
+                        def tfStateJson = readJSON(text: tfStateFile)
+                        def ip = tfStateJson.outputs.instance_public_ip.value
+                        def id = tfStateJson.outputs.instance_id.value
+                        def ecr_url = tfStateJson.outputs.ecr_url.value
+                        echo "IP = ${ip}"
+                        echo "ID = ${id}"
+                        env.my_ip = ip //create environment variable - env.my_ip
+                        env.instance_id = id //create environment variable - env.instance_id
+                        env.ecr_url = ecr_url //create environment variable - env.ecr_url
+                    }                      
+                }       
             }
+            
+        }
+
+        stage('Build and Push Image') {
+            
             steps { 
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
                 credentialsId: 'MainAcademy_AWS_key',
@@ -42,10 +64,10 @@ pipeline {
                     script {
                         
                         sh "docker build -t ${env.repository_name}:${env.git_branch} -f ${WORKSPACE}/webapp/Dockerfile ."
-                        sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin ${env.ECR_REGISTRY}"
+                        sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin ${env.ecr_url}"
                         
-                        sh "docker tag ${env.repository_name}:${env.git_branch} ${env.ECR_REGISTRY}:${env.git_branch}"
-                        sh "docker push ${env.ECR_REGISTRY}:${env.git_branch}"
+                        sh "docker tag ${env.repository_name}:${env.git_branch} ${env.ecr_url}:${env.git_branch}"
+                        sh "docker push ${env.ecr_url}:${env.git_branch}"
 
                     }
                 }
