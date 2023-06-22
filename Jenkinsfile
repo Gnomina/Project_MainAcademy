@@ -16,7 +16,7 @@ pipeline {
 
         stage('Clone') {
             steps {
-                git branch: 'Slave_ansible_Packajes', credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
+                git branch: 'Install_packages_on_Slave', credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
                 echo "PATH to clone repo: ${WORKSPACE}"
             }
         }
