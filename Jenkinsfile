@@ -102,7 +102,7 @@ pipeline {
                     sh 'ansible all -m ping -u ${REMOTE_USER} '+
                        '-i ${WORKSPACE}/ansible/inventory.ini --private-key=${KEY_PATH}'
 
-                    sh 'ANSIBLE_VERBOSITY=3 ansible-playbook -i ${WORKSPACE}/ansible/inventory.ini'+
+                    sh 'ANSIBLE_VERBOSITY=1 ansible-playbook -i ${WORKSPACE}/ansible/inventory.ini'+
                        ' ${WORKSPACE}/ansible/playbook.yml'+
                        ' --user=${REMOTE_USER} --key-file=${KEY_PATH}'
                 }
