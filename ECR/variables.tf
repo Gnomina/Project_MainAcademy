@@ -3,6 +3,6 @@ variable "ECR_Repo_Name" {
 }
 
 variable "Tag_Mutability" {
-  default = "IMMUTABLE"
+  default = "MUTABLE"
 }
   
