@@ -61,7 +61,7 @@ pipeline {
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                     script {
                         
-                        sh "sudo docker build -t ${env.repository_name}:${env.git_branch} -f ${WORKSPACE}/webapp/Dockerfile ."
+                        sh "docker build -t ${env.repository_name}:${env.git_branch} -f ${WORKSPACE}/webapp/Dockerfile ."
                         sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin ${env.ecr_url}"
                         
                         sh "docker tag ${env.repository_name}:${env.git_branch} ${env.ecr_url}:${env.git_branch}"
