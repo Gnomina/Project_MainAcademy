@@ -26,3 +26,7 @@
   shell: "sudo /tmp/aws/install"
   args:
     chdir: /tmp
+
+- name: Run exit command
+  become: true
+  ansible.builtin.shell: exit

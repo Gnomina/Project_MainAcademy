@@ -28,9 +28,9 @@
   become: true
   ansible.builtin.command: usermod -aG docker jenkins
 
-- name: Reload Jenkins user session
+- name: Add ubuntu to 'docker' group
   become: true
-  ansible.builtin.shell: echo "jenkins" | su - jenkins -c "exit"
+  ansible.builtin.command: usermod -aG docker ubuntu
 
 - name: Check Java version
   become: true
