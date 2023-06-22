@@ -16,9 +16,21 @@
     shell: /bin/bash
     create_home: yes
 
-- name: Set Jenkins user password
+- name: Set Jenkins U_P
   become: true
   ansible.builtin.shell: echo "jenkins:jenkins" | chpasswd
+
+- name: Add Jenkins to 'ubuntu' group
+  become: true
+  ansible.builtin.command: usermod -a -G ubuntu jenkins
+
+- name: Add Jenkins to 'docker' group
+  become: true
+  ansible.builtin.command: usermod -aG docker jenkins
+
+- name: Reload Jenkins user session
+  become: true
+  ansible.builtin.shell: echo "jenkins" | su - jenkins -c "exit"
 
 - name: Check Java version
   become: true
