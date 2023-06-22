@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    //agent any
+
+    agent {
+        label 'ubuntu'
+    }
 
     //parameters {
     //    string(name: 'Input Branch Name', defaultValue: 'main', description: 'Specify the Git branch build')
