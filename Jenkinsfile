@@ -16,7 +16,7 @@ pipeline {
 
         stage('Clone') {
             steps {
-                git branch: 'install-ClamAV-&-Docker', credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
+                git branch: 'Slave_ansible_Packajes', credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
                 echo "PATH to clone repo: ${WORKSPACE}"
             }
         }
