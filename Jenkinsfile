@@ -13,7 +13,7 @@ pipeline {
                cleanWs()
             }
         }
-        
+//---------------------------------------------------------GITHUB---------------------------------------------------------------------------------------
         stage('Clone') {
             steps {
                 //git branch: "${params.GIT_BRANCH_OR_TAG}", credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
@@ -30,7 +30,7 @@ pipeline {
                 
             }
         }
-
+//---------------------------------------------------------TERRAFORM---------------------------------------------------------------------------------------
         stage('Get Terraform Variable') { // obtaining variables with terraform S3bucet backend
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
@@ -47,7 +47,7 @@ pipeline {
             }
             
         }
-        
+//---------------------------------------------------------DOCKER---------------------------------------------------------------------------------------
         stage('Build and Push Image') {
             
             steps { 
