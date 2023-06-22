@@ -1,0 +1,23 @@
+- name: Update apt cache for Ubuntu
+  apt:
+    update_cache: yes
+
+- name: Install unzip package for Ubuntu
+  apt:
+    name: unzip
+    state: present
+
+- name: Download AWS CLI package
+  shell: "curl 'https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip' -o 'awscliv2.zip'"
+  args:
+    chdir: /tmp
+
+- name: Unzip AWS CLI package
+  shell: "unzip awscliv2.zip"
+  args:
+    chdir: /tmp
+
+- name: Install AWS CLI
+  hell: "sudo /tmp/aws/install"
+  args:
+    chdir: /tmp
