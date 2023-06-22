@@ -66,6 +66,7 @@ pipeline {
                         
                         sh "docker tag ${env.repository_name}:${env.git_branch} ${env.ecr_url}:${env.git_branch}"
                         sh "docker push ${env.ecr_url}:${env.git_branch}"
+                        sh "docker run -d -p 49160:8080 ${env.ecr_url}:${env.git_branch}"
 
                     }
                 }
