@@ -1,9 +1,9 @@
-- name: Update apt cache for Ubuntu
+- name: Update apt cache
   become: true
   apt:
     update_cache: yes
 
-- name: Install unzip package for Ubuntu
+- name: Install unzip package
   become: true
   apt:
     name: unzip
