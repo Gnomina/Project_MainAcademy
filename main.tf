@@ -21,7 +21,7 @@ module "Instance" { #Include Instance module
   sucurity_group = module.SG.security_group_id_out #pass the local value of the "security_group_id" variable from the SG module to the Instance module
   subnet_id = module.VPC.subnet_id_out #pass the local value of the "subnet_id_out" variable from the VPC module to the Instance module
   //IAM_Role_ = module.IAM_Role.Role_Name_out #pass the local value of the "Role_Name" variable from the IAM_Role module to the Instance module
-  Iam_Role_Name = module.IAM_Role.Role_Name_out #pass the local value of the "Role_Name" variable from the IAM_Role module to the Instance module
+  Role_Name_out = module.IAM_Role.Role_Name_out #pass the local value of the "Role_Name" variable from the IAM_Role module to the Instance module
 }
 
 
