@@ -32,6 +32,6 @@ output "ecr_url"{
 }
 
 output "IAM_Role_Name"{
-  value = module.IAM_Role.Role_Name #This variable locate in IAM_Role module -> outputs 
+  value = module.IAM_Role.Role_Name_out #This variable locate in IAM_Role module -> outputs 
   description = "IAM Role Name from IAM_Role module (outputs_source = ./IAM_Role)"
 }
