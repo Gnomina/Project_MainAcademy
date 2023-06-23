@@ -35,3 +35,8 @@ output "IAM_Role_Name"{
   value = module.IAM_Role.Role_Name_out #This variable locate in IAM_Role module -> outputs 
   description = "IAM Role Name from IAM_Role module (outputs_source = ./IAM_Role)"
 }
+
+output "Policy_arn"{
+  value = module.IAM_Role.Polisy_arn_out #This variable locate in IAM_Role module -> outputs 
+  description = "Policy arn from IAM_Role module (outputs_source = ./IAM_Role)"
+}
