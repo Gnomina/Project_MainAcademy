@@ -18,12 +18,14 @@ resource "aws_instance" "example"{
   vpc_security_group_ids = ["${var.sucurity_group}"]
   subnet_id              = "${var.subnet_id}"
   associate_public_ip_address = true
+  iam_instance_profile = "${var.Iam_Role_Name}"
   tags = {
     Name = "MainAcademy_Instance_TEST"
   } 
-  iam_instance_profile {
-    name = "${var.IAM_Role}"
-  }
+
+  #iam_instance_profile {
+   # name = "${var.Iam_Role_Name}"
+  #}
                    
 }
 
