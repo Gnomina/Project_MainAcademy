@@ -23,4 +23,8 @@ resource "aws_instance" "example"{
   }                  
 }
 
+iam_instance_profile {
+    name = "Cloudwatch-role" #role for cloudwatch
+}
+
 
