@@ -23,8 +23,4 @@ module "Instance" { #Include Instance module
 }
 
 
-module "ECR"{
-  source = "./ECR"
-}
-
 
