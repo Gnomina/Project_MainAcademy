@@ -18,11 +18,6 @@ variable "subnet_id"  { # variable from  VPC module -> outputs
   description = "local value of the 'subnet_id_out' variable from the VPC module -> outputs"
 }
 
-variable "IAM_role"{
-  default     = "Cloudwatch-role" # Local variable
-    description = "IAM role for instance"
-}
-
 /*
 variable "branch_name" {
   description = "Branch name from Jenkins"

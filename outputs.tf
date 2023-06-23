@@ -30,3 +30,8 @@ output "ecr_url"{
   value = module.ECR.ecr_repository_url #This variable locate in ECR module -> outputs 
   description = "ECR URL from ECR module (outputs_source = ./ECR)"
 }
+
+output "IAM_Role_Name"{
+  value = module.IAM_Role.Role_Name #This variable locate in IAM_Role module -> outputs 
+  description = "IAM Role Name from IAM_Role module (outputs_source = ./IAM_Role)"
+}

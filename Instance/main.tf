@@ -22,9 +22,9 @@ resource "aws_instance" "example"{
     Name = "MainAcademy_Instance_TEST"
   } 
   iam_instance_profile {
-    name = "${IAM_role}" #role for cloudwatch
+    name = "${var.IAM_Role}"
   }
-                 
+                   
 }
 
 
