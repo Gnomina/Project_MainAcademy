@@ -20,11 +20,12 @@ resource "aws_instance" "example"{
   associate_public_ip_address = true
   tags = {
     Name = "MainAcademy_Instance_TEST"
-  }                  
+  } 
+  iam_instance_profile {
+    name = "Cloudwatch-role" #role for cloudwatch
+  }
+                 
 }
 
-iam_instance_profile {
-    name = "Cloudwatch-role" #role for cloudwatch
-}
 
 
