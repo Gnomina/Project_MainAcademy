@@ -5,6 +5,11 @@ pipeline {
         label 'Master'
     }
     
+    options {
+    buildDiscarder(logRotator(numToKeepStr: '10'))
+    timestamps()
+    timeout(time: 1, unit: 'HOURS')
+    }
 
     stages {
 
@@ -123,7 +128,7 @@ pipeline {
                     */
                 
                     //sh 'ansible-playbook -i "$(ansible-inventory -i ${WORKSPACE}/ansible/aws_ec2.yaml --list)" ${WORKSPACE}/ansible/playbook.yml --user=${REMOTE_USER} --key-file=${KEY_PATH}'
-                    sh 'python3 -m ansible.inventory.aws_ec2 --graph'
+                    sh 'ansible-inventory -i aws_ec2.yaml --graph'
                 }    
             }
         }
