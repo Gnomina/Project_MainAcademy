@@ -18,6 +18,15 @@ variable "subnet_id"  { # variable from  VPC module -> outputs
   description = "local value of the 'subnet_id_out' variable from the VPC module -> outputs"
 }
 
+variable tags {
+  type = map(string)
+  default = {
+    Name = "Docker-container"
+  }
+   
+    
+  
+}
 /*
 variable "branch_name" {
   description = "Branch name from Jenkins"

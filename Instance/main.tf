@@ -19,9 +19,7 @@ resource "aws_instance" "example"{
   subnet_id              = "${var.subnet_id}"
   associate_public_ip_address = true
   iam_instance_profile = "EC2_RoleAddPerm"
-  tags = {
-    Name = "MainAcademy_Instance_TEST"
-  } 
+  tags = var.tags
 }
 
 
