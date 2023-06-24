@@ -112,6 +112,7 @@ pipeline {
              steps {
                 withCredentials([sshUserPrivateKey(credentialsId: "12345", 
                 keyFileVariable: 'KEY_PATH', usernameVariable: 'REMOTE_USER')]) {
+                    script {
                 /*
                     sh "ssh-keyscan ${env.my_ip} >> ~/.ssh/known_hosts"
 
@@ -128,10 +129,11 @@ pipeline {
                     */
                 
                     //sh 'ansible-playbook -i "$(ansible-inventory -i ${WORKSPACE}/ansible/aws_ec2.yaml --list)" ${WORKSPACE}/ansible/playbook.yml --user=${REMOTE_USER} --key-file=${KEY_PATH}'
-                    sh 'python3 -c "import boto3; print('Boto3 is installed.')" 2>/dev/null || echo "Boto3 is not installed."'
-                    sh 'python3 -c "import botocore; print('Boto3 is installed.')" 2>/dev/null || echo "Boto3 is not installed.'
+                     sh 'python3 -c "import boto3; print(\'Boto3 is installed.\')" 2>/dev/null || echo "Boto3 is not installed."'
+                     sh 'python3 -c "import botocore; print(\'Boto3 is installed.\')" 2>/dev/null || echo "Boto3 is not installed."'
 
-                    sh 'ansible-inventory -i aws_ec2.yaml --graph'
+                     sh 'ansible-inventory -i aws_ec2.yaml --graph'
+                    }
                 }    
             }
         }
