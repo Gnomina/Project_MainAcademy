@@ -50,7 +50,7 @@ pipeline {
                         echo "ID = ${id}"
                         env.my_ip = ip //create environment variable - env.my_ip
                         env.instance_id = id //create environment variable - env.instance_id
-                        sh 'ansible-inventory -i aws_ec2.yaml --graph'
+                        sh "ansible-inventory -i ${WORKSPACE}.aws_ec2.yaml --graph"
                     }                      
                 }       
             }
