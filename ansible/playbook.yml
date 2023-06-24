@@ -1,5 +1,5 @@
 - name: Package installation
-  hosts: myserver #tag of the EC2 instance
+  hosts: "{{ host_group }}"
   become: true
   roles:
     - ClamAV

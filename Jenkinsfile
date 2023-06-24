@@ -122,7 +122,8 @@ pipeline {
                        ' --user=${REMOTE_USER} --key-file=${KEY_PATH}'
                     */
                 
-                    sh 'ansible-playbook -i "$(ansible-inventory -i ${WORKSPACE}/ansible/aws_ec2.yaml --list)" ${WORKSPACE}/ansible/playbook.yml --user=${REMOTE_USER} --key-file=${KEY_PATH}'
+                    //sh 'ansible-playbook -i "$(ansible-inventory -i ${WORKSPACE}/ansible/aws_ec2.yaml --list)" ${WORKSPACE}/ansible/playbook.yml --user=${REMOTE_USER} --key-file=${KEY_PATH}'
+                    sh "ansible-playbook -i ${WORKSPACE}/ansible/aws_ec2.yaml --list ${WORKSPACE}/ansible/playbook.yml --user=${REMOTE_USER} --key-file=${KEY_PATH}"
                 }    
             }
         }
