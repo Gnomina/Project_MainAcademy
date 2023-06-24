@@ -66,7 +66,8 @@ pipeline {
                 }
             }
         }
-        */              
+        */  
+        /*            
         stage('Instance Status Check') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
@@ -107,6 +108,7 @@ pipeline {
                 }
             }
         }
+        */
         
         stage('Run Ansible playbook') {
              steps {
