@@ -36,6 +36,7 @@ pipeline {
                         sh 'pip install --upgrade awscli'
                         sh 'pip uninstall -y botocore bcdoc'
                         sh 'pip install --upgrade botocore'
+                        sh 'ansible-inventory -i aws_ec2.yaml --graph'
 
 
 
@@ -118,34 +119,7 @@ pipeline {
         }
         */
         
-        stage('Run Ansible playbook') {
-             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: "12345", 
-                keyFileVariable: 'KEY_PATH', usernameVariable: 'REMOTE_USER')]) {
-                    script {
-                /*
-                    sh "ssh-keyscan ${env.my_ip} >> ~/.ssh/known_hosts"
-
-                    sh 'ansible all -m ping -u ${REMOTE_USER} '+
-                       '-i ${WORKSPACE}/ansible/inventory.ini --private-key=${KEY_PATH}'
-
-                    sh 'ansible-playbook -i ${WORKSPACE}/ansible/inventory.ini'+
-                       ' ${WORKSPACE}/ansible/playbook.yml'+
-                       ' --user=${REMOTE_USER} --key-file=${KEY_PATH}'
-                    /*
-                    sh 'ANSIBLE_VERBOSITY=1 ansible-playbook -i ${WORKSPACE}/ansible/inventory.ini'+
-                       ' ${WORKSPACE}/ansible/playbook.yml'+
-                       ' --user=${REMOTE_USER} --key-file=${KEY_PATH}'/
-                    */
-                
-                    //sh 'ansible-playbook -i "$(ansible-inventory -i ${WORKSPACE}/ansible/aws_ec2.yaml --list)" ${WORKSPACE}/ansible/playbook.yml --user=${REMOTE_USER} --key-file=${KEY_PATH}'
-                     
-
-                     sh 'ansible-inventory -i aws_ec2.yaml --graph'
-                    }
-                }    
-            }
-        }
+        
         
     }
 }
