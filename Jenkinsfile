@@ -16,7 +16,7 @@ pipeline {
 
         stage('Clone') {
             steps {
-                git branch: 'Install_packages_on_Slave', credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
+                git branch: 'ansible-dynamic-inventory', credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
                 echo "PATH to clone repo: ${WORKSPACE}"
             }
         }
@@ -40,7 +40,19 @@ pipeline {
                 }       
             }
         }
+/*
+        stage('Run Ansible playbook') {
+            steps {
+                withCredentials([sshUserPrivateKey(credentialsId: "12345", 
+                keyFileVariable: 'KEY_PATH', usernameVariable: 'REMOTE_USER')]) {
+                    sh 'ansible-playbook -i "$(ansible-inventory -i ${WORKSPACE}/ansible/aws_ec2.yaml --list)" ${WORKSPACE}/ansible/playbook.yml --user=${REMOTE_USER} --key-file=${KEY_PATH}'
+               
+                }
+            }
+        }
+*/
 
+        /*
         stage('Write Inventory') {
             steps {
                 script {
@@ -49,7 +61,7 @@ pipeline {
                 }
             }
         }
-
+        */              
         stage('Instance Status Check') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
@@ -95,7 +107,7 @@ pipeline {
              steps {
                 withCredentials([sshUserPrivateKey(credentialsId: "12345", 
                 keyFileVariable: 'KEY_PATH', usernameVariable: 'REMOTE_USER')]) {
-                
+                /*
                     sh "ssh-keyscan ${env.my_ip} >> ~/.ssh/known_hosts"
 
                     sh 'ansible all -m ping -u ${REMOTE_USER} '+
@@ -109,8 +121,8 @@ pipeline {
                        ' ${WORKSPACE}/ansible/playbook.yml'+
                        ' --user=${REMOTE_USER} --key-file=${KEY_PATH}'
                     */
-
-                    sh 'ansible-playbook -i "$(ansible-inventory -i ${WORKSPACE}/ansible/aws_ec2.yaml --list)" ${WORKSPACE}/ansible/playbook.yml --user=${REMOTE_USER} --key-file=${KEY_PATH}'
+                
+                    sh "ansible-playbook -i ansible-inventory ${WORKSPACE}/ansible/aws_ec2.yaml --list ${WORKSPACE}/ansible/playbook.yml --user=${REMOTE_USER} --key-file=${KEY_PATH}"
                 }
             }
         }
