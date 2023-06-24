@@ -68,6 +68,19 @@ pipeline {
                         sh "docker push ${env.ecr_url}:${env.git_branch}"
                         // # Test start docker container
                         sh "docker run -d -p 49160:8080 --log-driver=awslogs --log-opt awslogs-group=MainAcademy_container_logs --log-opt awslogs-region=eu-central-1 --log-opt awslogs-stream=test_log ${env.ecr_url}:${env.git_branch}"
+                        
+                        
+                        /*
+                        sh '''
+                        docker run -d -p 49160:8080 
+                        --log-driver=awslogs
+                        --log-opt awslogs-region=eu-central-1
+                        --log-opt awslogs-group=MainAcademy_container_logs/app
+                        --log-opt awslogs-create-group=true 
+                        --log-opt awslogs-stream=test_log 
+                        ${env.ecr_url}:${env.git_branch}"
+                        '''
+                        */
 
                     }
                 }
