@@ -129,6 +129,7 @@ pipeline {
                     */
                 
                     //sh 'ansible-playbook -i "$(ansible-inventory -i ${WORKSPACE}/ansible/aws_ec2.yaml --list)" ${WORKSPACE}/ansible/playbook.yml --user=${REMOTE_USER} --key-file=${KEY_PATH}'
+                     sh 'pip install boto3'
                      sh 'python3 -c "import boto; print(\'Boto3 is installed.\')" 2>/dev/null || echo "Boto3 is not installed."'
                      sh 'python3 -c "import botocore; print(\'Boto3 is installed.\')" 2>/dev/null || echo "Boto3 is not installed."'
 
