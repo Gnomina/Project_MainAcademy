@@ -33,6 +33,14 @@ pipeline {
                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                     script {
+                        sh 'pip install --upgrade awscli'
+                        sh 'pip uninstall -y botocore bcdoc'
+                        sh 'pip install --upgrade botocore'
+
+
+
+
+
                         def tfStateFile = sh(script: "aws s3 cp s3://mainacademy-project-terraform-back/dev/backend/terraform.tfstate -", returnStdout: true).trim()// url or ARN
                         def tfStateJson = readJSON(text: tfStateFile)
                         def ip = tfStateJson.outputs.instance_public_ip.value
