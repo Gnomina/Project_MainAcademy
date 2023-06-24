@@ -1,5 +1,5 @@
 - name: Package installation
-  hosts: myserver
+  hosts: tag_Name_Docker_container #tag of the EC2 instance
   become: true
   roles:
     - ClamAV
