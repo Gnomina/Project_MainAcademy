@@ -33,10 +33,10 @@ pipeline {
                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                     script {
-                        sh 'pip install --upgrade awscli'
-                        sh 'pip uninstall -y botocore bcdoc'
-                        sh 'pip install --upgrade botocore'
-                        sh 'ansible-inventory -i aws_ec2.yaml --graph'
+                        //sh 'pip install --upgrade awscli'
+                        //sh 'pip uninstall -y botocore bcdoc'
+                        //sh 'pip install --upgrade botocore'
+                        
 
 
 
@@ -50,6 +50,7 @@ pipeline {
                         echo "ID = ${id}"
                         env.my_ip = ip //create environment variable - env.my_ip
                         env.instance_id = id //create environment variable - env.instance_id
+                        sh 'ansible-inventory -i aws_ec2.yaml --graph'
                     }                      
                 }       
             }
