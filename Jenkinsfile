@@ -32,14 +32,7 @@ pipeline {
                 credentialsId: 'MainAcademy_AWS_key',
                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
-                    script {
-                                               
                         
-
-                        
-
-                        
-                    }                      
                 }       
             }
         }
@@ -61,9 +54,6 @@ pipeline {
                         ' ${WORKSPACE}/ansible/playbook.yml'+
                         ' --user=${REMOTE_USER} --key-file=${KEY_PATH}'
                     }
-
-                    
-                    
                 }
             }
         }
