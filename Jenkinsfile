@@ -35,6 +35,7 @@ pipeline {
                     script {
                         
                         sh "python3 invent.py"
+                        sh "cat inventory.ini"
                     }                      
                 }       
             }
