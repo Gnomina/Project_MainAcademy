@@ -1,5 +1,5 @@
 - name: Package installation
-  hosts: "{{ host_group }}"
+  hosts: PROD
   become: true
   roles:
     #  - ClamAV
