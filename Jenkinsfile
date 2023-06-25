@@ -35,7 +35,7 @@ pipeline {
                     script {
                                                
                         sh "python3 ${WORKSPACE}/ansible/invent.py"
-                        sh "${WORKSPACE}/ansible/cat inventory.ini"
+                        sh "cat ${WORKSPACE}/ansible/inventory.ini"
 
                         sh 'ansible-playbook -i ${WORKSPACE}/ansible/inventory.ini'+
                        ' ${WORKSPACE}/ansible/playbook.yml'+
