@@ -1,8 +1,13 @@
 - name: Package installation
-  hosts: dev
+  hosts: prod
   become: true
   roles:
+  
     #  - ClamAV
     #  - Docker
     - Java_JDK
     - AWS_SLI #this block should be the last one. It contains a stop command, after which tasks are not executed
+      when:  not aws_sli_installed
+
+
+
