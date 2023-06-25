@@ -34,8 +34,8 @@ pipeline {
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                     script {
                                                
-                        sh "python3 ${WORKSPACE}invent.py"
-                        sh "cat ${WORKSPACE}inventory.ini"
+                        sh "python3 ${WORKSPACE}/invent.py"
+                        sh "cat ${WORKSPACE}/inventory.ini"
 
                         
                     }                      
