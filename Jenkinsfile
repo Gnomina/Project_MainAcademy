@@ -5,12 +5,7 @@ pipeline {
         label 'Master'
     }
     
-    options {
-    buildDiscarder(logRotator(numToKeepStr: '10'))
-    timestamps()
-    timeout(time: 1, unit: 'HOURS')
-    }
-
+    
     stages {
 
         stage('CLEAN_WORKSPACE') {
@@ -25,70 +20,28 @@ pipeline {
                 echo "PATH to clone repo: ${WORKSPACE}"
             }
         }
-
-        stage('inventory') {
+        
+        stage('Get Terraform Variable') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
                 credentialsId: 'MainAcademy_AWS_key',
                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
-                        
+                    script {
+                        def tfStateFile = sh(script: "aws s3 cp s3://mainacademy-project-terraform-back/dev/backend/terraform.tfstate -", returnStdout: true).trim()// url or ARN
+                        def tfStateJson = readJSON(text: tfStateFile)
+                        def ip = tfStateJson.outputs.instance_public_ip.value
+                        def id = tfStateJson.outputs.instance_id.value
+                        echo "IP = ${ip}"
+                        echo "ID = ${id}"
+                        env.my_ip = ip //create environment variable - env.my_ip
+                        env.instance_id = id //create environment variable - env.instance_id
+                    }                      
                 }       
             }
         }
 
-        stage('Run Ansible playbook') {
-             steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
-                credentialsId: 'MainAcademy_AWS_key',
-                accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
-                    withCredentials([sshUserPrivateKey(credentialsId: "12345", 
-                    keyFileVariable: 'KEY_PATH', usernameVariable: 'REMOTE_USER')]) {
-                        script{
-                
-                            //sh "ssh-keyscan ${env.my_ip} >> ~/.ssh/known_hosts"
-                            sh "python3 ${WORKSPACE}/invent.py"
-                            sh "cat ${WORKSPACE}/inventory.ini"
 
-                            sh 'ansible all -m ping -u ${REMOTE_USER} '+
-                            '-i ${WORKSPACE}/inventory.ini --private-key=${KEY_PATH}'
-
-                             sh 'ansible-playbook -i ${WORKSPACE}/inventory.ini'+
-                            ' ${WORKSPACE}/ansible/playbook.yml'+
-                            ' --user=${REMOTE_USER} --key-file=${KEY_PATH}'
-                        }    
-                    }
-                }
-            }
-        }
-/*
-        stage('Run Ansible playbook') {
-            steps {
-                withCredentials([sshUserPrivateKey(credentialsId: "12345", 
-                keyFileVariable: 'KEY_PATH', usernameVariable: 'REMOTE_USER')]) {
-                    sh 'ansible-playbook -i "$(ansible-inventory -i ${WORKSPACE}/ansible/aws_ec2.yaml --list)" ${WORKSPACE}/ansible/playbook.yml --user=${REMOTE_USER} --key-file=${KEY_PATH}'
-
-                    sh 'ansible-playbook -i ${WORKSPACE}/ansible/inventory.ini'+
-                       ' ${WORKSPACE}/ansible/playbook.yml'+
-                       ' --user=${REMOTE_USER} --key-file=${KEY_PATH}'
-               
-                }
-            }
-        }
-*/
-
-        /*
-        stage('Write Inventory') {
-            steps {
-                script {
-                    def inventoryFile = "${WORKSPACE}/ansible/inventory.ini"
-                    sh "sed -i 's/REPLACE_WITH_IP/${env.my_ip}/g' ${inventoryFile}"
-                }
-            }
-        }
-        */  
-        /*            
         stage('Instance Status Check') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
@@ -129,7 +82,36 @@ pipeline {
                 }
             }
         }
-        */
+
+        stage('Run Ansible playbook') {
+             steps {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
+                credentialsId: 'MainAcademy_AWS_key',
+                accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
+                    withCredentials([sshUserPrivateKey(credentialsId: "12345", 
+                    keyFileVariable: 'KEY_PATH', usernameVariable: 'REMOTE_USER')]) {
+                        script{
+                
+                            //sh "ssh-keyscan ${env.my_ip} >> ~/.ssh/known_hosts"
+                            sh "python3 ${WORKSPACE}/invent.py"
+                            sh "cat ${WORKSPACE}/inventory.ini"
+
+                            sh 'ansible all -m ping -u ${REMOTE_USER} '+
+                            '-i ${WORKSPACE}/inventory.ini --private-key=${KEY_PATH}'
+
+                             sh 'ansible-playbook -i ${WORKSPACE}/inventory.ini'+
+                            ' ${WORKSPACE}/ansible/playbook.yml'+
+                            ' --user=${REMOTE_USER} --key-file=${KEY_PATH}'
+                        }    
+                    }
+                }
+            }
+        }
+
+                   
+        
+        
         
         
         

@@ -1,8 +1,8 @@
 - name: Package installation
-  hosts: prod
+  hosts: docker
   become: true
   roles:
-    #  - ClamAV
-    #  - Docker
+    - role: ClamAV
+    - role: Docker
     - role: Java_JDK
     - role: AWS_SLI
