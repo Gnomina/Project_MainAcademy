@@ -1,5 +1,5 @@
 - name: Package installation
-  hosts: prod
+  hosts: dev
   become: true
   roles:
     #  - ClamAV
