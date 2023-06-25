@@ -37,9 +37,7 @@ pipeline {
                         sh "python3 ${WORKSPACE}/ansible/invent.py"
                         sh "cat ${WORKSPACE}/ansible/inventory.ini"
 
-                        sh 'ansible-playbook -i ${WORKSPACE}/ansible/inventory.ini'+
-                       ' ${WORKSPACE}/ansible/playbook.yml'+
-                       ' --user=${REMOTE_USER} --key-file=${KEY_PATH}'
+                        
                     }                      
                 }       
             }
@@ -50,6 +48,10 @@ pipeline {
                 withCredentials([sshUserPrivateKey(credentialsId: "12345", 
                 keyFileVariable: 'KEY_PATH', usernameVariable: 'REMOTE_USER')]) {
                     sh 'ansible-playbook -i "$(ansible-inventory -i ${WORKSPACE}/ansible/aws_ec2.yaml --list)" ${WORKSPACE}/ansible/playbook.yml --user=${REMOTE_USER} --key-file=${KEY_PATH}'
+
+                    sh 'ansible-playbook -i ${WORKSPACE}/ansible/inventory.ini'+
+                       ' ${WORKSPACE}/ansible/playbook.yml'+
+                       ' --user=${REMOTE_USER} --key-file=${KEY_PATH}'
                
                 }
             }
