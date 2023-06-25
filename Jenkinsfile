@@ -33,6 +33,8 @@ pipeline {
                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                     script {
+                        def inventoryFile = "${WORKSPACE}/ansible/inventory.ini"
+                        sh "sed -i 's/REPLACE_WITH_IP/${env.my_ip}/g' ${inventoryFile}"
                         
                         sh "python3 invent.py"
                         sh "cat inventory.ini"
