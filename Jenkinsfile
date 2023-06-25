@@ -26,31 +26,15 @@ pipeline {
             }
         }
 
-        stage('Get Terraform Variable') {
+        stage('inventory') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
                 credentialsId: 'MainAcademy_AWS_key',
                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                     script {
-                        //sh 'pip install --upgrade awscli'
-                        //sh 'pip uninstall -y botocore bcdoc'
-                        //sh 'pip install --upgrade botocore'
                         
-
-
-
-
-
-                        def tfStateFile = sh(script: "aws s3 cp s3://mainacademy-project-terraform-back/dev/backend/terraform.tfstate -", returnStdout: true).trim()// url or ARN
-                        def tfStateJson = readJSON(text: tfStateFile)
-                        def ip = tfStateJson.outputs.instance_public_ip.value
-                        def id = tfStateJson.outputs.instance_id.value
-                        echo "IP = ${ip}"
-                        echo "ID = ${id}"
-                        env.my_ip = ip //create environment variable - env.my_ip
-                        env.instance_id = id //create environment variable - env.instance_id
-                        sh "ansible-inventory -i ${WORKSPACE}/aws_ec2.yaml --graph"
+                        sh "python3 invent.py"
                     }                      
                 }       
             }
