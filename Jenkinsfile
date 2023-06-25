@@ -22,7 +22,7 @@ pipeline {
         stage('Clone') {
             steps {
                 git branch: 'ansible-dynamic-inventory', credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
-                echo "PATH to clone repo: ${WORKSPACE}"
+                echo "PATH to clone repo: "
             }
         }
 
@@ -33,11 +33,13 @@ pipeline {
                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                     script {
-                        def inventoryFile = "${WORKSPACE}/ansible/inventory.ini"
-                        sh "sed -i 's/REPLACE_WITH_IP/${env.my_ip}/g' ${inventoryFile}"
-                        
-                        sh "python3 invent.py"
-                        sh "cat inventory.ini"
+                                               
+                        sh "python3 ${WORKSPACE}/ansible/invent.py"
+                        sh "${WORKSPACE}/ansible/cat inventory.ini"
+
+                        sh 'ansible-playbook -i ${WORKSPACE}/ansible/inventory.ini'+
+                       ' ${WORKSPACE}/ansible/playbook.yml'+
+                       ' --user=${REMOTE_USER} --key-file=${KEY_PATH}'
                     }                      
                 }       
             }

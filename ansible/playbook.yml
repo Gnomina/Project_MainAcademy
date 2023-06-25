@@ -2,7 +2,7 @@
   hosts: "{{ host_group }}"
   become: true
   roles:
-    - ClamAV
-    - Docker
-    - Java_JDK
+    #  - ClamAV
+    #  - Docker
+    #  - Java_JDK
     - AWS_SLI #this block should be the last one. It contains a stop command, after which tasks are not executed
