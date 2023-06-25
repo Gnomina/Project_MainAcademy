@@ -23,12 +23,16 @@ variable tags {
   default = {
     Name = "Docker-container"
   }
-   
-    
-  
 }
-/*
-variable "branch_name" {
-  description = "Branch name from Jenkins"
+
+variable "instance_count" {
+  description = "Instance Count to start"
+  type        = number
+  default     = 1  # Default Value
 }
-*/
+
+variable "instance_tag" {
+  description = "Тег для назначения инстансам"
+  type        = string
+  default     = "default"
+}
