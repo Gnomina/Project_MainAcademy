@@ -37,6 +37,10 @@ pipeline {
                         sh "python3 ${WORKSPACE}/invent.py"
                         sh "cat ${WORKSPACE}/inventory.ini"
 
+                        sh 'ansible-playbook -i ${WORKSPACE}/inventory.ini'+
+                       ' ${WORKSPACE}/ansible/playbook.yml'+
+                       ' --user=${REMOTE_USER} --key-file=${KEY_PATH}'
+
                         
                     }                      
                 }       
