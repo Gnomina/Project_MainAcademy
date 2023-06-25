@@ -30,8 +30,8 @@ pipeline {
                     script {
                         def tfStateFile = sh(script: "aws s3 cp s3://mainacademy-project-terraform-back/dev/backend/terraform.tfstate -", returnStdout: true).trim()// url or ARN
                         def tfStateJson = readJSON(text: tfStateFile)
-                        def ip = tfStateJson.outputs.instance_public_ip.value
-                        def id = tfStateJson.outputs.instance_id.value
+                        def ip = tfStateJson.outputs.instance_public_ip.value[0]
+                        def id = tfStateJson.outputs.instance_id.value[0]
                         echo "IP = ${ip}"
                         echo "ID = ${id}"
                         env.my_ip = ip //create environment variable - env.my_ip
@@ -82,6 +82,7 @@ pipeline {
                 }
             }
         }
+        
 
         stage('Run Ansible playbook') {
              steps {
