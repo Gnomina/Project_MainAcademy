@@ -22,7 +22,7 @@ pipeline {
         stage('Clone') {
             steps {
                 git branch: 'ansible-dynamic-inventory', credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
-                echo "PATH to clone repo: "
+                echo "PATH to clone repo: ${WORKSPACE}"
             }
         }
 
