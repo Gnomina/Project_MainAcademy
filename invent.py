@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import json
 import boto3
 
@@ -18,6 +16,7 @@ for reservation in response['Reservations']:
         name = ""
         ip = ""
         tag = ""
+        state = ""
 
         # Ищем нужные данные в тегах экземпляра
         for tag_entry in instance.get('Tags', []):
@@ -29,8 +28,11 @@ for reservation in response['Reservations']:
         # Получаем IP-адрес
         ip = instance.get('PublicIpAddress', 'N/A')
 
-        # Проверяем, что все нужные данные присутствуют
-        if name and ip and tag:
+        # Получаем состояние экземпляра
+        state = instance['State']['Name']
+
+        # Проверяем, что все нужные данные присутствуют и состояние не является "terminated"
+        if name and ip and tag and state != "terminated":
             # Добавляем данные в словарь inventory
             if tag.lower() in inventory:
                 inventory[tag.lower()].append((name, ip))
@@ -43,12 +45,13 @@ with open("inventory.ini", "w") as file:
     file.write("[all]\n")
     for instances in inventory.values():
         for instance in instances:
-            file.write(f"{instance[0]} ansible_host={instance[1]} ansible_user=ubuntu\n")
+            file.write(
+                f"{instance[0]} ansible_host={instance[1]} ansible_user=ubuntu\n")
 
     # Записываем остальные группы
     for tag, instances in inventory.items():
         if tag != "all":
             file.write(f"\n[{tag}]\n")
             for instance in instances:
-                file.write(f"{instance[0]} ansible_host={instance[1]} ansible_user=ubuntu\n")
-
+                file.write(
+                    f"{instance[0]} ansible_host={instance[1]} ansible_user=ubuntu\n")
