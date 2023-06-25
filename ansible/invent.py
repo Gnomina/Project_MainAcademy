@@ -32,19 +32,23 @@ for reservation in response['Reservations']:
         # Проверяем, что все нужные данные присутствуют
         if name and ip and tag:
             # Добавляем данные в словарь inventory
-            if tag.upper() in inventory:
-                inventory[tag.upper()].append((name, ip))
+            if tag.lower() in inventory:
+                inventory[tag.lower()].append((name, ip))
             else:
-                inventory[tag.upper()] = [(name, ip)]
+                inventory[tag.lower()] = [(name, ip)]
 
 # Записываем данные в файл инвентари
 with open("inventory.ini", "w") as file:
-    for tag, instances in inventory.items():
-        file.write(f"[{tag}]\n")
+    # Записываем IP-адреса в группу [all]
+    file.write("[all]\n")
+    for instances in inventory.values():
         for instance in instances:
             file.write(f"{instance[0]} ansible_host={instance[1]} ansible_user=ubuntu\n")
 
-    # Добавляем общую группу
-    file.write("\n[ALL]\n")
-    for tag in inventory.keys():
-        file.write(f"{tag}\n")
+    # Записываем остальные группы
+    for tag, instances in inventory.items():
+        if tag != "all":
+            file.write(f"\n[{tag}]\n")
+            for instance in instances:
+                file.write(f"{instance[0]} ansible_host={instance[1]} ansible_user=ubuntu\n")
+
