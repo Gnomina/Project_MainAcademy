@@ -39,20 +39,25 @@ pipeline {
 
         stage('Run Ansible playbook') {
              steps {
-                withCredentials([sshUserPrivateKey(credentialsId: "12345", 
-                keyFileVariable: 'KEY_PATH', usernameVariable: 'REMOTE_USER')]) {
-                    script{
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
+                credentialsId: 'MainAcademy_AWS_key',
+                accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
+                    withCredentials([sshUserPrivateKey(credentialsId: "12345", 
+                    keyFileVariable: 'KEY_PATH', usernameVariable: 'REMOTE_USER')]) {
+                        script{
                 
-                        //sh "ssh-keyscan ${env.my_ip} >> ~/.ssh/known_hosts"
-                        sh "python3 ${WORKSPACE}/invent.py"
-                        sh "cat ${WORKSPACE}/inventory.ini"
+                            //sh "ssh-keyscan ${env.my_ip} >> ~/.ssh/known_hosts"
+                            sh "python3 ${WORKSPACE}/invent.py"
+                            sh "cat ${WORKSPACE}/inventory.ini"
 
-                        sh 'ansible all -m ping -u ${REMOTE_USER} '+
-                        '-i ${WORKSPACE}/inventory.ini --private-key=${KEY_PATH}'
+                            sh 'ansible all -m ping -u ${REMOTE_USER} '+
+                            '-i ${WORKSPACE}/inventory.ini --private-key=${KEY_PATH}'
 
-                         sh 'ansible-playbook -i ${WORKSPACE}/inventory.ini'+
-                        ' ${WORKSPACE}/ansible/playbook.yml'+
-                        ' --user=${REMOTE_USER} --key-file=${KEY_PATH}'
+                             sh 'ansible-playbook -i ${WORKSPACE}/inventory.ini'+
+                            ' ${WORKSPACE}/ansible/playbook.yml'+
+                            ' --user=${REMOTE_USER} --key-file=${KEY_PATH}'
+                        }    
                     }
                 }
             }
