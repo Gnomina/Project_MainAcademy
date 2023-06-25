@@ -1,3 +1,10 @@
+- name: Check if openjdk-11-jdk is installed
+  become: true
+  command: dpkg -s openjdk-11-jdk
+  register: openjdk_pkg_status
+  changed_when: false
+  ignore_errors: true
+
 - name: Update apt cache
   become: true
   apt:
@@ -8,6 +15,7 @@
   apt:
     name: openjdk-11-jdk
     state: present
+  when: openjdk_pkg_status.rc != 0
 
 - name: Create Jenkins user
   become: true

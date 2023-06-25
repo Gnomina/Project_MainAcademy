@@ -5,6 +5,4 @@
     #  - ClamAV
     #  - Docker
     - role: Java_JDK
-      when: not openjdk-11-jdk # assuming jdk_installed is a variable defined earlier
-    - role: AWS_SLI #this block should be the last one. It contains a stop command, after which tasks are not executed
-      when: not Download AWS CLI package
+    - role: AWS_SLI
