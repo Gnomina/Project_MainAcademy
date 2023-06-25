@@ -90,7 +90,7 @@ pipeline {
                 credentialsId: 'MainAcademy_AWS_key',
                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
-                    withCredentials([sshUserPrivateKey(credentialsId: "12345", 
+                    withCredentials([sshUserPrivateKey(credentialsId: "Ansible_ssh_key", 
                     keyFileVariable: 'KEY_PATH', usernameVariable: 'REMOTE_USER')]) {
                         script{
                 
