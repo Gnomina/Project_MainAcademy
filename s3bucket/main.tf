@@ -6,8 +6,3 @@ resource "aws_s3_bucket" "my_bucket_test" {
     Environment = "dev_22"
   }
 }
-resource "aws_s3_bucket_acl" "my_bucket_acl" {
-  bucket = aws_s3_bucket.my_bucket_test.id
-
-  acl = "private" # Настройте права доступа в соответствии с вашими потребностями
-}
