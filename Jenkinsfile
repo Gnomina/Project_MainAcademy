@@ -1,10 +1,7 @@
 pipeline {
     agent any
     
-    parameters {
-        string(name: 'INSTANCE_COUNT', description: 'Instance Count to start')
-        string(name: 'INSTANCE_TAG', description: 'Instance Tag')
-    }
+    
     
     stages {
 
@@ -16,7 +13,7 @@ pipeline {
         
         stage('Clone') {
             steps {
-                git branch: 'Parametr-start-instance', credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
+                git branch: 'Cloudfront', credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
                 echo "Клонированный репозиторий находится в папке: ${WORKSPACE}"
             }
         }
@@ -31,22 +28,11 @@ pipeline {
                         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                             sh 'terraform init'
                             sh 'terraform plan'
+                            sh "terraform apply -auto-approve"
                             echo 'ok'
                         }
                     }
                 }
-                
-                stage("Terraform_apply"){
-                    steps{
-                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
-                        credentialsId: 'MainAcademy_AWS_key',
-                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
-                            sh "terraform apply -auto-approve -var 'instance_count=${params.INSTANCE_COUNT}' -var 'instance_tag=${params.INSTANCE_TAG}'"
-                            echo 'ok'
-                        }
-                    }
-                } 
             }
         }
     }
