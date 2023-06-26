@@ -6,7 +6,7 @@ resource "aws_cloudfront_distribution" "loudfront" {
 
   origin {
     domain_name = "mainacademy-backend.s3.amazonaws.com/mainacademy-prod"  
-    origin_id   = "dev"
+    origin_id   = "prod"
     origin_path = "/dev"
     custom_origin_config {
       http_port              = 80
