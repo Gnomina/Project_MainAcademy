@@ -2,7 +2,7 @@ provider "aws" {
   region = "${var.Region}" 
 }
 
-module "VPC" { #Include VPC module
-  source = "./VPC" #VPC Module PATH
+module "s3" { #Include VPC module
+  source = "./s3bucket" #VPC Module PATH
 }
 
