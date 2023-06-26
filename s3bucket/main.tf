@@ -1,4 +1,4 @@
-resource "aws_s3_bucket" "my_bucket" {
+resource "aws_s3_bucket" "my_bucket_test" {
   bucket = "test-dev-bucket" # Замените на имя вашего бакета
  
   tags = {
@@ -7,7 +7,7 @@ resource "aws_s3_bucket" "my_bucket" {
   }
 }
 resource "aws_s3_bucket_acl" "my_bucket_acl" {
-  bucket = aws_s3_bucket.my_bucket.id
+  bucket = aws_s3_bucket.my_bucket_test.id
 
   acl = "private" # Настройте права доступа в соответствии с вашими потребностями
 }
