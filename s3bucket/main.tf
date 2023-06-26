@@ -1,4 +1,4 @@
-resource "aws_s3_bucket" "my_bucket_test" {
+resource "aws_s3_bucket" "my_bucket_dev" {
   bucket = "mainacademy-dev" # Замените на имя вашего бакета
  
   tags = {
@@ -7,7 +7,7 @@ resource "aws_s3_bucket" "my_bucket_test" {
   }
 }
 
-resource "aws_s3_bucket" "my_bucket_test" {
+resource "aws_s3_bucket" "my_bucket_prod" {
   bucket = "mainacademy-prod" # Замените на имя вашего бакета
  
   tags = {
