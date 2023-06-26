@@ -1,9 +1,9 @@
 resource "aws_s3_bucket" "my_bucket_test" {
-  bucket = "test-dev-bucket" # Замените на имя вашего бакета
+  bucket = "dev-bucket_11" # Замените на имя вашего бакета
  
   tags = {
-    Name        = "dev_bucket"
-    Environment = "dev"
+    Name        = "dev_bucket_22"
+    Environment = "dev_22"
   }
 }
 resource "aws_s3_bucket_acl" "my_bucket_acl" {
