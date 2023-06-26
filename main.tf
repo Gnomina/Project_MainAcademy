@@ -29,7 +29,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "site_origin" {
   }
 }
 
-resorce "aws_s3_bucket_versioning" "site_origin" {
+resource "aws_s3_bucket_versioning" "site_origin" {
   bucket   = aws_s3_bucket.site_origin.bucket
 
   versioning_configuration {
@@ -51,11 +51,11 @@ resource "aws_s3_object" "content" {
   content_type              = "text/html"
 }
 
-resources "aws_cloudfront_origin_access_control" "site"{
-    name                             = "security_pillar100_cf_s3_oac" #дома досмотреть, на нойте не видно!!
-    origin_acces_control_origin_type = "s3"
-    signing_behavior                 = "always"
-    signing_protocol                 = "sigv4"
+resource "aws_cloudfront_origin_access_control" "site"{
+    name                              = "security_pillar100_cf_s3_oac" #дома досмотреть, на нойте не видно!!
+    origin_access_control_origin_type = "s3"
+    signing_behavior                  = "always"
+    signing_protocol                  = "sigv4"
 }
 
 resource "aws_cloudfront_distribution" "site_access"{
@@ -66,7 +66,7 @@ resource "aws_cloudfront_distribution" "site_access"{
     ]
 
     enabled = true
-    defoult_root_object         = "index.html"
+    default_root_object         = "index.html"
 
     default_cachle_behavior{
         allowed_methods         = ["GET", "HEAD", "OPTIONS"]
@@ -98,7 +98,7 @@ resource "aws_cloudfront_distribution" "site_access"{
     }
 }
 
-resorce "aws_s3_bucket_polisy" "site_origin"{
+resource "aws_s3_bucket_policy" "site_origin"{
     dependens_on = [
         aws_cloudfront_distribution.site_access,
         aws_s3_bucket.site_origin
@@ -120,18 +120,18 @@ data "aws_iam_policy_document" "site_origin"{
         ]
     } 
 
-    principials{
+    principals{
         
         identifiers = ["cloudfront.amazon.com"]
         type = "Service"
     }   
 
-    resorce = [
+    resource = [
         "arn:aws:s3:::${aws_s3_bucket.site_origin.bucket}/*"
     ]
 
     condition {
-        test ="StringEquals"
+        test = "StringEquals"
         variable = "aws:SourceArn"
 
         values = [aws_cloudfront_distribution.site_access.arn]
