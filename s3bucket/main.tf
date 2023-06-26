@@ -15,3 +15,5 @@ resource "aws_s3_bucket" "my_bucket_prod" {
     Environment = "prod"
   }
 }
+//mainacademy-backend.s3.amazonaws.com/mainacademy-dev
+//mainacademy-backend.s3.amazonaws.com/mainacademy-prod
