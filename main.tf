@@ -1,145 +1,83 @@
+# Define your AWS provider
 provider "aws" {
-  region = "${var.Region}" 
+  region = "us-east-1"  # Update with your desired region
 }
 
-resource "aws_s3_bucket" "site_origin" {
-  bucket        = "site_origin_mainacademy" 
- 
-  tags = {
-    Environment = "lab"
-  }
+# Create the S3 buckets
+resource "aws_s3_bucket" "prod_bucket" {
+  bucket = "main_prod"  # Update with your desired bucket name
+  acl    = "private"
 }
 
-resource "aws_s3_bucket_public_access_block" "site_origin" {
-  bucket = aws_s3_bucket.site_origin.bucket
-
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
+resource "aws_s3_bucket" "dev_bucket" {
+  bucket = "main_dev"  # Update with your desired bucket name
+  acl    = "private"
 }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "site_origin" {
-  bucket            = aws_s3_bucket.site_origin.bucket
+# Upload dev.html and prod.html files to respective buckets
+resource "aws_s3_bucket_object" "dev_html" {
+  bucket = aws_s3_bucket.dev_bucket.bucket
+  key    = "dev.html"
+  source = "path/to/dev.html"  # Update with the path to your dev.html file
+}
 
-  rule {
-    apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
+resource "aws_s3_bucket_object" "prod_html" {
+  bucket = aws_s3_bucket.prod_bucket.bucket
+  key    = "prod.html"
+  source = "path/to/prod.html"  # Update with the path to your prod.html file
+}
+
+# Create the CloudFront distribution
+resource "aws_cloudfront_distribution" "main_distribution" {
+  origin {
+    domain_name = aws_s3_bucket.prod_bucket.bucket_regional_domain_name
+    origin_id   = "prod-bucket-origin"
+    custom_origin_config {
+      origin_protocol_policy = "http-only"
     }
   }
-}
 
-resource "aws_s3_bucket_versioning" "site_origin" {
-  bucket   = aws_s3_bucket.site_origin.bucket
+  default_cache_behavior {
+    target_origin_id = "prod-bucket-origin"
+    forwarded_values {
+      query_string = false
+      cookies {
+        forward = "none"
+      }
+    }
 
-  versioning_configuration {
-    status = "Enabled"
+    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = 0
+    default_ttl            = 3600
+    max_ttl                = 86400
+
+    default_root_object = "/prod.html"  # Set prod.html as the index document
   }
-}
 
-resource "aws_s3_object" "content" {
-
-    depends_on = [
-        aws_s3_bucket.site_origin
-        ]
-
-
-  bucket                    = aws_s3_bucket.site_origin.bucket
-  key                       = "index.html"
-  source                    = "./index.html"
-  server_side_encryption    = "AES256"
-  content_type              = "text/html"
-}
-
-resource "aws_cloudfront_origin_access_control" "site"{
-    name                              = "security_pillar100_cf_s3_oac" #дома досмотреть, на нойте не видно!!
-    origin_access_control_origin_type = "s3"
-    signing_behavior                  = "always"
-    signing_protocol                  = "sigv4"
-}
-
-resource "aws_cloudfront_distribution" "site_access"{
-
-    depends_on = [
-        aws_s3_bucket.site_origin,
-        aws_cloudfront_origin_access_control.site_access
-    ]
-
-    enabled = true
-    default_root_object         = "index.html"
-
-    default_cachle_behavior{
-        allowed_methods         = ["GET", "HEAD", "OPTIONS"]
-        cached_methods          = ["GET", "HEAD", "OPTIONS"]
-        target_origin_id        = "site_origin"
-        viewer_protocol_policy  = "htttps-only"
+  ordered_cache_behavior {
+    path_pattern     = "/dev/*"
+    target_origin_id = "dev-bucket-origin"
+    forwarded_values {
+      query_string = false
+      cookies {
+        forward = "none"
+      }
     }
 
-    forvardet_values{
-        query_string = false
+    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = 0
+    default_ttl            = 3600
+    max_ttl                = 86400
 
-        cookies{
-            forward  = "none"
-        }
-        
-    }
+    default_root_object = "/dev.html"  # Set dev.html as the index document
+  }
 
-    origin{
-        domain_name             = aws_s3_bucket.site_origin.bucket_domain_name
-        origin_id               = aws_s3_bucket.site_origin.id
-        origin_acces_control_id = aws_cloudfront_origin_access_control.site_access.id
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
     }
+  }
 
-    restrictions{
-        geo_restriction{
-            restriction_type = "whitelist"
-            locations        = ["US", "CA"]
-        }
-    }
+  price_class = "PriceClass_100"  # Choose your desired price class
 }
-
-resource "aws_s3_bucket_policy" "site_origin"{
-    dependens_on = [
-        aws_cloudfront_distribution.site_access,
-        aws_s3_bucket.site_origin
-    ]
-    bucket = aws_s3_bucket.site_origin.id
-    polisy = data.aws_iam_policy_document.site_origin
-}
-
-data "aws_iam_policy_document" "site_origin"{
-    depends_on = [
-        aws_cloudfront_distribution.site_access,
-        aws_s3_bucket.site_origin
-    ] 
-    statement{
-        sid = "3"
-        effect = "Allow"
-        actions = [
-            "s3:GetObject"
-        ]
-    } 
-
-    principals{
-        
-        identifiers = ["cloudfront.amazon.com"]
-        type = "Service"
-    }   
-
-    resource = [
-        "arn:aws:s3:::${aws_s3_bucket.site_origin.bucket}/*"
-    ]
-
-    condition {
-        test = "StringEquals"
-        variable = "aws:SourceArn"
-
-        values = [aws_cloudfront_distribution.site_access.arn]
-    }
-
-
-
-
-}
-
 

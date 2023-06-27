@@ -5,3 +5,7 @@ output "vpc_id" {
   description = "value of vpc_id_VPC from VPC module (outputs_source = ./VPC)"
 }
 */
+# Output the CloudFront domain name
+output "cloudfront_domain_name" {
+  value = aws_cloudfront_distribution.main_distribution.domain_name
+}
