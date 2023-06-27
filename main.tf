@@ -81,7 +81,9 @@ resource "aws_cloudfront_distribution" "site_access"{
         cookies{
             forward  = "none"
         }
-        
+    }
+    viewer_certificate {
+      cloudfront_default_certificate = true
     }
 
     origin{
