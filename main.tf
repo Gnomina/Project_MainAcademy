@@ -68,11 +68,11 @@ resource "aws_cloudfront_distribution" "site_access"{
     enabled = true
     default_root_object         = "index.html"
 
-    default_cachle_behavior{
+    default_cache_behavior{
         allowed_methods         = ["GET", "HEAD", "OPTIONS"]
         cached_methods          = ["GET", "HEAD", "OPTIONS"]
         target_origin_id        = "site_origin"
-        viewer_protocol_policy  = "htttps-only"
+        viewer_protocol_policy  = "https-only"
     }
 
     forvardet_values{
