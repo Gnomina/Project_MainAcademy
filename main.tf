@@ -102,7 +102,7 @@ resource "aws_cloudfront_distribution" "site_access"{
 }
 
 resource "aws_s3_bucket_policy" "site_origin"{
-  dependens_on = [
+  depends_on = [
     data.aws_iam_policy_document.site_origin
   ]
 
