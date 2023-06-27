@@ -65,13 +65,13 @@ resource "aws_cloudfront_distribution" "site_access"{
         aws_cloudfront_origin_access_control.site_access
     ]
 
-    enabled = true
+    enabled                     = true
     default_root_object         = "index.html"
 
     default_cache_behavior{
-        allowed_methods         = ["GET", "HEAD", "OPTIONS"]
-        cached_methods          = ["GET", "HEAD", "OPTIONS"]
-        target_origin_id        = "site_origin"
+        allowed_methods         = ["GET", "HEAD"]
+        cached_methods          = ["GET", "HEAD"]
+        target_origin_id        = aws_s3_bucket.site_origin.id
         viewer_protocol_policy  = "https-only"
     }
 
@@ -82,14 +82,11 @@ resource "aws_cloudfront_distribution" "site_access"{
             forward  = "none"
         }
     }
-    viewer_certificate {
-      cloudfront_default_certificate = true
-    }
 
     origin{
         domain_name             = aws_s3_bucket.site_origin.bucket_domain_name
         origin_id               = aws_s3_bucket.site_origin.id
-        origin_acces_control_id = aws_cloudfront_origin_access_control.site_access.id
+        origin_access_control_id = aws_cloudfront_origin_access_control.site_access.id
     }
 
     restrictions{
@@ -98,50 +95,51 @@ resource "aws_cloudfront_distribution" "site_access"{
             locations        = ["US", "CA"]
         }
     }
+
+    viewer_certificate {
+      cloudfront_default_certificate = true
+    }
 }
 
 resource "aws_s3_bucket_policy" "site_origin"{
-    dependens_on = [
-        aws_cloudfront_distribution.site_access,
-        aws_s3_bucket.site_origin
-    ]
-    bucket = aws_s3_bucket.site_origin.id
-    polisy = data.aws_iam_policy_document.site_origin
+  dependens_on = [
+    data.aws_iam_policy_document.site_origin
+  ]
+
+  bucket = aws_s3_bucket.site_origin.id
+  polisy = data.aws_iam_policy_document.site_origin
 }
 
 data "aws_iam_policy_document" "site_origin"{
-    depends_on = [
-        aws_cloudfront_distribution.site_access,
-        aws_s3_bucket.site_origin
-    ] 
-    statement{
-        sid = "3"
-        effect = "Allow"
-        actions = [
-            "s3:GetObject"
-        ]
-    } 
+  depends_on = [
+    aws_cloudfront_distribution.site_access,
+    aws_s3_bucket.site_origin
+  ] 
+  
+  statement{
+    sid = "3"
+    effect = "Allow"
+    actions = [
+      "s3:GetObject"
+    ]
+  
 
     principals{
-        
-        identifiers = ["cloudfront.amazon.com"]
-        type = "Service"
+      identifiers = ["cloudfront.amazon.com"]
+      type = "Service"
     }   
 
     resource = [
-        "arn:aws:s3:::${aws_s3_bucket.site_origin.bucket}/*"
-    ]
+      "arn:aws:s3:::${aws_s3_bucket.site_origin.bucket}/*"
+    ] 
 
     condition {
-        test = "StringEquals"
-        variable = "aws:SourceArn"
+      test     = "StringEquals"
+      variable = "aws:SourceArn"
 
-        values = [aws_cloudfront_distribution.site_access.arn]
+      values = [aws_cloudfront_distribution.site_access.arn]
     }
-
-
-
-
+  }  
 }
 
 
