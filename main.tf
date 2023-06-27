@@ -14,70 +14,71 @@ resource "aws_s3_bucket" "dev_bucket" {
   acl    = "private"
 }
 
-# Upload dev.html and prod.html files to respective buckets
+# Upload HTML files to the S3 bucket
 resource "aws_s3_bucket_object" "dev_html" {
-  bucket = aws_s3_bucket.dev_bucket.bucket
+  bucket = aws_s3_bucket.prod_bucket.id
   key    = "dev.html"
-  source = "path/to/dev.html"  # Update with the path to your dev.html file
+  source = "dev.html"
 }
 
 resource "aws_s3_bucket_object" "prod_html" {
-  bucket = aws_s3_bucket.prod_bucket.bucket
+  bucket = aws_s3_bucket.prod_bucket.id
   key    = "prod.html"
-  source = "path/to/prod.html"  # Update with the path to your prod.html file
+  source = "prod.html"
 }
 
-# Create the CloudFront distribution
+# Create CloudFront distribution
 resource "aws_cloudfront_distribution" "main_distribution" {
-  origin {
-    domain_name = aws_s3_bucket.prod_bucket.bucket_regional_domain_name
-    origin_id   = "prod-bucket-origin"
-    custom_origin_config {
-      origin_protocol_policy = "http-only"
-    }
+  enabled = true
+
+  # Define the viewer certificate
+  viewer_certificate {
+    cloudfront_default_certificate = true
   }
 
+  # Define the default cache behavior
   default_cache_behavior {
-    target_origin_id = "prod-bucket-origin"
+    allowed_methods  = ["GET", "HEAD"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = aws_s3_bucket.prod_bucket.id
+
     forwarded_values {
       query_string = false
       cookies {
         forward = "none"
       }
     }
+  }
 
-    viewer_protocol_policy = "redirect-to-https"
-    min_ttl                = 0
-    default_ttl            = 3600
-    max_ttl                = 86400
+  # Define the ordered cache behavior
+  ordered_cache_behavior {
+    path_pattern     = "/prod.html"
+    allowed_methods  = ["GET", "HEAD"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = aws_s3_bucket.prod_bucket.id
 
-    default_root_object = "/prod.html"  # Set prod.html as the index document
+    forwarded_values {
+      query_string = false
+      cookies {
+        forward = "none"
+      }
+    }
   }
 
   ordered_cache_behavior {
-    path_pattern     = "/dev/*"
-    target_origin_id = "dev-bucket-origin"
+    path_pattern     = "/dev.html"
+    allowed_methods  = ["GET", "HEAD"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = aws_s3_bucket.prod_bucket.id
+
     forwarded_values {
       query_string = false
       cookies {
         forward = "none"
       }
     }
-
-    viewer_protocol_policy = "redirect-to-https"
-    min_ttl                = 0
-    default_ttl            = 3600
-    max_ttl                = 86400
-
-    default_root_object = "/dev.html"  # Set dev.html as the index document
   }
 
-  restrictions {
-    geo_restriction {
-      restriction_type = "none"
-    }
-  }
-
-  price_class = "PriceClass_100"  # Choose your desired price class
+  # Define the default root object
+  default_root_object = "prod.html"
 }
-
