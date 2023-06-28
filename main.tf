@@ -51,7 +51,7 @@ resource "aws_s3_object" "content" {
   content_type              = "text/html"
 }
 
-resource "aws_cloudfront_origin_access_control" "site"{
+resource "aws_cloudfront_origin_access_control" "site_access"{
     name                              = "security_pillar100_cf_s3_oac" 
     origin_access_control_origin_type = "s3"
     signing_behavior                  = "always"
