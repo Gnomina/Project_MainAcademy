@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "site_origin" {
-  bucket        = "site_origin_mainacademy" 
+  bucket        = "site-origin-mainacademy" 
  
   tags = {
     Environment = "lab"
