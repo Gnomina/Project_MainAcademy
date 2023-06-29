@@ -73,15 +73,19 @@ resource "aws_cloudfront_distribution" "site_access"{
         cached_methods          = ["GET", "HEAD"]
         target_origin_id        = aws_s3_bucket.site_origin.id
         viewer_protocol_policy  = "https-only"
-    }
 
-    forwarded_values{
-        query_string = false
+        forwarded_values{
+          query_string = false
 
         cookies{
-            forward  = "none"
+          forward  = "none"
         }
+      }
     }
+
+
+
+    
 
     origin{
         domain_name             = aws_s3_bucket.site_origin.bucket_domain_name
