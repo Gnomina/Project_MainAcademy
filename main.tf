@@ -123,14 +123,15 @@ data "aws_iam_policy_document" "site_origin"{
   statement{
     sid = "3"
     effect = "Allow"
-    actions = [
-      "s3:GetObject"
-    ]
+    actions = ["s3:GetObject"]
+    
   
 
     principals{
-      identifiers = ["cloudfront.amazon.com"]
-      type = "Service"
+      //identifiers = ["cloudfront.amazon.com"]
+      //type = "Service"
+      type = "AWS"
+      identifiers = ["arn:aws:iam::284532103653:user/MainAcademy_project"]
     }   
 
     resources = [
