@@ -148,3 +148,6 @@ data "aws_iam_policy_document" "site_origin"{
 }
 
 
+output "cloudfront_url" {
+  value = aws_cloudfront_distribution.site_access.domain_name
+}
