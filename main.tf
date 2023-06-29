@@ -93,7 +93,7 @@ resource "aws_cloudfront_distribution" "site_access"{
     restrictions{
         geo_restriction{
             restriction_type = "whitelist"
-            locations        = ["US", "CA" "EU"]
+            locations        = ["US", "CA", "EU", "UA"]
         }
     }
 
