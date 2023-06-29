@@ -133,7 +133,7 @@ data "aws_iam_policy_document" "site_origin"{
       type = "Service"
     }   
 
-    resource = [
+    resources = [
       "arn:aws:s3:::${aws_s3_bucket.site_origin.bucket}/*"
     ] 
 
