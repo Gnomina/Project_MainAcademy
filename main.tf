@@ -75,7 +75,7 @@ resource "aws_cloudfront_distribution" "site_access"{
         viewer_protocol_policy  = "https-only"
     }
 
-    forvardet_values{
+    forwardet_values{
         query_string = false
 
         cookies{
