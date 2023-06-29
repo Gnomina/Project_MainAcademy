@@ -111,7 +111,7 @@ resource "aws_s3_bucket_policy" "site_origin"{
   ]
 
   bucket = aws_s3_bucket.site_origin.id
-  policy = data.aws_iam_policy_document.site_origin
+  policy = data.aws_iam_policy_document.site_origin.json
 }
 
 data "aws_iam_policy_document" "site_origin"{
