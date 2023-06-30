@@ -75,7 +75,7 @@ resource "aws_s3_object" "content" {
   acl    = "public-read"
 }
 
-resource "aws_s3_object" "content" {
+resource "aws_s3_object" "dev_content" {
 
     /*
     depends_on = [
