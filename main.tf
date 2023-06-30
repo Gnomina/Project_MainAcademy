@@ -101,6 +101,44 @@ resource "aws_cloudfront_distribution" "site_access"{
     }
 }
 
+resource "aws_s3_bucket_policy" "site_origin"{
+  depends_on = [
+    data.aws_iam_policy_document.site_origin
+  ]
+
+  bucket = aws_s3_bucket.site_origin.id
+  policy = data.aws_iam_policy_document.site_origin.json
+}
+
+data "aws_iam_policy_document" "site_origin"{
+  depends_on = [
+    aws_cloudfront_distribution.site_access,
+    aws_s3_bucket.site_origin
+  ] 
+  
+  statement{
+    sid = "PublicReadGetObject"
+    effect = "Allow"
+    actions = ["s3:GetObject"]
+
+
+    principals{
+      //identifiers = ["cloudfront.amazon.com"]
+      //type = "Service"
+      type = "AWS"
+      identifiers = ["*"]
+    }   
+
+    
+
+    resources = [
+      "arn:aws:s3:::${aws_s3_bucket.site_origin.bucket}/*"
+    ] 
+
+    
+  }  
+}
+
 output "cloudfront_url" {
   value = aws_cloudfront_distribution.site_access.domain_name
 }
