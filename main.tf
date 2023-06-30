@@ -161,7 +161,7 @@ resource "aws_cloudfront_distribution" "site_access"{
 
     s3_origin_config {
         
-        origin_access_identity = aws_cloudfront_origin_access_control.site_access.cloudfront_access_identity_path
+        origin_access_identity = aws_cloudfront_origin_access_control.site_access.cloudfront_origin_access_identity_path
         
       //origin_access_control_id = aws_cloudfront_origin_access_control.site_access.id
       //origin_access_identity = aws_cloudfront_origin_access_control.site_access.cloudfront_access_identity_path
@@ -174,7 +174,7 @@ resource "aws_cloudfront_distribution" "site_access"{
 
     s3_origin_config {
         //origin_access_identity = aws_cloudfront_origin_access_control.site_access.cloudfront_access_identity
-        origin_access_identity = aws_cloudfront_origin_access_control.site_access.cloudfront_access_identity_path
+        origin_access_identity = aws_cloudfront_origin_access_control.site_access.cloudfront_origin_access_identity_path
       //origin_access_control_id = aws_cloudfront_origin_access_control.site_access.id
       //origin_access_identity = aws_cloudfront_origin_access_control.site_access.cloudfront_access_identity_path
     }
