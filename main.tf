@@ -1,17 +1,27 @@
 provider "aws" {
   region = "eu-central-1" 
 }
-
-resource "aws_s3_bucket" "site_origin" {
-  bucket        = "site-origin-mainacademy" 
+//-----------------------Create bucket-----------------------
+resource "aws_s3_bucket" "site_prod" {
+  bucket        = "mainacademy-prod" 
  
   tags = {
-    Environment = "lab"
+    Environment = "Prod"
   }
 }
 
-resource "aws_s3_bucket_public_access_block" "site_origin" {
-  bucket = aws_s3_bucket.site_origin.bucket
+resource "aws_s3_bucket" "site_dev" {
+  bucket = "mainacademy-dev"
+
+  tags = {
+    Environment = "dev"
+  }
+}
+//-----------------------------------------------------------
+
+//-------------------Public access block---------------------
+resource "aws_s3_bucket_public_access_block" "site_prod" {
+  bucket = aws_s3_bucket.site_prod.bucket
 
   block_public_acls       = false
   block_public_policy     = false
@@ -19,8 +29,19 @@ resource "aws_s3_bucket_public_access_block" "site_origin" {
   restrict_public_buckets = false
 }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "site_origin" {
-  bucket            = aws_s3_bucket.site_origin.bucket
+resource "aws_s3_bucket_public_access_block" "site_dev" {
+  bucket = aws_s3_bucket.site_dev.bucket
+  //bucket = aws_s3_bucket.site_prod.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+//-----------------------------------------------------------
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "site_prod" {
+  bucket            = aws_s3_bucket.site_prod.bucket
 
   rule {
     apply_server_side_encryption_by_default {
@@ -29,27 +50,49 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "site_origin" {
   }
 }
 
-resource "aws_s3_bucket_versioning" "site_origin" {
-  bucket   = aws_s3_bucket.site_origin.bucket
+resource "aws_s3_bucket_versioning" "site_prod" {
+  bucket   = aws_s3_bucket.site_prod.bucket
 
   versioning_configuration {
     status = "Enabled"
   }
 }
-
+//---------------------Add content to bucket-----------------
 resource "aws_s3_object" "content" {
-
+    
+    /*
     depends_on = [
-        aws_s3_bucket.site_origin
+        aws_s3_bucket.site_prod
         ]
+    */
 
 
-  bucket                    = aws_s3_bucket.site_origin.bucket
+  bucket                    = aws_s3_bucket.site_prod.bucket
   key                       = "index.html"
   source                    = "./index.html"
   server_side_encryption    = "AES256"
   content_type              = "text/html"
+  acl    = "public-read"
 }
+
+resource "aws_s3_object" "content" {
+
+    /*
+    depends_on = [
+        aws_s3_bucket.site_dev
+        ]
+    */    
+
+
+  bucket                    = aws_s3_bucket.site_prod.bucket
+  key                       = "dev.html"
+  source                    = "./dev.html"
+  server_side_encryption    = "AES256"
+  content_type              = "text/html"
+  acl    = "public-read"
+}
+//-----------------------------------------------------------
+
 
 resource "aws_cloudfront_origin_access_control" "site_access"{
     name                              = "security_pillar100_cf_s3_oac" 
@@ -61,17 +104,19 @@ resource "aws_cloudfront_origin_access_control" "site_access"{
 resource "aws_cloudfront_distribution" "site_access"{
 
     depends_on = [
-        aws_s3_bucket.site_origin,
+        aws_s3_bucket.site_prod,
+        aws_s3_bucket.site_dev,
         aws_cloudfront_origin_access_control.site_access
     ]
 
     enabled                     = true
     default_root_object         = "index.html"
-
+    //------------------cache behavior----------------------------
     default_cache_behavior{
         allowed_methods         = ["GET", "HEAD"]
         cached_methods          = ["GET", "HEAD"]
-        target_origin_id        = aws_s3_bucket.site_origin.id
+        //target_origin_id        = "main_bucket"
+        target_origin_id        = aws_s3_bucket.site_prod.id
         viewer_protocol_policy  = "allow-all"
 
         forwarded_values{
@@ -83,12 +128,54 @@ resource "aws_cloudfront_distribution" "site_access"{
       }
     }
 
+  
+    ordered_cache_behavior {
+        path_pattern     = "/dev/*"
+        target_origin_id = aws_s3_bucket.site_dev.id
+
+        viewer_protocol_policy = "allow-all"
+
+        forwarded_values {
+            query_string = false
+
+            cookies {
+                forward = "none"
+            }
+        }
+    }
+    //-----------------------------------------------------------
+
+    //aws_cloudfront_origin_access_control.site_access
+    origin {
+    domain_name = aws_s3_bucket.site_prod.bucket_domain_name
+    origin_id   = aws_s3_bucket.site_prod.id
+
+    s3_origin_config {
+        origin_access_control_id = aws_cloudfront_origin_access_control.site_access.id
+      //origin_access_identity = aws_cloudfront_origin_access_control.site_access.cloudfront_access_identity_path
+    }
+  }
+
+  origin {
+    domain_name = aws_s3_bucket.site_dev.bucket_domain_name
+    origin_id   = aws_s3_bucket.site_dev.id
+
+    s3_origin_config {
+        origin_access_control_id = aws_cloudfront_origin_access_control.site_access.id
+      //origin_access_identity = aws_cloudfront_origin_access_control.site_access.cloudfront_access_identity_path
+    }
+  }
+
+
+
+
+    /*
     origin{
-        domain_name             = aws_s3_bucket.site_origin.bucket_domain_name
-        origin_id               = aws_s3_bucket.site_origin.id
+        domain_name             = aws_s3_bucket.site_prod.bucket_domain_name
+        origin_id               = aws_s3_bucket.site_prod.id
         origin_access_control_id = aws_cloudfront_origin_access_control.site_access.id
     }
-
+    */
     restrictions{
         geo_restriction{
             restriction_type = "whitelist"
@@ -100,20 +187,33 @@ resource "aws_cloudfront_distribution" "site_access"{
       cloudfront_default_certificate = true
     }
 }
-
-resource "aws_s3_bucket_policy" "site_origin"{
+//---------------Bucket policy-------------------------------
+resource "aws_s3_bucket_policy" "site_prod"{
   depends_on = [
-    data.aws_iam_policy_document.site_origin
+    data.aws_iam_policy_document.site_prod
   ]
 
-  bucket = aws_s3_bucket.site_origin.id
+  bucket = aws_s3_bucket.site_prod.id
   policy = data.aws_iam_policy_document.site_origin.json
 }
 
+resource "aws_s3_bucket_policy" "site_dev"{
+  depends_on = [
+    data.aws_iam_policy_document.site_dev
+  ]
+
+  bucket = aws_s3_bucket.site_dev.id
+  policy = data.aws_iam_policy_document.site_origin.json
+}
+//-----------------------------------------------------------
+
+
+//-----------------IAM Policy--------------------------------
 data "aws_iam_policy_document" "site_origin"{
   depends_on = [
     aws_cloudfront_distribution.site_access,
-    aws_s3_bucket.site_origin
+    aws_s3_bucket.site_prod,
+    aws_s3_bucket.site_dev
   ] 
   
   statement{
@@ -132,13 +232,21 @@ data "aws_iam_policy_document" "site_origin"{
     
 
     resources = [
-      "arn:aws:s3:::${aws_s3_bucket.site_origin.bucket}/*"
+      "arn:aws:s3:::${aws_s3_bucket.site_prod.bucket}/*",
+      "arn:aws:s3:::${aws_s3_bucket.site_dev.bucket}/*"
     ] 
 
     
   }  
 }
 
+
+//---------------------Output-------------------------------
 output "cloudfront_url" {
   value = aws_cloudfront_distribution.site_access.domain_name
 }
+
+output "ARN" {
+  value = aws_cloudfront_distribution.site_access.arn
+  
+} 
