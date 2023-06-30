@@ -218,6 +218,7 @@ resource "aws_s3_bucket_policy" "site_prod"{
 
   bucket = aws_s3_bucket.site_prod.id
   policy = data.aws_iam_policy_document.site_prod.json
+  //policy = data.aws_iam_policy_document.site_origin.json
 }
 /*
 resource "aws_s3_bucket_policy" "site_dev"{
