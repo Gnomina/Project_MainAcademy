@@ -73,7 +73,6 @@ resource "aws_cloudfront_distribution" "site_access"{
         cached_methods          = ["GET", "HEAD"]
         target_origin_id        = aws_s3_bucket.site_origin.id
         viewer_protocol_policy  = "allow-all"
-        //viewer_protocol_policy  = "https-only"
 
         forwarded_values{
           query_string = false
@@ -92,7 +91,6 @@ resource "aws_cloudfront_distribution" "site_access"{
 
     restrictions{
         geo_restriction{
-            //restriction_type = "none"
             restriction_type = "whitelist"
             locations        = ["UA", "US"]
         }
