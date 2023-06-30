@@ -128,7 +128,7 @@ data "aws_iam_policy_document" "site_origin"{
       //identifiers = ["cloudfront.amazon.com"]
       //type = "Service"
       type = "AWS"
-      identifiers = ["*"]
+      identifiers = ["aws_cloudfront_distribution.site_access.arn"]
     }   
 
     
