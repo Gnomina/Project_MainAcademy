@@ -72,7 +72,7 @@ resource "aws_s3_object" "content" {
   source                    = "./index.html"
   server_side_encryption    = "AES256"
   content_type              = "text/html"
-  acl    = "public-read"
+  
 }
 
 resource "aws_s3_object" "dev_content" {
@@ -89,7 +89,7 @@ resource "aws_s3_object" "dev_content" {
   source                    = "./dev.html"
   server_side_encryption    = "AES256"
   content_type              = "text/html"
-  acl    = "public-read"
+  
 }
 //-----------------------------------------------------------
 
