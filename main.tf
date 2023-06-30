@@ -130,6 +130,8 @@ resource "aws_cloudfront_distribution" "site_access"{
 
   
     ordered_cache_behavior {
+        allowed_methods         = ["GET", "HEAD"]
+        cached_methods          = ["GET", "HEAD"]
         path_pattern     = "/dev/*"
         target_origin_id = aws_s3_bucket.site_dev.id
 
@@ -151,7 +153,10 @@ resource "aws_cloudfront_distribution" "site_access"{
     origin_id   = aws_s3_bucket.site_prod.id
 
     s3_origin_config {
-        origin_access_control_id = aws_cloudfront_origin_access_control.site_access.id
+        
+        origin_access_identity = aws_cloudfront_origin_access_control.site_access.cloudfront_access_identity_path
+        
+      //origin_access_control_id = aws_cloudfront_origin_access_control.site_access.id
       //origin_access_identity = aws_cloudfront_origin_access_control.site_access.cloudfront_access_identity_path
     }
   }
@@ -161,7 +166,8 @@ resource "aws_cloudfront_distribution" "site_access"{
     origin_id   = aws_s3_bucket.site_dev.id
 
     s3_origin_config {
-        origin_access_control_id = aws_cloudfront_origin_access_control.site_access.id
+        origin_access_identity = aws_cloudfront_origin_access_control.site_access.cloudfront_access_identity_path
+      //origin_access_control_id = aws_cloudfront_origin_access_control.site_access.id
       //origin_access_identity = aws_cloudfront_origin_access_control.site_access.cloudfront_access_identity_path
     }
   }
