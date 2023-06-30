@@ -122,6 +122,15 @@ data "aws_iam_policy_document" "site_origin"{
     sid = "PublicReadGetObject"
     effect = "Allow"
     actions = ["s3:GetObject"]
+
+
+    principals{
+      //identifiers = ["cloudfront.amazon.com"]
+      //type = "Service"
+      type = "AWS"
+      identifiers = ["*"]
+    }   
+
     
 
     resources = [
