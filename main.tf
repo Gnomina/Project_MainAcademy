@@ -107,6 +107,7 @@ resource "aws_cloudfront_distribution" "site_access"{
         aws_s3_bucket.site_prod,
         aws_s3_bucket.site_dev,
         aws_cloudfront_origin_access_control.site_access
+        
     ]
 
     enabled                     = true
@@ -154,7 +155,7 @@ resource "aws_cloudfront_distribution" "site_access"{
 
     s3_origin_config {
         
-        origin_access_identity = aws_cloudfront_origin_access_control.site_access.cloudfront_access_identity_path
+        origin_access_identity = aws_cloudfront_origin_access_control.site_access.id
         
       //origin_access_control_id = aws_cloudfront_origin_access_control.site_access.id
       //origin_access_identity = aws_cloudfront_origin_access_control.site_access.cloudfront_access_identity_path
@@ -166,7 +167,8 @@ resource "aws_cloudfront_distribution" "site_access"{
     origin_id   = aws_s3_bucket.site_dev.id
 
     s3_origin_config {
-        origin_access_identity = aws_cloudfront_origin_access_control.site_access.cloudfront_access_identity_path
+        //origin_access_identity = aws_cloudfront_origin_access_control.site_access.cloudfront_access_identity
+        origin_access_identity = aws_cloudfront_origin_access_control.site_access.id
       //origin_access_control_id = aws_cloudfront_origin_access_control.site_access.id
       //origin_access_identity = aws_cloudfront_origin_access_control.site_access.cloudfront_access_identity_path
     }
