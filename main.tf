@@ -93,6 +93,15 @@ resource "aws_s3_object" "dev_content" {
 }
 //-----------------------------------------------------------
 
+output "site_prod_bucket_name" {
+  value = aws_s3_bucket.site_prod.bucket
+}
+
+output "site_dev_bucket_name" {
+  value = aws_s3_bucket.site_dev.bucket
+}
+
+
 //-----------------------------------------------------------
 resource "aws_cloudfront_origin_access_identity" "example" {
   comment = "Some comment"
