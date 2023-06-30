@@ -103,9 +103,6 @@ resource "aws_cloudfront_distribution" "site_access"{
     }
 }
 
-
-
-
 output "cloudfront_url" {
   value = aws_cloudfront_distribution.site_access.domain_name
 }
