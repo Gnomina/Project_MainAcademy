@@ -198,7 +198,7 @@ resource "aws_cloudfront_distribution" "site_access"{
 //---------------Bucket policy-------------------------------
 resource "aws_s3_bucket_policy" "site_prod"{
   depends_on = [
-    data.aws_iam_policy_document.site_prod
+    data.aws_iam_policy_document.site_origin
   ]
 
   bucket = aws_s3_bucket.site_prod.id
@@ -207,7 +207,7 @@ resource "aws_s3_bucket_policy" "site_prod"{
 
 resource "aws_s3_bucket_policy" "site_dev"{
   depends_on = [
-    data.aws_iam_policy_document.site_dev
+    data.aws_iam_policy_document.site_origin
   ]
 
   bucket = aws_s3_bucket.site_dev.id
