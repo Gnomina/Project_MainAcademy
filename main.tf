@@ -257,7 +257,7 @@ data "aws_iam_policy_document" "site_prod"{
     
 
     resources = [
-      "arn:aws:s3:::${aws_s3_bucket.site_prod.bucket}/*",
+      "arn:aws:s3:::mainacademy-prod/*",
       "arn:aws:s3:::${aws_s3_bucket.site_dev.bucket}/*"
     ] 
 
