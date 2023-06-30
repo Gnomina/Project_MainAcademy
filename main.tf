@@ -119,29 +119,16 @@ data "aws_iam_policy_document" "site_origin"{
   ] 
   
   statement{
-    sid = "3"
+    sid = "PublicReadGetObject"
     effect = "Allow"
     actions = ["s3:GetObject"]
-    
-  
-
-    principals{
-      //identifiers = ["cloudfront.amazon.com"]
-      //type = "Service"
-      type = "AWS"
-      identifiers = ["arn:aws:iam::284532103653:user/MainAcademy_project"]
-    }   
+    principals = ["*"]
 
     resources = [
       "arn:aws:s3:::${aws_s3_bucket.site_origin.bucket}/*"
     ] 
 
-    condition {
-      test     = "StringEquals"
-      variable = "aws:SourceArn"
-
-      values = [aws_cloudfront_distribution.site_access.arn]
-    }
+    
   }  
 }
 
