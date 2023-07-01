@@ -108,13 +108,15 @@ resource "aws_cloudfront_origin_access_identity" "example" {
 }
 //----------------------------------------------------------/
 
-
+//--------------------access control------------------------
 resource "aws_cloudfront_origin_access_control" "site_access"{
     name                              = "security_pillar100_cf_s3_oac" 
     origin_access_control_origin_type = "s3"
     signing_behavior                  = "always"
     signing_protocol                  = "sigv4"
 }
+//----------------------------------------------------------
+
 
 resource "aws_cloudfront_distribution" "site_access"{
 
@@ -169,25 +171,18 @@ resource "aws_cloudfront_distribution" "site_access"{
     origin_id   = aws_s3_bucket.site_prod.id
 
     s3_origin_config {
-        
         origin_access_identity = aws_cloudfront_origin_access_identity.example.cloudfront_access_identity_path
-        
-      //origin_access_control_id = aws_cloudfront_origin_access_control.site_access.id
-      //origin_access_identity = aws_cloudfront_origin_access_control.site_access.cloudfront_access_identity_path
-    }
-  }
+      } 
+          }
 
-  origin {
+    origin {
     domain_name = aws_s3_bucket.site_dev.bucket_domain_name
     origin_id   = aws_s3_bucket.site_dev.id
 
     s3_origin_config {
-        //origin_access_identity = aws_cloudfront_origin_access_control.site_access.cloudfront_access_identity
         origin_access_identity = aws_cloudfront_origin_access_identity.example.cloudfront_access_identity_path
-      //origin_access_control_id = aws_cloudfront_origin_access_control.site_access.id
-      //origin_access_identity = aws_cloudfront_origin_access_control.site_access.cloudfront_access_identity_path
+      }
     }
-  }
 
 
 
