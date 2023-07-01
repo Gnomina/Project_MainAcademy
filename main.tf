@@ -213,18 +213,18 @@ resource "aws_s3_bucket_policy" "s3_polisy"{
 
   bucket = aws_s3_bucket.site_prod.id
   policy = data.aws_iam_policy_document.s3_polisy.json
-  //policy = data.aws_iam_policy_document.site_origin.json
+  
 }
-/*
-resource "aws_s3_bucket_policy" "site_dev"{
+resource "aws_s3_bucket_policy" "s3_polisy_dev"{
   depends_on = [
-    data.aws_iam_policy_document.site_origin
+    data.aws_iam_policy_document.s3_polisy_dev
   ]
 
   bucket = aws_s3_bucket.site_dev.id
-  policy = data.aws_iam_policy_document.site_origin.json
+  policy = data.aws_iam_policy_document.s3_polisy_dev.json
+  
 }
-*/
+
 //-----------------------------------------------------------
 
 
@@ -243,8 +243,6 @@ data "aws_iam_policy_document" "s3_polisy"{
 
 
     principals{
-      //identifiers = ["cloudfront.amazon.com"]
-      //type = "Service"
       type = "AWS"
       identifiers = ["*"]
     }   
@@ -253,14 +251,39 @@ data "aws_iam_policy_document" "s3_polisy"{
 
     resources = [
       "arn:aws:s3:::mainacademy-prod/*",
-      //"arn:aws:s3:::${aws_s3_bucket.site_dev.bucket}/*"
-      //arn:aws:s3:::mainacademy-prod
-    ] 
+          ] 
 
     
   }  
 }
 
+data "aws_iam_policy_document" "s3_polisy_dev"{
+  depends_on = [
+    aws_cloudfront_distribution.site_access,
+    aws_s3_bucket.site_prod,
+    aws_s3_bucket.site_dev
+  ] 
+  
+  statement{
+    sid = "PublicReadGetObject"
+    effect = "Allow"
+    actions = ["s3:GetObject"]
+
+
+    principals{
+      type = "AWS"
+      identifiers = ["*"]
+    }   
+
+    
+
+    resources = [
+      "arn:aws:s3:::mainacademy-dev/*",
+          ] 
+
+    
+  }  
+}
 
 //---------------------Output-------------------------------
 output "cloudfront_url" {
