@@ -255,6 +255,7 @@ data "aws_iam_policy_document" "s3_polisy"{
     
 
     resources = [
+      "arn:aws:s3:::mainacademy-prod/*"
     
       //"arn:aws:s3:::mainacademy-prod/*",
       //"arn:aws:s3:::${aws_s3_bucket.site_dev.bucket}/*"
