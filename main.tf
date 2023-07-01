@@ -68,8 +68,8 @@ resource "aws_s3_object" "content" {
 
 
   bucket                    = aws_s3_bucket.site_prod.bucket
-  key                       = "index.html"
-  source                    = "./index.html"
+  key                       = "prod.html"
+  source                    = "./prod.html"
   server_side_encryption    = "AES256"
   content_type              = "text/html"
   
@@ -126,7 +126,7 @@ resource "aws_cloudfront_distribution" "site_access"{
     ]
 
     enabled                     = true
-    default_root_object         = "index.html"
+    default_root_object         = "prod.html"
     //------------------cache behavior----------------------------
     default_cache_behavior{
         allowed_methods         = ["GET", "HEAD"]
