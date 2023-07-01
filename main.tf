@@ -211,18 +211,14 @@ resource "aws_s3_bucket_policy" "s3_policy_site_prod" {
     data.aws_iam_policy_document.s3_policy
   ]
 
-  bucket = aws_s3_bucket.site_prod.id
+  bucket = [
+    aws_s3_bucket.site_prod.id,
+    aws_s3_bucket.site_dev.id
+    ]
   policy = data.aws_iam_policy_document.s3_policy.json
 }
 
-resource "aws_s3_bucket_policy" "s3_policy_site_dev" {
-  depends_on = [
-    data.aws_iam_policy_document.s3_policy
-  ]
 
-  bucket = aws_s3_bucket.site_dev.id
-  policy = data.aws_iam_policy_document.s3_policy.json
-}
 
 
 
@@ -276,8 +272,7 @@ data "aws_iam_policy_document" "s3_polisy"{
     
 
     resources = [
-      "arn:aws:s3:::${aws_s3_bucket.site_prod.bucket}/*",
-      "arn:aws:s3:::${aws_s3_bucket.site_dev.bucket}/*"
+    
       //"arn:aws:s3:::mainacademy-prod/*",
       //"arn:aws:s3:::${aws_s3_bucket.site_dev.bucket}/*"
       //arn:aws:s3:::mainacademy-prod
