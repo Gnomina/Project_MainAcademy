@@ -85,7 +85,7 @@ resource "aws_s3_object" "dev_content" {
 
 
   bucket                    = aws_s3_bucket.site_dev.bucket
-  key                       = "dev.html"
+  key                       = "dev" 
   source                    = "./dev.html"
   server_side_encryption    = "AES256"
   content_type              = "text/html"
