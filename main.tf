@@ -148,7 +148,7 @@ resource "aws_cloudfront_distribution" "site_access"{
     ordered_cache_behavior {
         allowed_methods         = ["GET", "HEAD"]
         cached_methods          = ["GET", "HEAD"]
-        path_pattern     = "/dev/*"
+        path_pattern     = "/dev.html"
         target_origin_id = aws_s3_bucket.site_dev.id
 
         viewer_protocol_policy = "allow-all"
