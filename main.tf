@@ -211,10 +211,7 @@ resource "aws_s3_bucket_policy" "s3_policy_site_prod" {
     data.aws_iam_policy_document.s3_policy
   ]
 
-  bucket = [
-    aws_s3_bucket.site_prod.id,
-    aws_s3_bucket.site_dev.id
-    ]
+  bucket = aws_s3_bucket.site_prod.id
   policy = data.aws_iam_policy_document.s3_policy.json
 }
 
