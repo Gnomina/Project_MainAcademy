@@ -206,18 +206,15 @@ resource "aws_cloudfront_distribution" "site_access"{
     }
 }
 //---------------Bucket policy-------------------------------
-
-
 resource "aws_s3_bucket_policy" "s3_polisy"{
   depends_on = [
     data.aws_iam_policy_document.s3_polisy
   ]
 
-  bucket = [aws_s3_bucket.site_prod.id, aws_s3_bucket.site_dev.id]
+  bucket = aws_s3_bucket.site_prod.id
   policy = data.aws_iam_policy_document.s3_polisy.json
   //policy = data.aws_iam_policy_document.site_origin.json
 }
-
 /*
 resource "aws_s3_bucket_policy" "site_dev"{
   depends_on = [
@@ -255,9 +252,7 @@ data "aws_iam_policy_document" "s3_polisy"{
     
 
     resources = [
-      "arn:aws:s3:::mainacademy-prod/*"
-    
-      //"arn:aws:s3:::mainacademy-prod/*",
+      "arn:aws:s3:::mainacademy-prod/*",
       //"arn:aws:s3:::${aws_s3_bucket.site_dev.bucket}/*"
       //arn:aws:s3:::mainacademy-prod
     ] 
