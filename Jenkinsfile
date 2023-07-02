@@ -92,6 +92,7 @@ pipeline {
                         sh "aws s3 sync ${WORKSPACE} s3://${targetBucketName}/ --delete"
 
                         sh "aws cloudfront create-invalidation --distribution-id ${distributionId} --paths '/*'"
+                        //aws cloudfront get-invalidation --distribution-id <distribution-id> --id <invalidation-id> можно сделать проверку статуса invalodate, но пока что лень.
 
                             
                     }
