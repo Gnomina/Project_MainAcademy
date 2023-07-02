@@ -73,7 +73,8 @@ pipeline {
 
                         // Формирование URL ведра
                         if (targetBucketName && region) {
-                            bucketUrl = "${targetBucketName}.s3.${region}.amazonaws.com"
+                           bucketUrl = "${targetBucketName}.s3.${region}.amazonaws.com"
+                           //bucketUrl = "${targetBucketName}.s3.${region}.amazonaws.com"
                         }
 
                         // Вывод результатов
@@ -86,7 +87,8 @@ pipeline {
                         env.region = region
                         env.bucket_url = bucketUrl
 
-                        sh "aws s3 sync ${WORKSPACE} s3://${bucketUrl}/"
+                        sh "aws s3 sync ${WORKSPACE} s3://mainacademy-dev/"
+                        //s3://mainacademy-dev/dev.html
                         
                             
                     }
