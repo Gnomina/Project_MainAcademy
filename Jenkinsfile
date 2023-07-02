@@ -76,22 +76,28 @@ pipeline {
                            bucketUrl = "${targetBucketName}.s3.${region}.amazonaws.com"
                            //bucketUrl = "${targetBucketName}.s3.${region}.amazonaws.com"
                         }
+                        def distributionId = sh(returnStdout: true, script: 'aws cloudfront list-distributions --query "DistributionList.Items[].Id" --output text').trim()
 
                         // Вывод результатов
                         echo "Bucket Name: ${targetBucketName}"
                         echo "Region: ${region}"
                         echo "Bucket URL: ${bucketUrl}"
+                        echo "Distribution ID: ${distributionId}"
 
                         // Запись значений в переменные
                         env.NameBucket = targetBucketName
                         env.region = region
                         env.bucket_url = bucketUrl
 
-                        sh "aws cloudfront list-distributions"
-                        def distributionId = sh(returnStdout: true, script: 'aws cloudfront list-distributions --query "DistributionList.Items[].Id" --output text').trim()
-                        echo "Distribution ID: ${distributionId}"
+                        sh "aws s3 sync ${WORKSPACE} s3://${targetBucketName}/ --delete"
 
-                        //sh "aws s3 sync ${WORKSPACE} s3://${targetBucketName}/ --delete"
+                        sh "aws cloudfront create-invalidation --distribution-id ${distributionId} --paths "/*""
+
+                        
+                        
+                        
+
+                        
                         
                         
                             
