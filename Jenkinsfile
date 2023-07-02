@@ -85,6 +85,8 @@ pipeline {
                         env.NameBucket = targetBucketName
                         env.region = region
                         env.bucket_url = bucketUrl
+
+                        sh "aws s3 cp '${WORKSPACE}' s3://'${env.NameBucket}'/"
                             
                     }
                         
