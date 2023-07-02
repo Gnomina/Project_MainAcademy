@@ -89,7 +89,7 @@ pipeline {
 
                         sh "aws cloudfront list-distributions"
                         def distributionId = sh(returnStdout: true, script: 'aws cloudfront list-distributions --query "DistributionList.Items[].Id" --output text').trim()
-                        echo "Distribution ID: ${distribution_id}"
+                        echo "Distribution ID: ${distributionId}"
 
                         //sh "aws s3 sync ${WORKSPACE} s3://${targetBucketName}/ --delete"
                         
