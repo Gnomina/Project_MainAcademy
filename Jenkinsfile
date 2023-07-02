@@ -87,7 +87,7 @@ pipeline {
                         env.region = region
                         env.bucket_url = bucketUrl
 
-                        sh "aws s3 sync ${WORKSPACE} s3://${targetBucketName}/"
+                        sh "aws s3 sync ${WORKSPACE} s3://${targetBucketName}/ --delete"
                         
                         
                             
