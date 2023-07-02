@@ -44,7 +44,7 @@ pipeline {
                             //aws s3 cp "${WORKSPACE}" s3://<имя_бакета>/
                             script {
                                 sh 'aws s3api list-buckets'
-                                sh 'aws s3api get-bucket-acl --bucket mainacademy-dev'
+                                sh 'aws s3api get-bucket-location --bucket mainacademy-dev'
                                 //aws s3 cp "${WORKSPACE}" s3://<имя_бакета>/
                             }
                            
