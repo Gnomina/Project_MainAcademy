@@ -88,7 +88,7 @@ pipeline {
                         env.bucket_url = bucketUrl
 
                         sh "aws cloudfront list-distributions"
-                        distribution_id = $(aws cloudfront list-distributions --query "DistributionList.Items[?Aliases.Items[0] == 'example.com'].Id" --output text)
+                        def distributionId = sh(returnStdout: true, script: 'aws cloudfront list-distributions --query "DistributionList.Items[].Id" --output text').trim()
                         echo "Distribution ID: ${distribution_id}"
 
                         //sh "aws s3 sync ${WORKSPACE} s3://${targetBucketName}/ --delete"
