@@ -91,7 +91,7 @@ pipeline {
 
                         sh "aws s3 sync ${WORKSPACE} s3://${targetBucketName}/ --delete"
 
-                        sh "aws cloudfront create-invalidation --distribution-id ${distributionId} --paths "/*""
+                        sh "aws cloudfront create-invalidation --distribution-id ${distributionId} --paths '/*'"
 
                         
                         
