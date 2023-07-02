@@ -24,10 +24,12 @@ pipeline {
                     def branchName = sh(returnStdout: true, script: 'git rev-parse --abbrev-ref HEAD').trim()
                     def repositoryName = sh(returnStdout: true, script: 'git remote show origin -n | grep "Fetch URL:" | awk -F/ \'{print $NF}\' | sed -e "s/.git$//"').trim().toLowerCase()
                     env.repository_name = repositoryName     
-                    env.git_branch = branchName
+                    env.work_branch = branchName
+                    env.downloaded_branch = "${params['Input Branch Name (Dev or Prod)']}"
                     echo "PATH to clone repo: ${WORKSPACE}"
                     echo "Repository name: ${env.repository_name}"
-                    echo "Branch name: ${env.git_branch}"
+                    echo "Branch name: ${env.work_branch}"
+                    echo "downloaded_branch: ${env.downloaded_branch}"
                 }
                 
             }
