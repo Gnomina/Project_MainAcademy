@@ -93,46 +93,11 @@ pipeline {
 
                         sh "aws cloudfront create-invalidation --distribution-id ${distributionId} --paths '/*'"
 
-                        
-                        
-                        
-
-                        
-                        
-                        
                             
                     }
-                        
-                }
-                        
-            }
-        }
-//--------------------------------------------------------------------------------------------------------------------------------------------------------
-
-//--------------------------------------------------------------------------------------------------------------------------------------------------------
-        /*
-        stage("AWS_Terraform"){
-            stages{
-                stage("Terraform_Init & Plan"){
-                    steps{
-                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
-                        credentialsId: 'MainAcademy_AWS_key',
-                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
-                            //aws s3 cp "${WORKSPACE}" s3://<имя_бакета>/
-                            script {
-                                sh 'aws s3api list-buckets'
-                                sh 'aws s3api list-buckets --region eu-central-1'
-                                sh 'aws s3api get-bucket-location --bucket mainacademy-dev'
-                                //aws s3 cp "${WORKSPACE}" s3://<имя_бакета>/
-                            }
-                           
-                        }
-                    }
                 }
             }
         }
-        */
     }
 }
 
