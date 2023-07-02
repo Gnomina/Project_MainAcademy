@@ -42,7 +42,9 @@ pipeline {
                         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                             //aws s3 cp "${WORKSPACE}" s3://<имя_бакета>/
-                            aws s3api list-buckets
+                            script {
+                                sh 'aws s3api list-buckets'
+                            }
                            
                         }
                     }
