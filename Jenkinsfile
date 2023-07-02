@@ -87,8 +87,8 @@ pipeline {
                         env.region = region
                         env.bucket_url = bucketUrl
 
-                        sh "aws s3 sync ${WORKSPACE} s3://mainacademy-dev/"
-                        //s3://mainacademy-dev/dev.html
+                        sh "aws s3 sync ${WORKSPACE} s3://${targetBucketName}/"
+                        
                         
                             
                     }
