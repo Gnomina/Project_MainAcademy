@@ -4,7 +4,7 @@ pipeline {
     
     
     parameters {
-       string(name: 'Input_Branch_Name_(Dev_or_Prod)', defaultValue: 'Dev', description: 'Uploading files from a specific branch to s3 bucket')
+       string(name: 'Input Branch Name (Dev or Prod)', defaultValue: 'Dev', description: 'Uploading files from a specific branch to s3 bucket')
     }
     
     stages {
@@ -18,7 +18,7 @@ pipeline {
 //---------------------------------------------------------GITHUB---------------------------------------------------------------------------------------
         stage('Clone') {
             steps {
-                git branch: "${params.Input_Branch_Name_(Dev_or_Prod)}", credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
+                git branch: "${params['Input Branch Name (Dev or Prod)']}", credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
                 //git branch: "WebApp", credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
                 script{
                     def branchName = sh(returnStdout: true, script: 'git rev-parse --abbrev-ref HEAD').trim()
