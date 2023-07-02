@@ -27,12 +27,67 @@ pipeline {
                     echo "PATH to clone repo: ${WORKSPACE}"
                     echo "Repository name: ${env.repository_name}"
                     echo "Branch name: ${env.work_branch}"
-                    
                 }
-                
             }
         }
+//--------------------------------------------------------------------------------------------------------------------------------------------------------
 
+//-------------------------------------------------------Bucket url---------------------------------------------------------------------------------------
+        stage("Get Bucket Info") {
+            steps {
+                script {
+                    def targetBucketName = ''
+                    def region = ''
+                    def bucketUrl = ''
+
+                    // Определение требуемого имени ведра
+                    if (env.work_branch.toLowerCase().contains("dev")) {
+                        targetBucketName = "dev"
+                    } else if (env.work_branch.toLowerCase().contains("prod")) {
+                        targetBucketName = "prod"
+                    }
+
+                    // Получение списка ведер
+                    def listBucketsOutput = sh(returnStdout: true, script: 'aws s3api list-buckets')
+                    def buckets = readJSON(text: listBucketsOutput)
+
+                    // Поиск ведра с требуемым именем
+                    for (bucket in buckets.Buckets) {
+                        def name = bucket.Name.toLowerCase()
+                        if (name.contains(targetBucketName)) {
+                            targetBucketName = bucket.Name
+                            break
+                        }
+                    }
+
+                    // Получение региона размещения ведра
+                    if (targetBucketName) {
+                        def getBucketLocationOutput = sh(returnStdout: true, script: "aws s3api get-bucket-location --bucket ${targetBucketName}")
+                        def location = readJSON(text: getBucketLocationOutput)
+                        region = location.LocationConstraint
+                    }
+
+                    // Формирование URL ведра
+                    if (targetBucketName && region) {
+                        bucketUrl = "https://${targetBucketName}.s3.${region}.amazonaws.com"
+                    }
+
+                    // Вывод результатов
+                    echo "Bucket Name: ${targetBucketName}"
+                    echo "Region: ${region}"
+                    echo "Bucket URL: ${bucketUrl}"
+
+                    // Запись значений в переменные
+                    env.NameBucket = targetBucketName
+                    env.region = region
+                    env.bucket_url = bucketUrl
+                }
+            }
+        }
+//--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------
+        /*
         stage("AWS_Terraform"){
             stages{
                 stage("Terraform_Init & Plan"){
@@ -54,6 +109,7 @@ pipeline {
                 }
             }
         }
+        */
     }
 }
 
