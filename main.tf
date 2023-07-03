@@ -31,8 +31,7 @@ resource "aws_s3_bucket_public_access_block" "site_prod" {
 
 resource "aws_s3_bucket_public_access_block" "site_dev" {
   bucket = aws_s3_bucket.site_dev.bucket
-  //bucket = aws_s3_bucket.site_prod.id
-
+  
   block_public_acls       = false
   block_public_policy     = false
   ignore_public_acls      = false
@@ -57,16 +56,10 @@ resource "aws_s3_bucket_versioning" "site_prod" {
     status = "Enabled"
   }
 }
+
 //---------------------Add content to bucket-----------------
 resource "aws_s3_object" "content" {
     
-    /*
-    depends_on = [
-        aws_s3_bucket.site_prod
-        ]
-    */
-
-
   bucket                    = aws_s3_bucket.site_prod.bucket
   key                       = "prod.html"
   source                    = "./prod.html"
@@ -76,14 +69,7 @@ resource "aws_s3_object" "content" {
 }
 
 resource "aws_s3_object" "dev_content" {
-
-    /*
-    depends_on = [
-        aws_s3_bucket.site_dev
-        ]
-    */    
-
-
+  
   bucket                    = aws_s3_bucket.site_dev.bucket
   key                       = "dev.html" 
   source                    = "./dev.html"
@@ -110,100 +96,86 @@ resource "aws_cloudfront_origin_access_identity" "example" {
 
 //--------------------access control------------------------
 resource "aws_cloudfront_origin_access_control" "site_access"{
-    name                              = "security_pillar100_cf_s3_oac" 
-    origin_access_control_origin_type = "s3"
-    signing_behavior                  = "always"
-    signing_protocol                  = "sigv4"
+  name                              = "security_pillar100_cf_s3_oac" 
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
 }
 //----------------------------------------------------------
 
 
 resource "aws_cloudfront_distribution" "site_access"{
 
-    depends_on = [
-        aws_s3_bucket.site_prod,
-        aws_s3_bucket.site_dev,
-        aws_cloudfront_origin_access_control.site_access
-        
-    ]
+  depends_on = [
+    aws_s3_bucket.site_prod,
+    aws_s3_bucket.site_dev,
+    aws_cloudfront_origin_access_control.site_access
+  ]
 
     enabled                     = true
     default_root_object         = "prod.html"
     //------------------cache behavior----------------------------
-    default_cache_behavior{
-        allowed_methods         = ["GET", "HEAD"]
-        cached_methods          = ["GET", "HEAD"]
-        //target_origin_id        = "main_bucket"
-        target_origin_id        = aws_s3_bucket.site_prod.id
-        viewer_protocol_policy  = "allow-all"
+  default_cache_behavior{
+    allowed_methods         = ["GET", "HEAD"]
+    cached_methods          = ["GET", "HEAD"]
+    target_origin_id        = aws_s3_bucket.site_prod.id
+    viewer_protocol_policy  = "allow-all"
 
-        forwarded_values{
-          query_string = false
+    forwarded_values{
+      query_string = false
 
-        cookies{
-          forward  = "none"
-        }
+      cookies{
+        forward  = "none"
       }
     }
+  }
 
-  
-    ordered_cache_behavior {
-        allowed_methods         = ["GET", "HEAD"]
-        cached_methods          = ["GET", "HEAD"]
-        path_pattern     = "/dev.html"
-        target_origin_id = aws_s3_bucket.site_dev.id
+  ordered_cache_behavior {
+    allowed_methods         = ["GET", "HEAD"]
+    cached_methods          = ["GET", "HEAD"]
+    path_pattern     = "/dev.html"
+    target_origin_id = aws_s3_bucket.site_dev.id
 
-        viewer_protocol_policy = "allow-all"
+    viewer_protocol_policy = "allow-all"
 
-        forwarded_values {
-            query_string = false
+    forwarded_values {
+      query_string = false
 
-            cookies {
-                forward = "none"
-            }
-        }
+      cookies {
+        forward = "none"
+      }
     }
+  }
     //-----------------------------------------------------------
 
-    //aws_cloudfront_origin_access_control.site_access
-    origin {
+  origin {
     domain_name = aws_s3_bucket.site_prod.bucket_domain_name
     origin_id   = aws_s3_bucket.site_prod.id
 
     s3_origin_config {
-        origin_access_identity = aws_cloudfront_origin_access_identity.example.cloudfront_access_identity_path
-      } 
-          }
+      origin_access_identity = aws_cloudfront_origin_access_identity.example.cloudfront_access_identity_path
+    } 
+  }
 
-    origin {
+  origin {
     domain_name = aws_s3_bucket.site_dev.bucket_domain_name
     origin_id   = aws_s3_bucket.site_dev.id
 
     s3_origin_config {
-        origin_access_identity = aws_cloudfront_origin_access_identity.example.cloudfront_access_identity_path
+      origin_access_identity = aws_cloudfront_origin_access_identity.example.cloudfront_access_identity_path
+    }
+  }
+    
+  restrictions{
+    geo_restriction{
+      restriction_type = "whitelist"
+      locations        = ["UA", "US"]
       }
-    }
+  }
 
-
-
-
-    /*
-    origin{
-        domain_name             = aws_s3_bucket.site_prod.bucket_domain_name
-        origin_id               = aws_s3_bucket.site_prod.id
-        origin_access_control_id = aws_cloudfront_origin_access_control.site_access.id
-    }
-    */
-    restrictions{
-        geo_restriction{
-            restriction_type = "whitelist"
-            locations        = ["UA", "US"]
-        }
-    }
-
-    viewer_certificate {
-      cloudfront_default_certificate = true
-    }
+  viewer_certificate {
+    cloudfront_default_certificate = true
+  }
 }
 //---------------Bucket policy-------------------------------
 resource "aws_s3_bucket_policy" "s3_polisy"{
@@ -213,8 +185,8 @@ resource "aws_s3_bucket_policy" "s3_polisy"{
 
   bucket = aws_s3_bucket.site_prod.id
   policy = data.aws_iam_policy_document.s3_polisy.json
-  
 }
+
 resource "aws_s3_bucket_policy" "s3_polisy_dev"{
   depends_on = [
     data.aws_iam_policy_document.s3_polisy_dev
@@ -222,11 +194,9 @@ resource "aws_s3_bucket_policy" "s3_polisy_dev"{
 
   bucket = aws_s3_bucket.site_dev.id
   policy = data.aws_iam_policy_document.s3_polisy_dev.json
-  
 }
 
 //-----------------------------------------------------------
-
 
 //-----------------IAM Policy--------------------------------
 data "aws_iam_policy_document" "s3_polisy"{
@@ -247,13 +217,9 @@ data "aws_iam_policy_document" "s3_polisy"{
       identifiers = ["*"]
     }   
 
-    
-
     resources = [
       "arn:aws:s3:::mainacademy-prod/*",
-          ] 
-
-    
+    ] 
   }  
 }
 
@@ -269,21 +235,17 @@ data "aws_iam_policy_document" "s3_polisy_dev"{
     effect = "Allow"
     actions = ["s3:GetObject"]
 
-
     principals{
       type = "AWS"
       identifiers = ["*"]
     }   
 
-    
-
     resources = [
       "arn:aws:s3:::mainacademy-dev/*",
-          ] 
-
-    
+    ] 
   }  
 }
+//-----------------------------------------------------------
 
 //---------------------Output-------------------------------
 output "cloudfront_url" {
