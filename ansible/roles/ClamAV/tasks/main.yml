@@ -20,7 +20,7 @@
   become: true
   vars:
     clamav_config_file: /etc/clamav/clamd.conf
-    scan_directory: ~/
+    scan_directory: /user/ubuntu/
   lineinfile:
     path: "{{ clamav_config_file }}"
     regexp: "^#OnAccessIncludePath"
