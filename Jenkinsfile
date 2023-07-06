@@ -28,8 +28,10 @@ pipeline {
                         sh 'terraform plan'
                         sh "terraform apply -auto-approve"
                         echo 'ok'
-                        def inst_id = sh(script: "terraform output instance_id", returnStdout: true).trim()
-                        echo "Instance ID: ${inst_id}"
+                        script {
+                            def inst_id = sh(script: "terraform output instance_id", returnStdout: true).trim()
+                            echo "Instance ID: ${inst_id}"
+                        }
                     }
                 }
             }
