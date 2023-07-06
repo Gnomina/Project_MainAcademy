@@ -19,7 +19,7 @@ pipeline {
 
         stage("AWS_Terraform"){
             steps{
-                dir('Start_instance') {
+                dir("${WORKSPACE}/Start_instance") {
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
                     credentialsId: 'MainAcademy_AWS_key',
                     accessKeyVariable: 'AWS_ACCESS_KEY_ID',
