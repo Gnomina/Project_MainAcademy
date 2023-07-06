@@ -20,6 +20,7 @@ resource "aws_instance" "example"{
   iam_instance_profile = "EC2_RoleAddPerm"
   tags = {
     "Name" = "${var.instance_tag}"
-    "env"  = var.instance_tag
+    "env"  = "${var.tags["Env"]}"
+    "name" = "${var.tags["Name"]}"
   }
 }
