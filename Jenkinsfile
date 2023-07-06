@@ -86,7 +86,8 @@ pipeline {
                             ' ${WORKSPACE}/ansible/playbook.yml'+
                             ' --user=${REMOTE_USER} --key-file=${KEY_PATH}'
                             */
-                        }    
+                        } 
+                    }   
                     
                 }
             }
