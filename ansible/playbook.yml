@@ -1,0 +1,7 @@
+- name: Package installation
+  hosts: docker
+  become: true
+  roles:
+    - role: ClamAV
+    - role: Docker
+    - role: AWS_SLI

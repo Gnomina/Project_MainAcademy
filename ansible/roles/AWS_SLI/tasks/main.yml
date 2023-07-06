@@ -1,0 +1,32 @@
+- name: Update apt cache
+  become: true
+  apt:
+    update_cache: yes
+
+- name: Install unzip package
+  become: true
+  apt:
+    name: unzip
+    state: present
+
+- name: Download AWS CLI package
+  become: true
+  shell: "curl 'https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip' -o 'awscliv2.zip'"
+  args:
+    chdir: /tmp
+
+- name: Unzip AWS CLI package
+  become: true
+  shell: "unzip awscliv2.zip"
+  args:
+    chdir: /tmp
+
+- name: Install AWS CLI
+  become: true
+  shell: "sudo /tmp/aws/install"
+  args:
+    chdir: /tmp
+
+- name: Run exit command
+  become: true
+  ansible.builtin.shell: exit

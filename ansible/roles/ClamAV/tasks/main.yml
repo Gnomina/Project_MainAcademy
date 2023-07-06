@@ -1,0 +1,71 @@
+- name: Update apt cache
+  become: true
+  apt:
+    update_cache: "yes"
+- name: Install ClamAV
+  become: true
+  apt:
+    name:
+      - clamav
+      - clamav-daemon
+    state: present
+
+- name: Stop ClamAV service
+  become: true
+  service:
+    name: clamav-freshclam
+    state: stopped
+
+- name: read clamav config file
+  become: true
+  vars:
+    clamav_config_file: /etc/clamav/clamd.conf
+    scan_directory: /user/ubuntu/
+  lineinfile:
+    path: "{{ clamav_config_file }}"
+    regexp: "^#OnAccessIncludePath"
+    line: "OnAccessIncludePath {{ scan_directory }}"
+    state: present
+    backup: "yes"
+
+- name: Add OnAccessPrevention line
+  become: true
+  vars:
+    clamav_config_file: /etc/clamav/clamd.conf
+  blockinfile:
+    path: "{{ clamav_config_file }}"
+    block: |
+      ScanOnAccess yes
+      OnAccessPrevention yes
+    backup: "yes"
+
+- name: Update the ClamAV signature database
+  become: true
+  command: freshclam
+
+- name: Add User=clamav line to clamav-daemon.service
+  become: true
+  lineinfile:
+    path: /etc/systemd/system/multi-user.target.wants/clamav-daemon.service
+    line: "User=root"
+    insertafter: '\[Service\]'
+
+- name: Restart ClamAV service
+  become: true
+  service:
+    name: clamav-freshclam
+    state: restarted
+    enabled: true
+
+- name: Start ClamAV service
+  become: true
+  service:
+    name: clamav-freshclam
+    state: started
+    enabled: true
+
+- name: Enable ClamAV daemon
+  become: true
+  service:
+    name: clamav-daemon
+    enabled: true
