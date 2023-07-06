@@ -16,3 +16,4 @@ module "Instance" { #Include Instance module
   sucurity_group = module.SG.security_group_id_out #pass the local value of the "security_group_id" variable from the SG module to the Instance module
   subnet_id = module.VPC.subnet_id_out #pass the local value of the "subnet_id_out" variable from the VPC module to the Instance moduleъ
 }
+
