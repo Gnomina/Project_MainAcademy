@@ -25,9 +25,10 @@ variable tags {
     Env = "Stack"
   }
 }
-
+/*
 variable "instance_tag" {
   description = "instance tag"
   type        = string
   default     = "Stack_ami_image"
 }
+*/
