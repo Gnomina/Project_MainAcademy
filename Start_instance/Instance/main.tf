@@ -19,7 +19,7 @@ resource "aws_instance" "example"{
   associate_public_ip_address = true
   iam_instance_profile = "EC2_RoleAddPerm"
   tags = {
-    "Name" = "${var.instance_tag}"
+    //"Name" = "${var.instance_tag}"
     "env"  = "${var.tags["Env"]}"
     "name" = "${var.tags["Name"]}"
   }
