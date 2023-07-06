@@ -1,5 +1,5 @@
 - name: Package installation
-  hosts: docker
+  hosts: env
   become: true
   roles:
     - role: ClamAV

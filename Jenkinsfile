@@ -78,14 +78,14 @@ pipeline {
                         script{
                             sh "python3 ${WORKSPACE}/ansible/inventory.py"
                             sh "cat ${WORKSPACE}/inventory.ini"
-                            /*
-                            sh 'ansible all -m ping -u ${REMOTE_USER} '+
+                            
+                            sh 'ansible env -m ping -u ${REMOTE_USER} '+
                             '-i ${WORKSPACE}/inventory.ini --private-key=${KEY_PATH}'
 
                              sh 'ansible-playbook -i ${WORKSPACE}/inventory.ini'+
                             ' ${WORKSPACE}/ansible/playbook.yml'+
                             ' --user=${REMOTE_USER} --key-file=${KEY_PATH}'
-                            */
+                            
                         } 
                     }   
                     
