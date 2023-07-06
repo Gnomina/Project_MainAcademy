@@ -19,14 +19,16 @@ pipeline {
 
         stage("AWS_Terraform"){
             steps{
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
-                credentialsId: 'MainAcademy_AWS_key',
-                accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
-                    sh 'terraform init'
-                    sh 'terraform plan'
-                    sh "terraform apply -auto-approve"
-                    echo 'ok'
+                dir('Start_instance') {
+                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
+                    credentialsId: 'MainAcademy_AWS_key',
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
+                        sh 'terraform init'
+                        sh 'terraform plan'
+                        sh "terraform apply -auto-approve"
+                        echo 'ok'
+                    }
                 }
             }
         }

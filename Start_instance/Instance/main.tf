@@ -11,7 +11,6 @@ data "aws_ami" "latest_ubuntu" { # search ubuntu image in AWS
 }
 
 resource "aws_instance" "example"{
-  count                  = var.instance_count
   ami                    = data.aws_ami.latest_ubuntu.id
   instance_type          = "${var.instance_type}"
   key_name               = "${var.key_name}"
@@ -20,7 +19,7 @@ resource "aws_instance" "example"{
   associate_public_ip_address = true
   iam_instance_profile = "EC2_RoleAddPerm"
   tags = {
-    "Name" = "${var.instance_tag}_${count.index + 1}"
+    "Name" = "${var.instance_tag}"
     "env"  = var.instance_tag
   }
 }

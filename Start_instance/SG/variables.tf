@@ -1,17 +1,17 @@
 #-------------Security Group Variables-----------------
 
 variable "Name" { #local variable
-  default     = "MAinAcademy_SG"
+  default     = "MAinAcademy_STACK_SG"
     description = "Name of the SG"
 }
 
 variable "description" { # local variable
-  default     = "MainAcademy_SG"
+  default     = "SG for the STACK"
     description = "Description of the SG"
 }
 
 variable "Tags" { # local variable
-  default     = "MainAcademy_SG"
+  default     = "STACK_SG"
     description = "Tags of the SG"
 }
 

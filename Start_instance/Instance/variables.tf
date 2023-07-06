@@ -21,18 +21,12 @@ variable "subnet_id"  { # variable from  VPC module -> outputs
 variable tags {
   type = map(string)
   default = {
-    Name = "Docker-container"
+    Name = "Test_Stack"
   }
 }
 
-variable "instance_count" {
-  description = "Instance Count to start"
-  type        = number
-  default     = 1  # Default Value
-}
-
 variable "instance_tag" {
-  description = "Тег для назначения инстансам"
+  description = "instance tag"
   type        = string
-  default     = "default"
+  default     = "Stack_ami_image"
 }
