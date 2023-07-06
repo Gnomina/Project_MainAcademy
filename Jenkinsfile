@@ -77,7 +77,7 @@ pipeline {
                     keyFileVariable: 'KEY_PATH', usernameVariable: 'REMOTE_USER')]) {
                         script{
                             sh "python3 ${WORKSPACE}/ansible/inventory.py"
-                            sh "cat ${WORKSPACE}/ansible/inventory.ini"
+                            sh "cat ${WORKSPACE}/inventory.ini"
                             /*
                             sh 'ansible all -m ping -u ${REMOTE_USER} '+
                             '-i ${WORKSPACE}/inventory.ini --private-key=${KEY_PATH}'
