@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "VPC" { #Include VPC module
-  source = "./Start_instance/VPC" #VPC Module PATH
+  source = "./VPC" #VPC Module PATH
 }
 
 module "SG" { #Include SG module
