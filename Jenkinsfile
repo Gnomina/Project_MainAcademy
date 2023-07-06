@@ -3,15 +3,10 @@ pipeline {
     agent any
         
     stages {
-
-        stage('CLEAN_WORKSPACE') {
-            steps {
-               cleanWs()
-            }
-        }
-        
+                
         stage('Clone') {
             steps {
+                cleanWs() // clean workspace before cloning
                 git branch: 'app_stack', credentialsId: 'Access_to_Git', url: 'https://github.com/Gnomina/Project_MainAcademy.git'
                 echo "Cloned repository PATH: ${WORKSPACE}"
             }
@@ -39,7 +34,7 @@ pipeline {
         }
 
         
-        stage('Instance Status Check') {
+        stage('Instance Status Check and start ansible') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
                 credentialsId: 'MainAcademy_AWS_key',
@@ -49,6 +44,7 @@ pipeline {
                         def passed = false
                         def timeoutMinutes = 5
                         def startTime = currentBuild.startTimeInMillis
+                        //---------------------------------Instance Status Check---------------------------------
                         while (!passed) {
                             def output = sh(script: "aws ec2 describe-instance-status --instance-ids ${env.instance_id} --region eu-central-1", returnStdout: true).trim()
                             def json = readJSON(text: output)
@@ -76,11 +72,25 @@ pipeline {
                             }
                         }
                     }
+                    //--------------------------------Ansible--------------------------------------------------
+                    withCredentials([sshUserPrivateKey(credentialsId: "Ansible_ssh_key", 
+                    keyFileVariable: 'KEY_PATH', usernameVariable: 'REMOTE_USER')]) {
+                        script{
+                            sh "python3 ${WORKSPACE}/ansible/inventory.py"
+                            sh "cat ${WORKSPACE}/ansible/inventory.ini"
+                            /*
+                            sh 'ansible all -m ping -u ${REMOTE_USER} '+
+                            '-i ${WORKSPACE}/inventory.ini --private-key=${KEY_PATH}'
+
+                             sh 'ansible-playbook -i ${WORKSPACE}/inventory.ini'+
+                            ' ${WORKSPACE}/ansible/playbook.yml'+
+                            ' --user=${REMOTE_USER} --key-file=${KEY_PATH}'
+                            */
+                        }    
+                    
                 }
             }
         }
-
-
     }
 }
 
