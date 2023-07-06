@@ -49,7 +49,7 @@ pipeline {
                         def timeoutMinutes = 5
                         def startTime = currentBuild.startTimeInMillis
                         while (!passed) {
-                            def output = sh(script: "aws ec2 describe-instance-status --instance-ids ${inst_id} --region eu-central-1", returnStdout: true).trim()
+                            def output = sh(script: "aws ec2 describe-instance-status --instance-ids ${env.inst_id} --region eu-central-1", returnStdout: true).trim()
                             def json = readJSON(text: output)
 
                             def server = json.InstanceStatuses[0].InstanceState.Name
