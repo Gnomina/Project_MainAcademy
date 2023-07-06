@@ -22,6 +22,7 @@ variable tags {
   type = map(string)
   default = {
     Name = "Test_Stack"
+    Env = "Stack"
   }
 }
 

@@ -17,16 +17,13 @@ pipeline {
             }
         }
 
-        stage("AWS_Terraform"){
+        stage("Create_instance"){
             steps{
-                sh "pwd"
                 dir("${WORKSPACE}/Start_instance") {
-                    sh "pwd"
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
                     credentialsId: 'MainAcademy_AWS_key',
                     accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
-                        sh "pwd"
                         sh 'terraform init'
                         sh 'terraform plan'
                         sh "terraform apply -auto-approve"
@@ -35,6 +32,8 @@ pipeline {
                 }
             }
         }
+
+        
     }
 }
 
