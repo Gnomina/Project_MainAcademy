@@ -34,7 +34,7 @@ pipeline {
         }
 
         
-        stage('Instance Status Check and start ansible') {
+        stage('Instance Status Check and Start Ansible') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
                 credentialsId: 'MainAcademy_AWS_key',
@@ -88,7 +88,6 @@ pipeline {
                             
                         } 
                     }   
-                    
                 }
             }
         }
