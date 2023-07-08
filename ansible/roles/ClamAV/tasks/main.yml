@@ -1,11 +1,9 @@
 - name: Check if ClamAV is installed
   become: true
-  command:
-    cmd: dpkg -s clamav
-    register: clamav_package_status
-    changed_when: false
-    failed_when: false
-    check_mode: no
+  command: dpkg -s clamav
+  register: clamav_package_status
+  changed_when: false
+  failed_when: false
 
 - name: Install ClamAV
   become: true
