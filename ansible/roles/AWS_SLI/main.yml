@@ -1,0 +1,46 @@
+- name: Check if AWS CLI is already installed
+  become: true
+  command:
+    cmd: aws --version
+  register: awscli_check
+  failed_when: false
+  check_mode: no
+
+- name: Update apt cache
+  become: true
+  apt:
+    update_cache: yes
+  when: awscli_check.rc != 0
+
+- name: Install unzip package
+  become: true
+  apt:
+    name: unzip
+    state: present
+  when: awscli_check.rc != 0
+
+- name: Download AWS CLI package
+  become: true
+  shell: "curl 'https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip' -o 'awscliv2.zip'"
+  args:
+    chdir: /tmp
+  when: awscli_check.rc != 0
+
+- name: Unzip AWS CLI package
+  become: true
+  shell: "unzip awscliv2.zip"
+  args:
+    chdir: /tmp
+  when: awscli_check.rc != 0
+
+- name: Install AWS CLI
+  become: true
+  shell: "sudo /tmp/aws/install"
+  args:
+    chdir: /tmp
+  when: awscli_check.rc != 0
+
+- name: Run exit command
+  become: true
+  ansible.builtin.shell: exit
+  when: awscli_check.rc != 0
