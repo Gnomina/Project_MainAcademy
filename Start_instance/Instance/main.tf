@@ -26,15 +26,44 @@ resource "aws_instance" "example"{
   
   //user code here.
   user_data = <<-EOF
-    #!/bin/bash
-    
-    #obtain ECR Credentials
-    ECR_LOGIN=$(aws ecr get-login-password --region eu-central-1)
-    echo $ECR_LOGIN | docker login --username AWS --password-stdin 284532103653.dkr.ecr.eu-central-1.amazonaws.com
+  #!/bin/bash
 
-    # Download container
+    check_dependencies() {
+      # Проверяем доступность AWS CLI
+      aws --version >/dev/null 2>&1
+      local aws_status=$?
+
+      # Проверяем доступность Docker
+      docker --version >/dev/null 2>&1
+      local docker_status=$?
+
+      # Возвращаем статусы проверки
+      return $((aws_status + docker_status))
+    }
+
+    wait_for_dependencies() {
+      local max_attempts=5
+      local sleep_duration=60
+      local attempt=1
+
+      while ! check_dependencies; do
+        echo "Ожидание доступности зависимостей (попытка $attempt/$max_attempts)..."
+        sleep "$sleep_duration"
+
+        attempt=$((attempt + 1))
+
+        if ((attempt > max_attempts)); then
+          echo "Ошибка: зависимости не доступны после нескольких попыток. Прерывание выполнения."
+          exit 1
+        fi
+      done
+    }
+    wait_for_dependencies
+    
+    aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 284532103653.dkr.ecr.eu-central-1.amazonaws.com
     docker pull 284532103653.dkr.ecr.eu-central-1.amazonaws.com/mainacademy_images:WebApp
-   
-    echo "Finished user_data script"
+    docker run -d -p 49160:8080 --log-driver=awslogs --log-opt awslogs-group=MainAcademy_container_logs --log-opt awslogs-region=eu-central-1 --log-opt awslogs-stream=test_log 284532103653.dkr.ecr.eu-central-1.amazonaws.com/mainacademy_images:WebApp
+
+    
   EOF
 }
