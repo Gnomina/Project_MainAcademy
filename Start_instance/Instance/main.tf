@@ -23,4 +23,18 @@ resource "aws_instance" "example"{
     "env"  = "${var.tags["Env"]}"
     "name" = "${var.tags["Name"]}"
   }
+  
+  //user code here.
+  user_data = <<-EOF
+    #!/bin/bash
+    
+    #obtain ECR Credentials
+    ECR_LOGIN=$(aws ecr get-login-password --region eu-central-1)
+    echo $ECR_LOGIN | docker login --username AWS --password-stdin 284532103653.dkr.ecr.eu-central-1.amazonaws.com
+
+    # Download container
+    docker pull 284532103653.dkr.ecr.eu-central-1.amazonaws.com/mainacademy_images:WebApp
+   
+    echo "Finished user_data script"
+  EOF
 }
