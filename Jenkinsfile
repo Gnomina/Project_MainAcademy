@@ -94,16 +94,21 @@ pipeline {
 
         stage('Create AMI') {
             steps {
-                script {
-                def amiName = "test_ami_0.1"
-                def region = "eu-central-1"
-                def instanceId = sh(script: "aws ec2 describe-instances --region ${region} --filters Name=tag:Name,Values=my-instance-name --query 'Reservations[0].Instances[0].InstanceId' --output text", returnStdout: true).trim()
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
+                credentialsId: 'MainAcademy_AWS_key',
+                accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
+                    script {
+                    def amiName = "test_ami_0.1"
+                    def region = "eu-central-1"
+                    def instanceId = sh(script: "aws ec2 describe-instances --region ${region} --filters Name=tag:Name,Values=my-instance-name --query 'Reservations[0].Instances[0].InstanceId' --output text", returnStdout: true).trim()
 
-                def amiId = sh(script: "aws ec2 create-image --instance-id ${env.instance_id} --name \"${amiName}\" --region ${region} --output text", returnStdout: true).trim()
+                    def amiId = sh(script: "aws ec2 create-image --instance-id ${env.instance_id} --name \"${amiName}\" --region ${region} --output text", returnStdout: true).trim()
 
-                // Store the new AMI ID for later use
-                env.NEW_AMI_ID = amiId
-                echo "New AMI ID: ${env.NEW_AMI_ID}"
+                    // Store the new AMI ID for later use
+                    env.NEW_AMI_ID = amiId
+                    echo "New AMI ID: ${env.NEW_AMI_ID}"
+                    }
                 }
             }
         }
