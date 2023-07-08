@@ -102,7 +102,7 @@ pipeline {
                         def amiName = "test_ami_0.1"
                         def region = "eu-central-1"
 
-                        def amiId = null
+                        //def amiIds = null
                         def passed = false
                         def timeoutMinutes = 10
                         def startTime = System.currentTimeMillis()
