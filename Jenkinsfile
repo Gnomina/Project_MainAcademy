@@ -61,8 +61,8 @@ pipeline {
                                 echo "Instance status is passed. Proceeding with the pipeline..."
                                 passed = true
                             } else {
-                                echo "Instance is initializing. Waiting for 10 seconds..."
-                                sleep 10
+                                echo "Instance is initializing. Waiting for 25 seconds..."
+                                sleep 25
                             }
                             def elapsedTime = System.currentTimeMillis() - startTime
                             def timeoutMillis = timeoutMinutes * 60 * 1000

@@ -19,9 +19,9 @@ resource "aws_instance" "example"{
   associate_public_ip_address = true
   iam_instance_profile = "EC2_RoleAddPerm"
   tags = {
-    //"Name" = "${var.instance_tag}"
+    "Name" = "${var.tags["Name"]}"
     "env"  = "${var.tags["Env"]}"
-    "name" = "${var.tags["Name"]}"
+    //"name" = "${var.tags["Name"]}"
   }
   
   //user code here.
@@ -29,31 +29,31 @@ resource "aws_instance" "example"{
   #!/bin/bash
 
     check_dependencies() {
-      # Проверяем доступность AWS CLI
+      # Chec if AWS CLI are available
       aws --version >/dev/null 2>&1
       local aws_status=$?
 
-      # Проверяем доступность Docker
+      # Check if Docker are available
       docker --version >/dev/null 2>&1
       local docker_status=$?
 
-      # Возвращаем статусы проверки
+      # Return status AWS CLI and Docker
       return $((aws_status + docker_status))
     }
 
     wait_for_dependencies() {
-      local max_attempts=5
+      local max_attempts=7
       local sleep_duration=60
       local attempt=1
 
       while ! check_dependencies; do
-        echo "Ожидание доступности зависимостей (попытка $attempt/$max_attempts)..."
+        echo "Waiting for availability of dependencies (attempt $attempt/$max_attempts)..."
         sleep "$sleep_duration"
 
         attempt=$((attempt + 1))
 
         if ((attempt > max_attempts)); then
-          echo "Ошибка: зависимости не доступны после нескольких попыток. Прерывание выполнения."
+          echo "Error: Dependencies not available after several attempts. Execution interrupt."
           exit 1
         fi
       done
@@ -63,7 +63,6 @@ resource "aws_instance" "example"{
     aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 284532103653.dkr.ecr.eu-central-1.amazonaws.com
     docker pull 284532103653.dkr.ecr.eu-central-1.amazonaws.com/mainacademy_images:WebApp
     docker run -d -p 49160:8080 --log-driver=awslogs --log-opt awslogs-group=MainAcademy_container_logs --log-opt awslogs-region=eu-central-1 --log-opt awslogs-stream=test_log 284532103653.dkr.ecr.eu-central-1.amazonaws.com/mainacademy_images:WebApp
-
     
   EOF
 }

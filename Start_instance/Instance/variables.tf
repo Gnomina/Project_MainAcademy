@@ -21,7 +21,7 @@ variable "subnet_id"  { # variable from  VPC module -> outputs
 variable tags {
   type = map(string)
   default = {
-    Name = "Test_Stack"
+    Name = "App_stack"
     Env = "Stack"
   }
 }
