@@ -99,15 +99,43 @@ pipeline {
                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                     script {
-                    def amiName = "test_ami_0.1"
-                    def region = "eu-central-1"
-                    def instanceId = sh(script: "aws ec2 describe-instances --region ${region} --filters Name=tag:Name,Values=my-instance-name --query 'Reservations[0].Instances[0].InstanceId' --output text", returnStdout: true).trim()
+                        def amiName = "test_ami_0.1"
+                        def region = "eu-central-1"
 
-                    def amiId = sh(script: "aws ec2 create-image --instance-id ${env.instance_id} --name \"${amiName}\" --region ${region} --output text", returnStdout: true).trim()
+                        def amiId = null
+                        def passed = false
+                        def timeoutMinutes = 10
+                        def startTime = System.currentTimeMillis()
 
-                    // Store the new AMI ID for later use
-                    env.NEW_AMI_ID = amiId
-                    echo "New AMI ID: ${env.NEW_AMI_ID}"
+                        def instanceId = sh(script: "aws ec2 describe-instances --region ${region} --filters Name=tag:Name,Values=my-instance-name --query 'Reservations[0].Instances[0].InstanceId' --output text", returnStdout: true).trim()
+
+                        def amiId = sh(script: "aws ec2 create-image --instance-id ${env.instance_id} --name \"${amiName}\" --region ${region} --output text", returnStdout: true).trim()
+
+                    
+
+                        while (!passed) {
+                            def output = sh(script: "aws ec2 describe-images --image-ids ${amiId} --region ${region}", returnStdout: true).trim()
+                            def json = readJSON(text: output)
+
+                            def state = json.Images[0].State
+
+                            echo "AMI State: ${state}"
+
+                            if (state == 'available') {
+                                echo "AMI creation is complete. Proceeding with the pipeline..."
+                                passed = true
+                            } else {
+                                echo "AMI is still being created. Waiting for 30 seconds..."
+                                sleep 30
+                            }
+
+                            def elapsedTime = System.currentTimeMillis() - startTime
+                            def timeoutMillis = timeoutMinutes * 60 * 1000
+
+                            if (elapsedTime >= timeoutMillis) {
+                                error("AMI creation timed out. AMI is not available within ${timeoutMinutes} minutes.")
+                            }
+                        }
                     }
                 }
             }
