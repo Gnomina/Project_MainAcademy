@@ -111,8 +111,6 @@ pipeline {
 
                         def amiId = sh(script: "aws ec2 create-image --instance-id ${env.instance_id} --name \"${amiName}\" --region ${region} --output text", returnStdout: true).trim()
 
-                    
-
                         while (!passed) {
                             def output = sh(script: "aws ec2 describe-images --image-ids ${amiId} --region ${region}", returnStdout: true).trim()
                             def json = readJSON(text: output)
@@ -136,6 +134,10 @@ pipeline {
                                 error("AMI creation timed out. AMI is not available within ${timeoutMinutes} minutes.")
                             }
                         }
+
+                        // Store the new AMI ID for later use
+                        env.NEW_AMI_ID = amiId
+                        echo "New AMI ID: ${env.NEW_AMI_ID}, AMI created successfully"
                     }
                 }
             }
