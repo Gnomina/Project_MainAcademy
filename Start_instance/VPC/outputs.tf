@@ -12,6 +12,6 @@ output "subnet_id_out" { # Local output variable
 }
 
 output "subnet_name_out" { # Local output variable
-  value = aws_subnet.name
+  value = aws_subnet.my_subnet.tags.Name
   description = "subnet_name"
 }
