@@ -175,7 +175,10 @@ pipeline {
                         " -var sg_id=${env.sg_id} -var subnet_name=${env.subnet_name}"
                         echo 'ok'
                         */
-                        sh "terraform destroy -auto-approve"
+                        sh "terraform destroy -auto-approve"+
+                        " -var vpc_id=${env.vpc_id} -var subnet_id=${env.subnet_id}"+
+                        " -var sg_id=${env.sg_id} -var subnet_name=${env.subnet_name}"
+                        echo 'ok'
                     }
                 }
             }
