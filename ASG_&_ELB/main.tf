@@ -22,7 +22,7 @@ resource "aws_launch_template" "example" {
       device_index          = 0
       network_interface_id  = aws_network_interface.example_nic.id  
       associate_public_ip_address = true
-      //security_group_ids = ["sg-04947ae25e78b4864"]
+      security_groups = [sg-04947ae25e78b4864]
       
     }
     
