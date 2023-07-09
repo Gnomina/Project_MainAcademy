@@ -8,7 +8,7 @@ resource "aws_launch_configuration" "example" {
   image_id      = "ami-0b6777e145afb9a29" #ami_id from block Create ami.
   instance_type = "t2.small"
   
-  security_groups = ["${sg_id}"]
+  security_groups = ["sg-092480697adebc0f1"]
 
   user_data = <<-EOF
   #!/bin/bash
