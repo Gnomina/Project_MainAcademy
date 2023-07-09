@@ -8,7 +8,15 @@ resource "aws_launch_template" "example" {
   image_id      = "ami-0b6777e145afb9a29" #ami_id from block Create ami.
   instance_type = "t2.small"
   key_name               = "ubuntu_key"
-  vpc_security_group_ids = ["sg-04947ae25e78b4864"]
+  //vpc_security_group_ids = ["sg-04947ae25e78b4864"]
+  
+    network_interfaces {
+      device_index          = 0
+      subnet_id             = "subnet-0329c8ffd17751d83"  
+      associate_public_ip_address = true
+      security_groups = ["sg-04947ae25e78b4864"]
+      
+    }
   
     iam_instance_profile {
       name = "EC2_RoleAddPerm"  
@@ -39,13 +47,7 @@ resource "aws_autoscaling_group" "example_asg" {
     aws_elb.example_elb.name  
   ]
 
-  network_interfaces {
-      device_index          = 0
-      subnet_id             = "subnet-0329c8ffd17751d83"  
-      associate_public_ip_address = true
-      security_groups = ["sg-04947ae25e78b4864"]
-      
-    }
+  
 }
 
 # Создание балансировщика нагрузки (ELB)
