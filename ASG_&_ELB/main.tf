@@ -56,7 +56,7 @@ resource "aws_elb" "example_elb" {
 }
 
 # Внешний интернет-шлюз (EIGW)
-data "aws_internet_gateway" "existing_igw" {
+resource "aws_internet_gateway" "existing_igw" {
   vpc_id = "vpc-0a5859a6d6889753f"  # Замените на ID вашей VPC
 }
 
