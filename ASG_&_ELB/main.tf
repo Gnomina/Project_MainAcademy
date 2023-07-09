@@ -10,21 +10,14 @@ resource "aws_launch_template" "example" {
   key_name               = "ubuntu_key"
   vpc_security_group_ids = ["sg-04947ae25e78b4864"]
   
-  iam_instance_profile {
-    name = "EC2_RoleAddPerm"  
-  }
-  
-  network_interfaces {
-      device_index          = 0
-      subnet_id             = "subnet-0329c8ffd17751d83"  
-      associate_public_ip_address = true
-      security_groups = ["sg-04947ae25e78b4864"]
-      
-      
+    iam_instance_profile {
+      name = "EC2_RoleAddPerm"  
     }
+  
+    
     
 
-  user_data = filebase64("userdata.sh") 
+    user_data = filebase64("userdata.sh") 
 }#------------------------------------------------------------------------------
 
 # Создание группы автоматического масштабирования (ASG)
@@ -45,6 +38,14 @@ resource "aws_autoscaling_group" "example_asg" {
   load_balancers = [
     aws_elb.example_elb.name  
   ]
+
+  network_interfaces {
+      device_index          = 0
+      subnet_id             = "subnet-0329c8ffd17751d83"  
+      associate_public_ip_address = true
+      security_groups = ["sg-04947ae25e78b4864"]
+      
+    }
 }
 
 # Создание балансировщика нагрузки (ELB)
