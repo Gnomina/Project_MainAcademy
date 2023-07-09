@@ -12,6 +12,7 @@ resource "aws_launch_template" "example" {
   
   iam_instance_profile {
     name = "EC2_RoleAddPerm"  
+  }
   network_interfaces {
       device_index          = 0
       subnet_id             = "subnet-0329c8ffd17751d83"  
