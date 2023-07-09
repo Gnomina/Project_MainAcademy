@@ -55,17 +55,19 @@ resource "aws_elb" "example_elb" {
   }
 }
 
-resource "aws_eigw" "example_eigw" {
+# Создание внешнего интернет-шлюза (EIGW)
+resource "aws_internet_gateway" "example_igw" {
   vpc_id = "vpc-0a5859a6d6889753f"  # Замените на ID вашей VPC
 
   tags = {
-    Name = "ЕУЫЕ"
+    Name = "TEST-igw"
   }
 }
 
-resource "aws_eigw_attachment" "example_eigw_attachment" {
+# Привязка внешнего интернет-шлюза к VPC
+resource "aws_vpc_attachment" "example_vpc_attachment" {
   vpc_id             = "vpc-0a5859a6d6889753f"  # Замените на ID вашей VPC
-  elastic_gateway_id = aws_eigw.example_eigw.id
+  internet_gateway_id = aws_internet_gateway.example_igw.id
 }
 
 resource "aws_route_table" "example_public_route_table" {
