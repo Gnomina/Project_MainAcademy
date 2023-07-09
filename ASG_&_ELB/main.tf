@@ -9,10 +9,10 @@ resource "aws_launch_template" "example" {
   instance_type = "t2.small"
   key_name               = "ubuntu_key"
   vpc_security_group_ids = ["sg-04947ae25e78b4864"]
-  //security_groups    = ["sg-04947ae25e78b4864"]
-
   
-  //vpc_security_group_ids = ["sg-04947ae25e78b4864"]
+  iam_instance_profile {
+    name = "EC2_RoleAddPerm"  # Замените на имя или ARN вашей роли IAM
+  }
 
   user_data = filebase64("userdata.sh") 
 }#------------------------------------------------------------------------------
