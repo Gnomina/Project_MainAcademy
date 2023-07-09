@@ -1,77 +1,64 @@
 provider "aws" {
   region = "${var.Region}" 
 }
-
+#------------------------------------------------------------------------------
 # Создание шаблона запуска
 resource "aws_launch_template" "example" {
   name_prefix   = "example"
-  image_id      = var.ami_id #ami_id from block Create ami.
+  image_id      = "ami-0b6777e145afb9a29" #ami_id from block Create ami.
   instance_type = "t2.small"
-
-  # Определение блока Network Interfaces, если требуется
-  network_interfaces {
-    device_index         = 0
-    #associate_public_ip_address = true  # Установите значение в true, если требуется публичный IP
-    subnet_id            = var.subnet_id  # Укажите подсеть, в которой должны размещаться экземпляры
-    security_groups      = [var.sg_id]  # Укажите группы безопасности для экземпляров
-  }
-}
-
-# Создание группы автомасштабирования (ASG) с использованием шаблона запуска
-resource "aws_autoscaling_group" "example_asg" {
-  name                 = "TEST-asg"
-  min_size             = 3
-  max_size             = 3
-  desired_capacity     = 3
-  launch_template {
-    id      = aws_launch_template.example.id  # Используйте ID шаблона запуска
-    version = "$Latest"  # Используйте последнюю версию шаблона
-  }
-
-  # Укажите ID или имя виртуальной частной сети (VPC) для размещения ASG
-  vpc_zone_identifier = [ var.vpc_id, ]
-
-  # Укажите имя подсетей для размещения экземпляров EC2
-  subnet_names         = [var.subnet_name]
-
-  # Укажите имя группы безопасности для экземпляров EC2
-  vpc_security_group_ids = [var.sg_id]
-}
-
-# Создание Application Load Balancer (ALB)
-resource "aws_lb" "example_alb" {
-  name               = "TEST-alb"
-  load_balancer_type = "application"
-  subnets            = [var.subnet_name]  # Укажите подсети для размещения ALB
-
   
-}
+  security_groups = ["${sg_id}"]
 
-# Создание таргет-группы для ALB
-resource "aws_lb_target_group" "example_target_group" {
-  name     = "TEST-target-group"
-  port     = 80
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id  # Укажите ID или имя VPC
+  user_data = <<-EOF
+  #!/bin/bash
 
-  # Определение проверки здоровья
-  enable_deletion_protection = false
-  health_check {
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
-    timeout             = 5
-    interval            = 30
-    path                = "/"
-    matcher             = "200"
-  }
-}
+    check_dependencies() {
+      # Chec if AWS CLI are available
+      aws --version >/dev/null 2>&1
+      local aws_status=$?
 
-# Привязка ASG к ALB
-resource "aws_lb_target_group_attachment" "example_attachment" {
-  target_group_arn = aws_lb_target_group.example_target_group.arn
-  target_id        = aws_autoscaling_group.example_asg.id
-  port             = 80
-}
+      # Check if Docker are available
+      docker --version >/dev/null 2>&1
+      local docker_status=$?
+
+      # Return status AWS CLI and Docker
+      return $((aws_status + docker_status))
+    }
+
+    wait_for_dependencies() {
+      local max_attempts=7
+      local sleep_duration=60
+      local attempt=1
+
+      while ! check_dependencies; do
+        echo "Waiting for availability of dependencies (attempt $attempt/$max_attempts)..."
+        sleep "$sleep_duration"
+
+        attempt=$((attempt + 1))
+
+        if ((attempt > max_attempts)); then
+          echo "Error: Dependencies not available after several attempts. Execution interrupt."
+          exit 1
+        fi
+      done
+    }
+    wait_for_dependencies
+    
+    aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 284532103653.dkr.ecr.eu-central-1.amazonaws.com
+    docker pull 284532103653.dkr.ecr.eu-central-1.amazonaws.com/mainacademy_images:WebApp
+    
+    if [[ ! -f "/home/ubuntu/nginx.conf" ]]; then
+      echo "${file("nginx.conf")}" > /home/ubuntu/nginx.conf
+    fi
+
+    if [[ ! -f "/home/ubuntu/docker-compose.yml" ]]; then
+      echo "${file("docker-compose.yml")}" > /home/ubuntu/docker-compose.yml
+    fi
+
+    docker-compose -f /home/ubuntu/docker-compose.yml up -d
+  EOF
+}#------------------------------------------------------------------------------
 
 
 
