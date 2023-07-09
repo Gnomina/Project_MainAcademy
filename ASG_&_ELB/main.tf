@@ -3,7 +3,7 @@ provider "aws" {
 }
 #------------------------------------------------------------------------------
 # Создание шаблона запуска
-resource "aws_launch_configuration" "example" {
+resource "aws_launch_template" "example" {
   name_prefix   = "example"
   image_id      = "ami-0b6777e145afb9a29" #ami_id from block Create ami.
   instance_type = "t2.small"
@@ -15,7 +15,7 @@ resource "aws_launch_configuration" "example" {
       device_index          = 0
       subnet_id             = "subnet-0329c8ffd17751d83"  
       associate_public_ip_address = true
-      security_group_ids = ["sg-04947ae25e78b4864"]
+      //security_group_ids = ["sg-04947ae25e78b4864"]
       
     }
     
@@ -35,7 +35,7 @@ resource "aws_autoscaling_group" "example_asg" {
   desired_capacity          = 3
   health_check_type         = "EC2"
   launch_template {
-    id      = aws_launch_configuration.example.id
+    id      = aws_launch_template.example.id
     version = "$Latest"
   }
   vpc_zone_identifier       = ["subnet-0329c8ffd17751d83"]
