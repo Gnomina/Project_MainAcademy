@@ -55,71 +55,15 @@ resource "aws_elb" "example_elb" {
   }
 }
 
-#Create Internet Gateway
-resource "aws_internet_gateway" "my_igw_1" {
-  vpc_id = "vpc-0a5859a6d6889753f"
-
-  tags = {
-    Name = "TEST-igw"
-  }
+# Внешний интернет-шлюз (EIGW)
+data "aws_internet_gateway" "existing_igw" {
+  vpc_id = "vpc-0a5859a6d6889753f"  # Замените на ID вашей VPC
 }
 
-# Create Route Table
-resource "aws_route_table" "my_route_table" {
-  vpc_id = "vpc-0a5859a6d6889753f"
-
-  tags = {
-    Name = "TEST-RT"
-  }
-}
-
-# Create Route
-resource "aws_route" "internet_route" {
-  route_table_id         = aws_route_table.my_route_table.id
-  destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.my_igw_1.id
-}
-
-# Create Route Table Association
+# Ассоциация таблицы маршрутизации с публичной подсетью
 resource "aws_route_table_association" "subnet_association" {
-  subnet_id      = "subnet-0329c8ffd17751d83"
-  route_table_id = aws_route_table.my_route_table.id
+  subnet_id         = "subnet-0329c8ffd17751d83"  # Замените на ID вашей публичной подсети
+  route_table_id    = "rtb-029d3649c48c3d855"  # Замените на ID вашей таблицы маршрутизации
 }
-//------------------------------------------------------------------------------------
-
-/*
-# Создание внешнего интернет-шлюза (EIGW)
-resource "aws_internet_gateway" "example_igw" {
-  vpc_id = "vpc-0a5859a6d6889753f"  # Замените на ID вашей VPC
-
-  tags = {
-    Name = "TEST-igw"
-  }
-}
-
-# Привязка внешнего интернет-шлюза к VPC
-resource "aws_vpc_attachment" "example_vpc_attachment" {
-  vpc_id             = "vpc-0a5859a6d6889753f"  # Замените на ID вашей VPC
-  internet_gateway_id = aws_internet_gateway.example_igw.id
-}
-
-resource "aws_route_table" "example_public_route_table" {
-  vpc_id = "vpc-0a5859a6d6889753f"  # Замените на ID вашей VPC
-
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.example_igw.id
-  }
-
-  tags = {
-    Name = "example-public-route-table-ЕУЫЕ"
-  }
-}
-
-resource "aws_route_table_association" "example_public_subnet_association" {
-  subnet_id      = "subnet-0329c8ffd17751d83"  # Замените на ID вашей публичной подсети
-  route_table_id = aws_route_table.example_public_route_table.id
-}
-*/
 
 
