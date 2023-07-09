@@ -18,6 +18,7 @@ resource "aws_launch_template" "example" {
       device_index          = 0
       subnet_id             = "subnet-0329c8ffd17751d83"  
       associate_public_ip_address = true
+      security_groups = ["sg-04947ae25e78b4864"]
       
       
     }
