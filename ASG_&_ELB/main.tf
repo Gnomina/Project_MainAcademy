@@ -32,17 +32,27 @@ resource "aws_autoscaling_group" "example_asg" {
   vpc_zone_identifier = [ var.vpc_id, ]
 
   # Укажите имя подсетей для размещения экземпляров EC2
-  subnet_names         = [var.subnet_name, ]
+  subnet_names         = [var.subnet_name]
 
   # Укажите имя группы безопасности для экземпляров EC2
-  security_groups      = [var.sg_id]
+  vpc_security_group_ids = [var.sg_id]
 }
 
 # Создание Application Load Balancer (ALB)
 resource "aws_lb" "example_alb" {
   name               = "TEST-alb"
   load_balancer_type = "application"
-  subnets            = [var.subnet_name,]  # Укажите подсети для размещения ALB
+  subnets            = [var.subnet_name]  # Укажите подсети для размещения ALB
+
+  
+}
+
+# Создание таргет-группы для ALB
+resource "aws_lb_target_group" "example_target_group" {
+  name     = "TEST-target-group"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = var.vpc_id  # Укажите ID или имя VPC
 
   # Определение проверки здоровья
   enable_deletion_protection = false
@@ -54,14 +64,6 @@ resource "aws_lb" "example_alb" {
     path                = "/"
     matcher             = "200"
   }
-}
-
-# Создание таргет-группы для ALB
-resource "aws_lb_target_group" "example_target_group" {
-  name     = "TEST-target-group"
-  port     = 80
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id  # Укажите ID или имя VPC
 }
 
 # Привязка ASG к ALB
