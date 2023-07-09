@@ -56,7 +56,35 @@ resource "aws_autoscaling_group" "example_asg" {
 
   
 }
+# Создание балансировщика нагрузки
+resource "aws_lb" "example_lb" {
+  name               = "example-lb"
+  load_balancer_type = "application"
+  subnets            = ["subnet-0329c8ffd17751d83"]
+}
 
+# Создание целевой группы
+resource "aws_lb_target_group" "example_target_group" {
+  name        = "example-target-group"
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = "vpc-0a5859a6d6889753f"
+  target_type = "instance"
+}
+
+# Создание слушателя на порт 80
+resource "aws_lb_listener" "example_listener" {
+  load_balancer_arn = aws_lb.example_lb.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.example_target_group.arn
+  }
+}
+
+/*
 # Создание балансировщика нагрузки (ELB)
 resource "aws_elb" "example_elb" {
   name               = "example-elb"
@@ -70,6 +98,7 @@ resource "aws_elb" "example_elb" {
     lb_protocol       = "http"
   }
 }
+*/
 
 
 # Ассоциация таблицы маршрутизации с публичной подсетью
