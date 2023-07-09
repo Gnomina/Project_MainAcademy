@@ -37,7 +37,7 @@ resource "aws_elb" "example_elb" {
   name               = "example-elb"
   security_groups    = ["sg-04947ae25e78b4864"]
   subnets            = ["subnet-0329c8ffd17751d83"]
-  instances          = ["i-073d9b9afe2a100ef"]
+  //instances          = ["i-073d9b9afe2a100ef"]
   listener {
     instance_port     = 80
     instance_protocol = "http"
