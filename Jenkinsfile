@@ -91,7 +91,8 @@ pipeline {
                 }
             }
         }
-
+        // ---Work code for create AMI---
+        /*
         stage('Create AMI') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
@@ -142,6 +143,7 @@ pipeline {
                 }
             }
         }
+        */
     }
 }
 

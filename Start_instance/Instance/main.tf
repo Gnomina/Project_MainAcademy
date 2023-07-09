@@ -62,7 +62,19 @@ resource "aws_instance" "example"{
     
     aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 284532103653.dkr.ecr.eu-central-1.amazonaws.com
     docker pull 284532103653.dkr.ecr.eu-central-1.amazonaws.com/mainacademy_images:WebApp
-    docker run -d -p 49160:8080 --log-driver=awslogs --log-opt awslogs-group=MainAcademy_container_logs --log-opt awslogs-region=eu-central-1 --log-opt awslogs-stream=test_log 284532103653.dkr.ecr.eu-central-1.amazonaws.com/mainacademy_images:WebApp
     
+    if [[ ! -f "/home/ubuntu/nginx.conf" ]]; then
+      echo "${file("nginx.conf")}" > /home/ubuntu/nginx.conf
+    fi
+
+    if [[ ! -f "/home/ubuntu/docker-compose.yml" ]]; then
+      echo "${file("docker-compose.yml")}" > /home/ubuntu/docker-compose.yml
+    fi
+
+    docker-compose -f /home/ubuntu/docker-compose.yml up -d
   EOF
 }
+
+// docker run -d -p 49160:8080 --log-driver=awslogs --log-opt awslogs-group=MainAcademy_container_logs --log-opt awslogs-region=eu-central-1
+// --log-opt awslogs-stream=test_log 284532103653.dkr.ecr.eu-central-1.amazonaws.com/mainacademy_images:WebApp
+
