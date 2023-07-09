@@ -3,7 +3,7 @@ provider "aws" {
 }
 #------------------------------------------------------------------------------
 # Создание шаблона запуска
-resource "aws_launch_template" "example" {
+resource "aws_launch_configuration" "example" {
   name_prefix   = "example"
   image_id      = "ami-0b6777e145afb9a29" #ami_id from block Create ami.
   instance_type = "t2.small"
