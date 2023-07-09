@@ -13,6 +13,11 @@ resource "aws_launch_template" "example" {
   iam_instance_profile {
     name = "EC2_RoleAddPerm"  # Замените на имя или ARN вашей роли IAM
   }
+  network_interfaces {
+      device_index          = 0
+      subnet_id             = "subnet-0329c8ffd17751d83"  # Замените на ID вашей публичной подсети
+      associate_public_ip_address = true
+    }
 
   user_data = filebase64("userdata.sh") 
 }#------------------------------------------------------------------------------
@@ -48,6 +53,37 @@ resource "aws_elb" "example_elb" {
     lb_port           = 80
     lb_protocol       = "http"
   }
+}
+
+resource "aws_eigw" "example_eigw" {
+  vpc_id = "vpc-0a5859a6d6889753f"  # Замените на ID вашей VPC
+
+  tags = {
+    Name = "ЕУЫЕ"
+  }
+}
+
+resource "aws_eigw_attachment" "example_eigw_attachment" {
+  vpc_id             = "vpc-0a5859a6d6889753f"  # Замените на ID вашей VPC
+  elastic_gateway_id = aws_eigw.example_eigw.id
+}
+
+resource "aws_route_table" "example_public_route_table" {
+  vpc_id = "vpc-0a5859a6d6889753f"  # Замените на ID вашей VPC
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_eigw.example_eigw.id
+  }
+
+  tags = {
+    Name = "example-public-route-table-ЕУЫЕ"
+  }
+}
+
+resource "aws_route_table_association" "example_public_subnet_association" {
+  subnet_id      = "subnet-0329c8ffd17751d83"  # Замените на ID вашей публичной подсети
+  route_table_id = aws_route_table.example_public_route_table.id
 }
 
 
