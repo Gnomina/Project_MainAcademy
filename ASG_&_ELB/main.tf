@@ -3,7 +3,7 @@ provider "aws" {
 }
 #------------------------------------------------------------------------------
 # Создание шаблона запуска
-resource "aws_launch_configuration" "example" {
+resource "aws_launch_template" "example" {
   name_prefix   = "example"
   image_id      = "ami-0b6777e145afb9a29" #ami_id from block Create ami.
   instance_type = "t2.small"
@@ -59,6 +59,21 @@ resource "aws_launch_configuration" "example" {
     docker-compose -f /home/ubuntu/docker-compose.yml up -d
   EOF
 }#------------------------------------------------------------------------------
+
+# Создание группы автоматического масштабирования (ASG)
+resource "aws_autoscaling_group" "example_asg" {
+  name                      = "example-asg"
+  min_size                  = 1
+  max_size                  = 3
+  desired_capacity          = 3
+  health_check_type         = "EC2"
+  launch_template {
+    id      = aws_launch_template.example.id
+    version = "$Latest"
+  }
+  vpc_zone_identifier       = ["subnet-0329c8ffd17751d83"]
+  termination_policies      = ["OldestInstance"]
+}
 
 
 
