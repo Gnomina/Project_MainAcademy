@@ -13,12 +13,14 @@ resource "aws_launch_template" "example" {
   iam_instance_profile {
     name = "EC2_RoleAddPerm"  
   }
+  
   network_interfaces {
       device_index          = 0
       subnet_id             = "subnet-0329c8ffd17751d83"  
       associate_public_ip_address = true
-      security_group_ids    = ["sg-04947ae25e78b4864"]
+      
     }
+    
 
   user_data = filebase64("userdata.sh") 
 }#------------------------------------------------------------------------------
@@ -36,6 +38,7 @@ resource "aws_autoscaling_group" "example_asg" {
   }
   vpc_zone_identifier       = ["subnet-0329c8ffd17751d83"]
   termination_policies      = ["OldestInstance"]
+  vpc_security_group_ids    = ["sg-04947ae25e78b4864"]
 
   load_balancers = [
     aws_elb.example_elb.name  
