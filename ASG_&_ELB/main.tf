@@ -51,7 +51,7 @@ resource "aws_autoscaling_group" "example_asg" {
   
 
   load_balancers = [
-    aws_elb.example_elb.name  
+    aws_lb.example_lb.name  
   ]
 
   
