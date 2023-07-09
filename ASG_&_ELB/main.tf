@@ -1,6 +1,13 @@
 provider "aws" {
   region = "${var.Region}" 
 }
+
+
+resource "aws_network_interface" "example_nic" {
+  subnet_id                = "subnet-0329c8ffd17751d83"
+  security_groups          = ["sg-04947ae25e78b4864"]
+  private_ips              = ["10.0.0.10"] # Замените на подходящий IP-адрес
+}
 #------------------------------------------------------------------------------
 # Создание шаблона запуска
 resource "aws_launch_template" "example" {
@@ -13,7 +20,7 @@ resource "aws_launch_template" "example" {
     
     network_interfaces {
       device_index          = 0
-      subnet_id             = "subnet-0329c8ffd17751d83"  
+      network_interface_id  = aws_network_interface.example_nic.id  
       associate_public_ip_address = true
       //security_group_ids = ["sg-04947ae25e78b4864"]
       
