@@ -25,8 +25,20 @@ pipeline {
                         echo 'ok'
                         script {
                             def inst_id = sh(script: "terraform output instance_id", returnStdout: true).trim()
+                            def sub_id = sh(script: "terraform output subnet_id", returnStdout: true).trim()
+                            def sub_name = sh(script: "terraform output subnet_name", returnStdout: true).trim()
+                            def sg_id = sh(script: "terraform output sg_id", returnStdout: true).trim()
+                            def vps_id = sh(script: "terraform output vpc_id", returnStdout: true).trim()
                             env.instance_id = inst_id
+                            env.subnet_id = sub_id
+                            env.subnet_name = sub_name
+                            env.sg_id = sg_id
+                            env.vpc_id = vps_id
                             echo "Instance ID: ${env.instance_id}"
+                            echo "Subnet ID: ${env.subnet_id}"
+                            echo "Subnet Name: ${env.subnet_name}"
+                            echo "Security Group ID: ${env.sg_id}"
+                            echo "VPC ID: ${env.vpc_id}"
                         }
                     }
                 }
@@ -139,6 +151,24 @@ pipeline {
                         // Store the new AMI ID for later use
                         env.NEW_AMI_ID = amiId
                         echo "New AMI ID: ${env.NEW_AMI_ID}, AMI created successfully"
+                    }
+                }
+            }
+        }
+        */
+
+        /*
+        stage("Create_ASG_&_ELB"){
+            steps{
+                dir("${WORKSPACE}/ASG_&_ELB") {
+                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
+                    credentialsId: 'MainAcademy_AWS_key',
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
+                        sh 'terraform init'
+                        //sh 'terraform plan'
+                        sh "terraform apply -auto-approve -var ami_id=${env.NEW_AMI_ID}"
+                        echo 'ok'
                     }
                 }
             }

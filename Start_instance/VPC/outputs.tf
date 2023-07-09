@@ -10,3 +10,8 @@ output "subnet_id_out" { # Local output variable
   value = aws_subnet.my_subnet.id
   description = "subnet_id"
 }
+
+output "subnet_name_out" { # Local output variable
+  value = aws_subnet.name
+  description = "subnet_name"
+}

@@ -23,3 +23,8 @@ output "instance_id" {
   value = module.Instance.instance_id #This variable locate in Instance module -> outputs 
   description = "instance id from Instance module (outputs_source = ./Instance)"
 }
+
+output "subnet_name" {
+  value = module.VPC.subnet_name_out #This variable locate in VPC module -> outputs 
+  description = "subnet name from VPC module (outputs_source = ./VPC)"
+}
