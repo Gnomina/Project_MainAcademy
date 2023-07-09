@@ -71,7 +71,7 @@ resource "aws_instance" "example"{
       echo "${file("docker-compose.yml")}" > /home/ubuntu/docker-compose.yml
     fi
 
-    docker-compose -f /home/ubuntu/docker-compose.yml up -d
+    docker-compose up -d
   EOF
 }
 
