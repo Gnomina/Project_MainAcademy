@@ -11,15 +11,15 @@ resource "aws_launch_template" "example" {
   # Определение блока Network Interfaces, если требуется
   network_interfaces {
     device_index         = 0
-    associate_public_ip_address = true  # Установите значение в true, если требуется публичный IP
-    subnet_id            = "subnet-12345678"  # Укажите подсеть, в которой должны размещаться экземпляры
-    security_groups      = ["sg-12345678"]  # Укажите группы безопасности для экземпляров
+    #associate_public_ip_address = true  # Установите значение в true, если требуется публичный IP
+    subnet_id            = var.subnet_id  # Укажите подсеть, в которой должны размещаться экземпляры
+    security_groups      = [var.sg_id]  # Укажите группы безопасности для экземпляров
   }
 }
 
 # Создание группы автомасштабирования (ASG) с использованием шаблона запуска
 resource "aws_autoscaling_group" "example_asg" {
-  name                 = "example-asg"
+  name                 = "TEST-asg"
   min_size             = 3
   max_size             = 3
   desired_capacity     = 3
@@ -29,11 +29,48 @@ resource "aws_autoscaling_group" "example_asg" {
   }
 
   # Укажите ID или имя виртуальной частной сети (VPC) для размещения ASG
-  vpc_zone_identifier = ["vpc-12345678", "vpc-87654321"]
+  vpc_zone_identifier = [ var.vpc_id, ]
 
   # Укажите имя подсетей для размещения экземпляров EC2
-  subnet_names         = ["subnet-abcdef", "subnet-fedcba"]
+  subnet_names         = [var.subnet_name, ]
 
   # Укажите имя группы безопасности для экземпляров EC2
-  security_groups      = ["sg-12345678"]
+  security_groups      = [var.sg_id]
 }
+
+# Создание Application Load Balancer (ALB)
+resource "aws_lb" "example_alb" {
+  name               = "TEST-alb"
+  load_balancer_type = "application"
+  subnets            = [var.subnet_name,]  # Укажите подсети для размещения ALB
+
+  # Определение проверки здоровья
+  enable_deletion_protection = false
+  health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    timeout             = 5
+    interval            = 30
+    path                = "/"
+    matcher             = "200"
+  }
+}
+
+# Создание таргет-группы для ALB
+resource "aws_lb_target_group" "example_target_group" {
+  name     = "TEST-target-group"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = var.vpc_id  # Укажите ID или имя VPC
+}
+
+# Привязка ASG к ALB
+resource "aws_lb_target_group_attachment" "example_attachment" {
+  target_group_arn = aws_lb_target_group.example_target_group.arn
+  target_id        = aws_autoscaling_group.example_asg.id
+  port             = 80
+}
+
+
+
+
