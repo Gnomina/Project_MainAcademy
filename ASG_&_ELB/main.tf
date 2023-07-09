@@ -11,11 +11,10 @@ resource "aws_launch_template" "example" {
   vpc_security_group_ids = ["sg-04947ae25e78b4864"]
   
   iam_instance_profile {
-    name = "EC2_RoleAddPerm"  # Замените на имя или ARN вашей роли IAM
-  }
+    name = "EC2_RoleAddPerm"  
   network_interfaces {
       device_index          = 0
-      subnet_id             = "subnet-0329c8ffd17751d83"  # Замените на ID вашей публичной подсети
+      subnet_id             = "subnet-0329c8ffd17751d83"  
       associate_public_ip_address = true
     }
 
@@ -55,6 +54,39 @@ resource "aws_elb" "example_elb" {
   }
 }
 
+#Create Internet Gateway
+resource "aws_internet_gateway" "my_igw_1" {
+  vpc_id = "vpc-0a5859a6d6889753f"
+
+  tags = {
+    Name = "TEST-igw"
+  }
+}
+
+# Create Route Table
+resource "aws_route_table" "my_route_table" {
+  vpc_id = "vpc-0a5859a6d6889753f"
+
+  tags = {
+    Name = "TEST-RT"
+  }
+}
+
+# Create Route
+resource "aws_route" "internet_route" {
+  route_table_id         = aws_route_table.my_route_table.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.my_igw_1.id
+}
+
+# Create Route Table Association
+resource "aws_route_table_association" "subnet_association" {
+  subnet_id      = "subnet-0329c8ffd17751d83"
+  route_table_id = aws_route_table.my_route_table.id
+}
+//------------------------------------------------------------------------------------
+
+/*
 # Создание внешнего интернет-шлюза (EIGW)
 resource "aws_internet_gateway" "example_igw" {
   vpc_id = "vpc-0a5859a6d6889753f"  # Замените на ID вашей VPC
@@ -75,7 +107,7 @@ resource "aws_route_table" "example_public_route_table" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_eigw.example_eigw.id
+    gateway_id = aws_internet_gateway.example_igw.id
   }
 
   tags = {
@@ -87,6 +119,6 @@ resource "aws_route_table_association" "example_public_subnet_association" {
   subnet_id      = "subnet-0329c8ffd17751d83"  # Замените на ID вашей публичной подсети
   route_table_id = aws_route_table.example_public_route_table.id
 }
-
+*/
 
 
