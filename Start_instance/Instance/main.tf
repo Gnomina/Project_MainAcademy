@@ -71,10 +71,9 @@ resource "aws_instance" "example"{
       echo "${file("docker-compose.yml")}" > /home/ubuntu/docker-compose.yml
     fi
 
-    docker-compose up -d
+    docker-compose -f /home/ubuntu/docker-compose.yml up -d
   EOF
 }
 
 // docker run -d -p 49160:8080 --log-driver=awslogs --log-opt awslogs-group=MainAcademy_container_logs --log-opt awslogs-region=eu-central-1
 // --log-opt awslogs-stream=test_log 284532103653.dkr.ecr.eu-central-1.amazonaws.com/mainacademy_images:WebApp
-
