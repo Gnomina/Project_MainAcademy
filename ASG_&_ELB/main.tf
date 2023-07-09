@@ -8,8 +8,8 @@ resource "aws_launch_template" "example" {
   image_id      = "ami-0b6777e145afb9a29" #ami_id from block Create ami.
   instance_type = "t2.small"
   key_name               = "ubuntu_key"
-  security_groups = ["sg-04947ae25e78b4864"]
-  //vpc_security_group_ids = ["sg-04947ae25e78b4864"]
+  //security_groups = ["sg-04947ae25e78b4864"]
+  vpc_security_group_ids = ["sg-04947ae25e78b4864"]
     
     /*
     network_interfaces {
