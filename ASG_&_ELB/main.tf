@@ -2,12 +2,13 @@ provider "aws" {
   region = "${var.Region}" 
 }
 
-
+/*
 resource "aws_network_interface" "example_nic" {
   subnet_id                = "subnet-0329c8ffd17751d83"
   security_groups          = ["sg-04947ae25e78b4864"]
   private_ips              = ["172.16.0.15"] # Замените на подходящий IP-адрес
 }
+*/
 #------------------------------------------------------------------------------
 # Создание шаблона запуска
 resource "aws_launch_template" "example" {
@@ -15,12 +16,12 @@ resource "aws_launch_template" "example" {
   image_id      = "ami-0b6777e145afb9a29" #ami_id from block Create ami.
   instance_type = "t2.small"
   key_name               = "ubuntu_key"
-  vpc_security_group_ids = ["sg-04947ae25e78b4864"]
+  //vpc_security_group_ids = ["sg-04947ae25e78b4864"]
     
     
     network_interfaces {
-      device_index          = 0
-      network_interface_id  = aws_network_interface.example_nic.id  
+      device_index      = 0
+      subnet_id         = "subnet-0329c8ffd17751d83"  
       associate_public_ip_address = true
       security_groups = ["sg-04947ae25e78b4864"]
       
