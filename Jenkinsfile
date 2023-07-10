@@ -44,18 +44,18 @@ pipeline {
                         def region = ''
                         def bucketUrl = ''
 
-                        // Определение требуемого имени ведра
+                        // Определение требуемого имени bucket
                         if (env.work_branch.toLowerCase().contains("dev")) {
                             targetBucketName = "dev"
                         } else if (env.work_branch.toLowerCase().contains("prod")) {
                             targetBucketName = "prod"
                         }
 
-                        // Получение списка ведер
+                        // Получение списка bucket
                         def listBucketsOutput = sh(returnStdout: true, script: 'aws s3api list-buckets')
                         def buckets = readJSON(text: listBucketsOutput)
 
-                        // Поиск ведра с требуемым именем
+                        // Поиск bucket с требуемым именем
                         for (bucket in buckets.Buckets) {
                             def name = bucket.Name.toLowerCase()
                             if (name.contains(targetBucketName)) {
@@ -64,17 +64,17 @@ pipeline {
                             }
                         }
 
-                        // Получение региона размещения ведра
+                        // Получение региона размещения bucket
                         if (targetBucketName) {
                             def getBucketLocationOutput = sh(returnStdout: true, script: "aws s3api get-bucket-location --bucket ${targetBucketName}")
                             def location = readJSON(text: getBucketLocationOutput)
                             region = location.LocationConstraint
                         }
 
-                        // Формирование URL ведра
+                        // Формирование URL bucket
                         if (targetBucketName && region) {
                            bucketUrl = "${targetBucketName}.s3.${region}.amazonaws.com"
-                           //bucketUrl = "${targetBucketName}.s3.${region}.amazonaws.com"
+                           
                         }
                         def distributionId = sh(returnStdout: true, script: 'aws cloudfront list-distributions --query "DistributionList.Items[].Id" --output text').trim()
 
@@ -92,7 +92,7 @@ pipeline {
                         sh "aws s3 sync ${WORKSPACE} s3://${targetBucketName}/ --delete"
 
                         sh "aws cloudfront create-invalidation --distribution-id ${distributionId} --paths '/*'"
-                        //aws cloudfront get-invalidation --distribution-id <distribution-id> --id <invalidation-id> можно сделать проверку статуса invalodate, но пока что лень.
+                        //aws cloudfront get-invalidation --distribution-id <distribution-id> --id <invalidation-id> можно сделать проверку статуса invalidate, но пока что лень.
 
                             
                     }
