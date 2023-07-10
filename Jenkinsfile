@@ -170,9 +170,7 @@ pipeline {
                         //sh 'terraform plan'
                         //sh "terraform apply -auto-approve -var ami_id=${env.NEW_AMI_ID}"+
                         
-                        sh "terraform apply -auto-approve"+
-                        " -var vpc_id=${env.vpc_id} -var subnet_id=${env.subnet_id}"+
-                        " -var sg_id=${env.sg_id} -var subnet_name=${env.subnet_name}"
+                        sh "terraform apply -auto-approve"
                         echo 'ok'
                         
                         /*
