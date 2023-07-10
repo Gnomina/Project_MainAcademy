@@ -1,6 +1,6 @@
 # Project_MainAcademy
 Project at MainAcademy shcool
-http://35.242.240.246:8080/
+
 
 create ASG
 https://www.youtube.com/watch?v=9Z0heLHN2Xk&ab_channel=e2eSolutionArchitect
