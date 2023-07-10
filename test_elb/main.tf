@@ -300,7 +300,8 @@ resource "aws_lb_target_group" "TG-tf" {
 #------------------------Create Load Balancer---------------------------
 # Create ALB
 resource "aws_lb" "ALB-tf" {
-  name               = "TEST-STACK-ALG-tf"
+  //name               = "TEST-STACK-ALG-tf"
+  name               = "MAIN-Academy-stack"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.elb_sg.id]
