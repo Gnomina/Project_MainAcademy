@@ -1,5 +1,9 @@
 # Project_MainAcademy
-Project at MainAcademy shcool
+Project at MainAcademy 
+
+
+Start instanse to create AMI image. After create image, start ELB and ASG (and other needed parts) to create WebApp server-stack
+
 
 
 create ASG
