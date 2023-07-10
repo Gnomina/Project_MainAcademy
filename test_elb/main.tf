@@ -251,9 +251,8 @@ resource "aws_launch_configuration" "webserver-launch-config" {
   key_name        = "ubuntu_key"
   security_groups = ["${aws_security_group.webserver_sg.id}"]
 
-  iam_instance_profile {
-      name = "EC2_RoleAddPerm"  
-    }
+  iam_instance_profile = "EC2_RoleAddPerm"
+    
     
   user_data = filebase64("userdata.sh")
   
