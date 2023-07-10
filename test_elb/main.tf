@@ -236,7 +236,7 @@ resource "aws_security_group" "webserver_sg" {
   }
 
   tags = {
-    Name    = var.sg_ws_tagname
+    Name    = "SG for web"
     Project = "TEST_STACK_0.1"
   }
 }
@@ -301,7 +301,7 @@ resource "aws_autoscaling_group" "Demo-ASG-tf" {
 
 # Create Target group
 resource "aws_lb_target_group" "TG-tf" {
-  name       = "TEST_STACK_0.1-TargetGroup-tf"
+  name       = "TEST-STACK-TargetGroup-tf"
   depends_on = [aws_vpc.main]
   port       = 80
   protocol   = "HTTP"
@@ -324,7 +324,7 @@ resource "aws_lb_target_group" "TG-tf" {
 #------------------------Create Load Balancer---------------------------
 # Create ALB
 resource "aws_lb" "ALB-tf" {
-  name               = "TEST_STACK_0.1-ALG-tf"
+  name               = "TEST-STACK-ALG-tf"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.elb_sg.id]
