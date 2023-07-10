@@ -161,7 +161,7 @@ pipeline {
         
         stage("Create_ASG_&_ELB"){
             steps{
-                dir("${WORKSPACE}/ASG_&_ELB") {
+                dir("${WORKSPACE}/test_elb") {
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
                     credentialsId: 'MainAcademy_AWS_key',
                     accessKeyVariable: 'AWS_ACCESS_KEY_ID',
