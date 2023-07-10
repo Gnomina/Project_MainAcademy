@@ -255,25 +255,6 @@ resource "aws_launch_configuration" "webserver-launch-config" {
     
     
   user_data = filebase64("userdata.sh")
-  
-  /*
-  root_block_device {
-    volume_type = "gp2"
-    volume_size = 10
-    encrypted   = true
-  }
-
-  ebs_block_device {
-    device_name = "/dev/sdf"
-    volume_type = "gp2"
-    volume_size = 5
-    encrypted   = true
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-  */
 }
 #------------------------------------------------------------------------
 
@@ -281,8 +262,8 @@ resource "aws_launch_configuration" "webserver-launch-config" {
 # Create Auto Scaling Group
 resource "aws_autoscaling_group" "Demo-ASG-tf" {
   name                 = "TEST_STACK_0.1-ASG-tf"
-  desired_capacity     = 2
-  max_size             = 3
+  desired_capacity     = 3
+  max_size             = 4
   min_size             = 1
   force_delete         = true
   depends_on           = [aws_lb.ALB-tf]
@@ -305,18 +286,14 @@ resource "aws_lb_target_group" "TG-tf" {
   port       = 80
   protocol   = "HTTP"
   vpc_id     = aws_vpc.main.id
-  /*
+    
   health_check {
-    interval            = 70
-    path                = "/index.html"
-    port                = 80
+    interval            = 30
+    timeout             = 10
+    protocol            = "TCP"
     healthy_threshold   = 2
     unhealthy_threshold = 2
-    timeout             = 60
-    protocol            = "HTTP"
-    matcher             = "200,202"
   }
-  */
 }
 #------------------------------------------------------------------------
 
