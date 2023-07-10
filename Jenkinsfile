@@ -35,7 +35,7 @@ pipeline {
             }
         }
 //---------------------------------------------------------TERRAFORM---------------------------------------------------------------------------------------
-        stage('Get Terraform Variable') { // obtaining variables with terraform S3bucet backend
+        stage('Get Terraform Variable') { // obtaining variables with terraform S3bucket backend
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
                 credentialsId: 'MainAcademy_AWS_key',
@@ -45,7 +45,7 @@ pipeline {
                         def tfStateFile = sh(script: "aws s3 cp s3://mainacademy-project-terraform-back/dev/backend/terraform.tfstate -", returnStdout: true).trim()// url or ARN
                         def tfStateJson = readJSON(text: tfStateFile)
                         def ecr_url = tfStateJson.outputs.ecr_url.value
-                        env.ecr_url = ecr_url //create environment variable - env.ecr_url
+                        env.ecr_url = ecr_url //obtaining ECR url to use on docker push - env.ecr_url
                     }                      
                 }       
             }
@@ -60,13 +60,14 @@ pipeline {
                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                     script {
-                        
+                        //build docker image
                         sh "docker build -t ${env.repository_name}:${env.git_branch} -f ${WORKSPACE}/webapp/Dockerfile ."
+                        
                         sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin ${env.ecr_url}"
                         
                         sh "docker tag ${env.repository_name}:${env.git_branch} ${env.ecr_url}:${env.git_branch}"
                         sh "docker push ${env.ecr_url}:${env.git_branch}"
-                        // # Test start docker container
+                        // # Test start docker container, and push logs to CloudWatch
                         sh "docker run -d -p 49160:8080 --log-driver=awslogs --log-opt awslogs-group=MainAcademy_container_logs --log-opt awslogs-region=eu-central-1 --log-opt awslogs-stream=test_log ${env.ecr_url}:${env.git_branch}"
                         
                         
