@@ -169,7 +169,7 @@ pipeline {
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                         sh 'terraform init'
                         sh 'terraform plan'
-                        sh "terraform apply -auto-approve -var ami_image_id=${env.NEW_AMI_ID}"
+                        sh "terraform apply -auto-approve -var ami_image_id=$env.NEW_AMI_ID"
                         
                         //sh "terraform apply -auto-approve"
                         echo 'ok'
