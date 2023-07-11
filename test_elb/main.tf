@@ -108,6 +108,8 @@ resource "aws_route_table_association" "internet_for_pub_sub2" {
 #------------------------------------------------------------------------
 
 #------------------------Craete EIP for NAT -----------------------------
+
+# maybe need 3 subnets and 3 EIPs for 3 NAT GWs.!!!
 # Create EIP for NAT GW1
 resource "aws_eip" "eip_natgw1" {
   count = "1"
