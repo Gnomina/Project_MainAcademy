@@ -1,6 +1,12 @@
 version: '3'
 services:
   nodejs:
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: eu-central-1
+        awslogs-group: MainAcademy_container_logs
+        awslogs-stream: nodejs
     image: 284532103653.dkr.ecr.eu-central-1.amazonaws.com/mainacademy_images:WebApp
     container_name: nodejs_container
     restart: always
@@ -8,6 +14,13 @@ services:
       - 8080:8080
 
   nginx:
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: eu-central-1
+        awslogs-group: MainAcademy_container_logs
+        awslogs-stream: nginx
+
     image: nginx:latest
     container_name: nginx_container
     ports:
