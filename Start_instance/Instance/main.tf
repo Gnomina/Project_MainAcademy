@@ -61,6 +61,7 @@ resource "aws_instance" "example"{
     wait_for_dependencies
     
     aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 284532103653.dkr.ecr.eu-central-1.amazonaws.com
+
     docker pull 284532103653.dkr.ecr.eu-central-1.amazonaws.com/mainacademy_images:WebApp
     
     if [[ ! -f "/home/ubuntu/nginx.conf" ]]; then
