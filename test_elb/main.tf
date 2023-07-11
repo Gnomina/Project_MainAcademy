@@ -246,7 +246,7 @@ resource "aws_security_group" "webserver_sg" {
 #Create Launch config
 resource "aws_launch_configuration" "webserver-launch-config" {
   name_prefix     = "webserver-launch-config"
-  image_id        = var.ami_id
+  image_id        = "ami-07fc206c57b925dbe"
   instance_type   = "t2.small"
   key_name        = "ubuntu_key"
   security_groups = ["${aws_security_group.webserver_sg.id}"]
