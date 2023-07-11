@@ -290,7 +290,7 @@ resource "aws_lb_target_group" "TG-tf" {
   health_check {
     interval            = 30
     timeout             = 10
-    protocol            = "TCP"
+    protocol            = "HTTP"
     healthy_threshold   = 2
     unhealthy_threshold = 2
   }
