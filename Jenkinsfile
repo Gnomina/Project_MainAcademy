@@ -112,7 +112,7 @@ pipeline {
                 accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                     script {
-                        def amiName = "test_ami_0.2"
+                        def amiName = "test_ami_0.3"
                         def region = "eu-central-1"
 
                         //def amiIds = null
