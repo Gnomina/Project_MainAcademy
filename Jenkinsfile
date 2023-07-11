@@ -104,7 +104,7 @@ pipeline {
             }
         }
         // ---Work code for create AMI---
-        /*
+        
         stage('Create AMI') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
@@ -155,10 +155,10 @@ pipeline {
                 }
             }
         }
-        */
+        
         
 
-        /*
+        
         stage("Create_ASG_&_ELB"){
             steps{
                 dir("${WORKSPACE}/test_elb") {
@@ -167,16 +167,16 @@ pipeline {
                     accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                         sh 'terraform init'
-                        //sh 'terraform plan'
-                        //sh "terraform apply -auto-approve -var ami_id=${env.NEW_AMI_ID}"+
+                        sh 'terraform plan'
+                        sh "terraform apply -auto-approve -var ami_image_id=${env.NEW_AMI_ID}"+
                         
-                        sh "terraform apply -auto-approve"
+                        //sh "terraform apply -auto-approve"
                         echo 'ok'
                     }
                 }
             }
         }
-        */
+        
         
     }
 }
