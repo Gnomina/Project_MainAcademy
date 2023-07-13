@@ -21,7 +21,7 @@ pipeline {
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                         sh 'terraform init'
                         //sh 'terraform plan'
-                        sh "terraform apply -auto-approve"
+                        sh "terraform destroy -auto-approve"
                         echo 'ok'
                         script {
                             def inst_id = sh(script: "terraform output instance_id", returnStdout: true).trim()
@@ -45,7 +45,7 @@ pipeline {
             }
         }
 
-        
+        /*
         stage('Instance Status Check and Start Ansible') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', 
@@ -103,6 +103,7 @@ pipeline {
                 }
             }
         }
+        */
         // ---Work code for create AMI---
         /*
         stage('Create AMI') {
@@ -169,7 +170,7 @@ pipeline {
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                         sh 'terraform init'
                         sh 'terraform plan'
-                        sh "terraform apply -auto-approve"
+                        sh "terraform destroy -auto-approve"
                                                
                         echo 'ok'
                     }
